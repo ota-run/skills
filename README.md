@@ -63,8 +63,17 @@ ota skills install --agent claude
 Each skill contains:
 
 - `SKILL.md` for agent instructions
+- `agents/openai.yaml` for Codex display metadata
 - `references/` for supporting canonical links and docs
 - optional `scripts/` for automation helpers
+
+## Validation
+
+Run the repository validation script before publishing changes:
+
+```bash
+./scripts/validate.sh
+```
 
 ## License
 

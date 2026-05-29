@@ -1,0 +1,7 @@
+interface:
+  display_name: "Ota"
+  short_description: "Repo readiness and Ota contract guidance."
+  default_prompt: "Use $ota to review this repository's readiness contract and recommend the next correct Ota change."
+
+policy:
+  allow_implicit_invocation: true
