@@ -1,0 +1,10 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "groupings": [
+    {
+      "title": "Ota",
+      "description": "Skills for Ota repo readiness, contract authoring, contract review, and Studio workflows.",
+      "skills": ["ota"]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+<!--
+                █████
+               ░░███
+       ██████  ███████    ██████
+      ███░░███░░░███░    ░░░░░███
+     ░███ ░███  ░███      ███████
+     ░███ ░███  ░███ ███ ███░░███
+     ░░██████   ░░█████ ░░████████
+      ░░░░░░     ░░░░░   ░░░░░░░░
+
+   Copyright (C) 2026 — 2026, Ota. All Rights Reserved.
+
+   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+
+   Licensed under the Apache License, Version 2.0. See LICENSE for the full license text.
+   You may not use this file except in compliance with that License.
+   Unless required by applicable law or agreed to in writing, software distributed under the
+   License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+   either express or implied. See the License for the specific language governing permissions
+   and limitations under the License.
+
+   If you need additional information or have any questions, please email: os@ota.run
+-->
+
+# Ota Skills
+
+Official Ota agent skills for repo readiness, contract authoring, contract review, and Studio workflows.
+
+[![skills.sh](https://skills.sh/b/ota-run/skills)](https://skills.sh/ota-run/skills)
+
+## Available Skills
+
+### ota
+
+Use when working on anything Ota-specific: creating, refining, reviewing, or explaining Ota contracts (`ota.yaml`), repo readiness modeling, `ota doctor` / `ota up` / `ota run` flows, agent safety surfaces, Ota Studio boundaries, or deciding whether a problem belongs in the repo contract or in Ota itself.
+
+The skill helps agents:
+
+- author truthful `ota.yaml` contracts
+- review contract quality and readiness modeling
+- detect Ota platform gaps versus repo-local issues
+- use the real Ota CLI when available
+- bootstrap Ota installation with explicit user approval when missing
+- reason about Ota Studio local/cloud boundaries
+
+## Installation
+
+Install with the `skills` CLI:
+
+```bash
+npx skills add ota-run/skills
+```
+
+You can also install the same distribution copy through Ota itself:
+
+```bash
+ota skills install --agent codex
+ota skills install --agent claude
+```
+
+## Skill Structure
+
+Each skill contains:
+
+- `SKILL.md` for agent instructions
+- `references/` for supporting canonical links and docs
+- optional `scripts/` for automation helpers
+
+## License
+
+Apache-2.0. See [LICENSE](LICENSE).
