@@ -48,7 +48,7 @@ The skill helps agents:
 Install with the `skills` CLI:
 
 ```bash
-npx skills add ota-run/skills
+npx skills add ota-run/skills --full-depth
 ```
 
 You can also install the same distribution copy through Ota itself:

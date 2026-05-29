@@ -1,6 +1,6 @@
 ---
 name: ota
-description: Use when working on anything Ota-specific: creating, refining, reviewing, or explaining Ota contracts (`ota.yaml`), repo readiness modeling, `ota doctor` / `ota up` / `ota run` flows, agent safety surfaces, Ota Studio boundaries, or when deciding whether a problem belongs in the repo contract or in Ota itself.
+description: "Use when working on anything Ota-specific: creating, refining, reviewing, or explaining Ota contracts (`ota.yaml`), repo readiness modeling, `ota doctor` / `ota up` / `ota run` flows, agent safety surfaces, Ota Studio boundaries, or when deciding whether a problem belongs in the repo contract or in Ota itself."
 ---
 
 <!--
@@ -48,7 +48,7 @@ modeling, not schema-only completion.
 Prefer sources in this order:
 
 1. the repo you are actively working on
-2. local canonical Ota references:
+2. local canonical Ota references, when they exist in the checkout:
    - `ota.yaml`
    - `examples/`
    - `docs/spec/contract-reference.md`
@@ -57,7 +57,8 @@ Prefer sources in this order:
 3. public references in `references/official-sources.md`
 
 Do not jump straight to public docs if the local repository already contains the canonical
-answer.
+answer. If the active repo is not the Ota repo, treat local repo files as evidence about that
+project, not as Ota product documentation.
 
 ## Bootstrap flow
 
@@ -75,12 +76,19 @@ Always prefer using the real Ota binary when it is available.
 Prefer the official install docs and repository references in
 `references/official-sources.md` when you need canonical links.
 
+Do not silently install Ota, install agent skills, modify shell profiles, or overwrite an existing
+`ota.yaml`. Ask first unless the user explicitly requested that action.
+
 ## Canonical command workflow
 
 Use the smallest real Ota workflow that fits the task:
 
 - `ota doctor`
   - inspect readiness blockers, warnings, next actions, and agent guidance
+- `ota init`
+  - create a starter contract only when the user wants Ota adoption or no contract exists
+- `ota detect`
+  - inspect deterministic repo evidence before broadening a contract
 - `ota validate`
   - verify structural and semantic contract correctness
 - `ota tasks`
@@ -98,6 +106,10 @@ If the repository has no contract yet:
 2. model the minimum truthful contract
 3. validate it
 4. only then broaden the contract if real repo truth requires it
+
+For agent, Studio, CI, or other integration surfaces, prefer Ota JSON output (`--json`) or documented
+schemas. Do not parse rich human output unless no machine-readable surface exists, and call that out
+as an Ota platform gap.
 
 ## Contract authoring workflow
 
@@ -117,6 +129,13 @@ When creating or refining a contract:
    - `ota run` executes named tasks honestly
 4. Prefer contract fields over repo-local helper scripts when Ota already supports the
    behavior cleanly.
+
+Before editing:
+
+- preserve existing user intent in `ota.yaml`
+- make the narrowest complete contract change
+- update docs/tests only when command behavior, schema shape, or published examples change
+- validate with `ota validate` and, when useful, `ota doctor`
 
 Author from evidence, not vibes. Before writing or broadening a contract, inspect the smallest
 set of repo files that reveal real behavior:
@@ -217,8 +236,9 @@ A good review response should usually end with:
 - any Ota gaps
 - the next best change
 
-When reviewing, lead with findings in priority order. Include concrete file/line references when
-available, then summarize what is solid, what is missing, what to add, and what to remove.
+When reviewing, lead with findings in priority order and include concrete file/line references when
+available. State whether validation was run. If it was not run, say why. Then summarize what is
+solid, what is missing, what to add, and what to remove.
 
 ## Ota gap detection
 
@@ -243,6 +263,7 @@ When the task touches Ota Studio:
 - keep local and cloud behind adapters
 - keep `ota` canonical
 - keep the UI consuming shaped Ota data, not terminal scraping
+- keep `ota.yaml` and Ota JSON output as the data contract boundary
 
 Prefer:
 
@@ -258,6 +279,8 @@ Prefer:
 - “just put it in a script” when a contract field already exists
 - making users carry platform defects in repo-local glue
 - overfitting the contract to one temporary workflow
+- parsing human CLI output when JSON/schema output exists
+- broadening agent permissions to make a weak contract pass
 
 ## References
 

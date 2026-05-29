@@ -36,6 +36,17 @@ knowledge.
 - Windows PowerShell installer:
   - `https://dist.ota.run/install.ps1`
 
+## Skill installation and distribution
+
+- Skills CLI install:
+  - `npx skills add ota-run/skills --full-depth`
+- Ota-managed Codex install:
+  - `ota skills install --agent codex`
+- Ota-managed Claude Code install:
+  - `ota skills install --agent claude`
+- Raw skill distribution base for tooling:
+  - `https://raw.githubusercontent.com/ota-run/skills/main/skills/ota`
+
 ## GitHub
 
 - Skills repository:
@@ -63,6 +74,9 @@ knowledge.
 ## When to use which
 
 - Use the skills repository when referencing, installing, or changing the Ota skill itself.
+- Use the skill install commands when the user wants the agent skill, not the Ota CLI.
+- Use the raw skill distribution base only for installer/tooling implementation, not as the
+  human-facing install link.
 - Use the install page when the user needs a public human-facing setup link.
 - Use the installer URLs when the workflow needs the exact install command.
 - Use the examples directory when authoring or reviewing contracts against canonical patterns.
