@@ -24,7 +24,7 @@
 
 # Ota Skills
 
-Official Ota agent skills for repo readiness, contract authoring, contract review, and Studio workflows.
+Official Ota agent skills for execution governance and contract workflows for humans and AI agents.
 
 [![skills.sh](https://skills.sh/b/ota-run/skills)](https://skills.sh/ota-run/skills)
 
@@ -32,12 +32,15 @@ Official Ota agent skills for repo readiness, contract authoring, contract revie
 
 ### ota
 
-Use when working on anything Ota-specific: creating, refining, reviewing, or explaining Ota contracts (`ota.yaml`), repo readiness modeling, `ota doctor` / `ota up` / `ota run` flows, agent safety surfaces, Ota Studio boundaries, or deciding whether a problem belongs in the repo contract or in Ota itself.
+Use when working on anything Ota-specific: creating, refining, reviewing, or explaining Ota
+contracts (`ota.yaml`), modeling execution governance for humans and AI agents, working through
+`ota doctor` / `ota up` / `ota run`, handling agent safety surfaces, Ota Studio boundaries, or
+deciding whether a problem belongs in the repo contract or in Ota itself.
 
 The skill helps agents:
 
 - author truthful `ota.yaml` contracts
-- review contract quality and readiness modeling
+- review contract quality and execution governance
 - detect Ota platform gaps versus repo-local issues
 - use the real Ota CLI when available
 - bootstrap Ota installation with explicit user approval when missing

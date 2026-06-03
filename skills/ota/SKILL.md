@@ -1,6 +1,6 @@
 ---
 name: ota
-description: "Use when working on anything Ota-specific: creating, refining, reviewing, or explaining Ota contracts (`ota.yaml`), repo readiness modeling, `ota doctor` / `ota up` / `ota run` flows, agent safety surfaces, Ota Studio boundaries, or when deciding whether a problem belongs in the repo contract or in Ota itself."
+description: "Use when working on anything Ota-specific: creating, refining, reviewing, or explaining Ota contracts (`ota.yaml`), modeling execution governance for humans and AI agents, working through `ota doctor` / `ota up` / `ota run`, handling agent safety surfaces, Ota Studio boundaries, or when deciding whether a problem belongs in the repo contract or in Ota itself."
 ---
 
 <!--
@@ -29,16 +29,16 @@ description: "Use when working on anything Ota-specific: creating, refining, rev
 
 # Ota
 
-Use this skill when the task is about Ota-specific contract authoring, review, readiness
-modeling, or Ota platform judgment.
+Use this skill when the task is about Ota-specific contract authoring, contract review, execution
+governance for humans and AI agents, or Ota platform judgment.
 
-Do not use this skill for generic YAML generation. It is for truthful repo readiness
-modeling, not schema-only completion.
+Do not use this skill for generic YAML generation. It is for truthful execution governance, not
+schema-only completion.
 
 ## Core product posture
 
 - Doctor first, contract second.
-- `ota.yaml` is the canonical source of repo readiness truth.
+- `ota.yaml` is the canonical source of execution governance truth.
 - Prefer one explicit operational path over parallel scripts and tribal knowledge.
 - If the repo needs ugly glue because Ota lacks a product feature, call it out as an Ota
   gap instead of normalizing the workaround.

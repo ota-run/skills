@@ -3,7 +3,7 @@
   "groupings": [
     {
       "title": "Ota",
-      "description": "Skills for Ota repo readiness, contract authoring, contract review, and Studio workflows.",
+      "description": "Skills for Ota execution governance and contract workflows for humans and AI agents.",
       "skills": ["ota"]
     }
   ]
