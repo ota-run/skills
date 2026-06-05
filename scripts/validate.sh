@@ -39,4 +39,20 @@ if find "${root}" -path "${root}/.git" -prune -o -path "${root}/scripts/validate
   fail "stale ota-run/ota skill source reference found"
 fi
 
+command -v npx >/dev/null 2>&1 || fail "npx is required for install smoke validation"
+
+smoke_dir="$(mktemp -d)"
+trap 'rm -rf "${smoke_dir}"' EXIT INT TERM
+
+(
+  cd "${smoke_dir}"
+  npm init -y >/dev/null 2>&1
+  npx -y skills add "${root}" --skill ota --agent codex -y --copy --full-depth >/dev/null
+  npx -y skills ls --json > skills-list.json
+  [ -f "${smoke_dir}/skills-lock.json" ] || fail "skills install smoke must produce skills-lock.json"
+  [ -f "${smoke_dir}/.agents/skills/ota/SKILL.md" ] || fail "skills install smoke must install ota skill files"
+  jq -e '. | map(select(.name == "ota" and .scope == "project")) | length == 1' skills-list.json >/dev/null \
+    || fail "skills install smoke must expose ota in project skill listing"
+)
+
 printf '%s\n' "OK"
