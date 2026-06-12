@@ -41,6 +41,8 @@ The skill helps agents:
 
 - author truthful `ota.yaml` contracts
 - review contract quality and execution governance
+- prefer strong first-class contract surfaces such as `aggregate`, `launch.kind: command`, toolchain-owned package managers, and lockfile-strict dependency hydration
+- cover holistic workflow, service, env, check, and agent-governance surfaces instead of stopping at task syntax
 - detect Ota platform gaps versus repo-local issues
 - use the real Ota CLI when available
 - bootstrap Ota installation with explicit user approval when missing
@@ -67,7 +69,7 @@ Each skill contains:
 
 - `SKILL.md` for agent instructions
 - `agents/openai.yaml` for Codex display metadata
-- `references/` for supporting canonical links and docs
+- `references/` for canonical links, compact contract patterns, and review checklists
 - optional `scripts/` for automation helpers
 
 ## Validation

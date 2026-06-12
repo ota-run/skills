@@ -60,6 +60,17 @@ Do not jump straight to public docs if the local repository already contains the
 answer. If the active repo is not the Ota repo, treat local repo files as evidence about that
 project, not as Ota product documentation.
 
+When the active repo is `ota-run/ota`, also inspect adjacent first-party repos when the task
+touches their ownership boundary:
+
+- inspect `ota-site` when the task affects public install docs, public contract docs, public
+  examples, onboarding guidance, or anything the docs site promises to operators
+- inspect `ota-run/skills` when the task affects first-party agent-skill guidance, contract
+  authoring behavior, or the public skill installation story
+
+Do this only when the task really crosses that boundary. Do not turn routine Ota implementation
+work into a mandatory three-repo read.
+
 ## Bootstrap flow
 
 Always prefer using the real Ota binary when it is available.
@@ -130,6 +141,21 @@ When creating or refining a contract:
 4. Prefer contract fields over repo-local helper scripts when Ota already supports the
    behavior cleanly.
 
+Prefer these concrete shapes when repo truth matches them:
+
+- use `aggregate` for finite task grouping instead of fake `run: "true"` bodies
+- use `launch.kind: command` for long-running service processes instead of opaque `run`
+- use `prepare.kind: dependency_hydration` for dependency setup instead of raw package-manager
+  install commands when Ota can own the lane truthfully
+- use lockfile-strict npm hydration with `manager: npm` and `mode: ci` when the repo truth is npm
+  plus `package-lock.json`
+- use `toolchains.python.package_managers.poetry` instead of standalone `tools.poetry` when Poetry
+  owns Python dependency truth
+- use first-class env ownership such as `env_files`, `ensure_env_file`, and workflow-owned env
+  materialization instead of baking env-file flags and shell rewrite glue into task commands
+- set `metadata.ota.minimum_version` when the contract depends on newer parser, validator, or
+  runtime surfaces
+
 Before editing:
 
 - preserve existing user intent in `ota.yaml`
@@ -178,6 +204,50 @@ Do not duplicate ownership across `toolchains`, `runtimes`, and `tools`. If a pa
 runtime, or command is owned by a declared toolchain, task requirements may select it, but top-level
 runtime/tool ownership should not be duplicated.
 
+## Preferred modern contract shapes
+
+When the repo truth supports them, push toward these shapes explicitly:
+
+- finite verification grouping:
+  - `aggregate.tasks` for `verify`, `ci`, and other bounded parent tasks
+- long-running services:
+  - `launch.kind: command` plus `runtime.kind: service` and surfaced readiness
+- package-manager truth:
+  - Node package managers under `toolchains.node.package_managers`
+  - Poetry under `toolchains.python.package_managers.poetry`
+  - Bundler under `toolchains.ruby.package_managers.bundler`
+- deterministic setup:
+  - `prepare.kind: dependency_hydration` instead of ad hoc install shell bodies where Ota already
+    owns the manager lane
+- env and compose truth:
+  - `env.sources`, `env.vars`, `env_files`, `ensure_env_file`, and workflow-owned env rendering
+    before resorting to inline shell glue
+- release/governance truth:
+  - `metadata.ota.minimum_version` when the contract uses newer Ota capabilities
+
+Prefer the strongest truthful contract surface, not the broadest valid YAML surface.
+
+For fuller holistic shapes, also use:
+
+- `references/workflow-service-patterns.md` for workflows, services, env modeling,
+  `requires_services`, context-bound `execution`, and post-run hooks
+- `references/agent-and-governance-checklist.md` for `agent`, `checks`, `effects`, proof posture,
+  and CI/version-floor governance
+
+## Known regression traps
+
+Watch for the concrete regressions we have repeatedly seen in pressure-test repos:
+
+- `runtime.kind: service` paired with opaque `run` instead of `launch.kind: command`
+- fake aggregate bodies such as `run: "true"` where `aggregate` should own the task shape
+- aggregate membership smuggled through `depends_on` instead of `aggregate.tasks`
+- Poetry declared under `tools.poetry` when it actually owns Python dependency truth
+- raw `npm install` or non-lockfile setup when the repo truth is npm plus `package-lock.json`
+- public CI or proof workflows pinned to an older Ota build than the contract surface they execute
+- env-file ownership baked into shell commands when first-class env surfaces can own that truth
+- missing `metadata.ota.minimum_version` when a contract depends on newer Ota parsing or runtime
+  behavior
+
 ## Production-readiness gates
 
 When the user asks whether an Ota contract is solid, production-ready, PR-ready, or suitable for a
@@ -188,14 +258,20 @@ serious OSS repo, evaluate these gates explicitly:
   supports them.
 - Bounded agent defaults: `agent.default_task`, `agent.safe_tasks`, and `verify_after_changes`
   prefer finite verification tasks over long-running dev loops.
+- Strong task-body modeling: aggregate verification is modeled with `aggregate`, and long-running
+  services use `launch.kind: command` when Ota owns that surface.
 - Readiness truth: surfaces/checks prove the declared workflow is usable, not just that a process
   started.
 - Workflow fidelity: Ota workflows mirror real contributor/CI paths instead of inventing a parallel
   path.
+- Ownership clarity: package managers, runtimes, and tools sit under the highest truthful owner and
+  do not drift into duplicate declarations.
 - Agent boundary: writable/protected paths are tight, and generated-file exceptions do not conflict
   with protected paths.
 - CI proof posture: public PR workflows use released Ota setup/install paths unless the task is
   explicitly pressure-testing unreleased Ota.
+- Version-floor honesty: contracts that use newer Ota surfaces declare `metadata.ota.minimum_version`
+  and keep workflow-installed Ota in sync with that floor.
 - Container/native parity: container and native workflows are both modeled only when the repo
   actually supports them, and lifecycle choices are intentional.
 - Ota gap honesty: missing provider/features are called out as Ota gaps instead of hidden in
@@ -216,12 +292,19 @@ When reviewing an `ota.yaml`, look for:
 - tasks that depend on hidden local state
 - readiness that only proves a process started, not that the repo is truly ready
 - long-running dev tasks marked agent-safe or used as the default agent task
+- service tasks that should be `launch.kind: command` but still hide behind opaque `run`
+- fake aggregate parent tasks that should use `aggregate.tasks`
 - install/setup commands that ignore the repo lockfile or canonical package manager
+- missing first-class dependency hydration where Ota already owns the setup lane
+- Poetry or other package-manager truth declared under the wrong owner
+- env-file or env-rendering truth hidden in shell flags instead of first-class env surfaces
 - weak dependency checks such as checking only that `node_modules` exists
 - public CI workflows pinned to unreleased Ota branches or local source installs
+- public CI workflows pinned to older Ota builds than the contract surface they execute
 - protected paths that contradict generated safe setup actions
 - workflow names/descriptions that overclaim the modeled slice
 - missing bounded verification tasks for the repo's known preflight checks
+- missing `metadata.ota.minimum_version` when newer contract surfaces are in use
 - duplicated ownership across toolchains, runtimes, and tools
 
 A good review should separate:
@@ -286,6 +369,19 @@ Prefer:
 
 Read `references/official-sources.md` when you need canonical install links, official docs,
 or public GitHub references for examples and contract behavior.
+
+Read `references/contract-patterns.md` when you want compact canonical shapes for service launch,
+aggregate verification, Poetry ownership, lockfile-strict npm hydration, env ownership, and
+minimum-version governance.
+
+Read `references/review-checklist.md` when you want a compact review pass that focuses on modern
+contract-shape regressions rather than generic YAML validity.
+
+Read `references/workflow-service-patterns.md` when the repo needs stronger workflow structure,
+service ownership, env modeling, `requires_services`, `execution`, or post-run hook truth.
+
+Read `references/agent-and-governance-checklist.md` when you want a compact pass over `agent`,
+`checks`, `effects`, proof posture, and CI/version-floor governance.
 
 ## Expected output style
 
