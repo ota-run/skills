@@ -33,7 +33,9 @@ Use `prepare`, `setup`, and `run` intentionally. Put finite env materialization 
 in `prepare`, dependency/setup truth in `setup`, and the user-facing long-running or verification
 task in `run`. When that materialization produces a dotenv artifact for `docker compose`
 interpolation, project it through `tasks.<name>.adapter_inputs.compose.env_files` rather than task
-process `env_files`.
+process `env_files`. When the workflow owns the base compose file stack or compose project name,
+keep that under `workflows.<name>.env.compose_files` / `.compose_project_name` so task-local
+adapter inputs only carry narrower path-specific additions.
 
 ```yaml
 workflows:

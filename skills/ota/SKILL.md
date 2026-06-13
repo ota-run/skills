@@ -158,6 +158,9 @@ Prefer these concrete shapes when repo truth matches them:
 - use first-class env ownership such as `env_files`, `ensure_env_file`, workflow-owned env
   materialization, and `adapter_inputs.compose.env_files` for compose interpolation truth instead
   of baking env-file flags and shell rewrite glue into task commands
+- use `workflows.<name>.env.compose_files` and `.compose_project_name` when one workflow should own
+  the base compose file stack or project naming across its selected compose task closure, instead
+  of repeating that truth in task-local adapter inputs
 - set `metadata.ota.minimum_version` when the contract depends on newer parser, validator, or
   runtime surfaces
 
@@ -231,6 +234,8 @@ When the repo truth supports them, push toward these shapes explicitly:
   - `env.sources`, `env.vars`, `env_files`, `ensure_env_file`, workflow-owned env rendering, and
     `adapter_inputs.compose.env_files` for compose interpolation inputs before resorting to inline
     shell glue
+  - `workflows.<name>.env.compose_files` / `.compose_project_name` when compose file selection or
+    project naming belongs to the workflow rather than one isolated task body
 - release/governance truth:
   - `metadata.ota.minimum_version` when the contract uses newer Ota capabilities
 
