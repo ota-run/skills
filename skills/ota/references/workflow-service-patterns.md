@@ -102,7 +102,11 @@ tasks:
   test:integration:
     requires_services:
       - postgres
-    run: npm run test:integration
+    command:
+      exe: npm
+      args:
+        - run
+        - test:integration
 ```
 
 ## Execution and context-bound modes
@@ -113,7 +117,11 @@ parallel tasks.
 ```yaml
 tasks:
   build:
-    run: npm run build
+    command:
+      exe: npm
+      args:
+        - run
+        - build
     execution:
       default_mode: native
       modes:
@@ -131,7 +139,11 @@ repo truth.
 ```yaml
 tasks:
   build:
-    run: npm run build
+    command:
+      exe: npm
+      args:
+        - run
+        - build
     after_success:
       - discoverability:check
 ```
