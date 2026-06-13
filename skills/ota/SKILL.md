@@ -155,8 +155,9 @@ Prefer these concrete shapes when repo truth matches them:
   instead of raw `run: uv sync`
 - use `toolchains.python.package_managers.poetry` instead of standalone `tools.poetry` when Poetry
   owns Python dependency truth
-- use first-class env ownership such as `env_files`, `ensure_env_file`, and workflow-owned env
-  materialization instead of baking env-file flags and shell rewrite glue into task commands
+- use first-class env ownership such as `env_files`, `ensure_env_file`, workflow-owned env
+  materialization, and `adapter_inputs.compose.env_files` for compose interpolation truth instead
+  of baking env-file flags and shell rewrite glue into task commands
 - set `metadata.ota.minimum_version` when the contract depends on newer parser, validator, or
   runtime surfaces
 
@@ -227,8 +228,9 @@ When the repo truth supports them, push toward these shapes explicitly:
     owns the manager lane
   - `prepare.kind: sequence` when one setup task must compose multiple structural finite steps
 - env and compose truth:
-  - `env.sources`, `env.vars`, `env_files`, `ensure_env_file`, and workflow-owned env rendering
-    before resorting to inline shell glue
+  - `env.sources`, `env.vars`, `env_files`, `ensure_env_file`, workflow-owned env rendering, and
+    `adapter_inputs.compose.env_files` for compose interpolation inputs before resorting to inline
+    shell glue
 - release/governance truth:
   - `metadata.ota.minimum_version` when the contract uses newer Ota capabilities
 
@@ -254,6 +256,8 @@ Watch for the concrete regressions we have repeatedly seen in pressure-test repo
 - raw `npm install` or non-lockfile setup when the repo truth is npm plus `package-lock.json`
 - public CI or proof workflows pinned to an older Ota build than the contract surface they execute
 - env-file ownership baked into shell commands when first-class env surfaces can own that truth
+- compose interpolation files modeled as process `env_files` instead of
+  `tasks.<name>.adapter_inputs.compose.env_files`
 - missing `metadata.ota.minimum_version` when a contract depends on newer Ota parsing or runtime
   behavior
 

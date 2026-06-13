@@ -31,7 +31,9 @@ execution governance.
 
 Use `prepare`, `setup`, and `run` intentionally. Put finite env materialization and preflight work
 in `prepare`, dependency/setup truth in `setup`, and the user-facing long-running or verification
-task in `run`.
+task in `run`. When that materialization produces a dotenv artifact for `docker compose`
+interpolation, project it through `tasks.<name>.adapter_inputs.compose.env_files` rather than task
+process `env_files`.
 
 ```yaml
 workflows:

@@ -175,8 +175,11 @@ tasks:
 
 ## Env ownership
 
-Prefer first-class env ownership such as `env_files` and `ensure_env_file` before baking env-file
-flags into task commands.
+Prefer first-class env ownership such as `env_files`, `ensure_env_file`, and
+`adapter_inputs.compose.env_files` before baking env-file flags into task commands. Use
+`env_files` when the task process itself needs the overlay. Use
+`adapter_inputs.compose.env_files` when the file is compose interpolation truth for `docker
+compose`, including workflow-rendered dotenv artifacts.
 
 ```yaml
 tasks:
@@ -189,8 +192,10 @@ tasks:
 
   selfhost:compose:
     description: Start the self-host compose stack
-    env_files:
-      - .env.selfhost
+    adapter_inputs:
+      compose:
+        env_files:
+          - .env.selfhost
     launch:
       kind: command
       exe: docker
