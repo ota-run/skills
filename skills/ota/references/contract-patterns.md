@@ -83,6 +83,77 @@ toolchains:
       poetry: ">=1.8"
 ```
 
+## uv hydration
+
+When a Python repo uses uv for dependency setup, prefer first-class dependency hydration instead of
+raw `run: uv sync`.
+
+```yaml
+tasks:
+  setup:
+    description: Hydrate Python dependencies
+    prepare:
+      kind: dependency_hydration
+      medium: package_dependencies
+      source:
+        kind: uv
+        cwd: .
+    requirements:
+      toolchains:
+        - python
+    effects:
+      writes:
+        - .venv
+      network: true
+      network_kind: dependency_hydration
+```
+
+## Mixed finite setup sequencing
+
+When one repo-level `setup` lane honestly needs more than one structural finite step, use
+`prepare.kind: sequence` instead of collapsing everything back into one shell script.
+
+```yaml
+toolchains:
+  node:
+    version: "22"
+    package_managers:
+      pnpm: "10"
+  python:
+    version: "3.12"
+    package_managers:
+      uv: "*"
+
+tasks:
+  setup:
+    description: Hydrate frontend and backend dependencies
+    prepare:
+      kind: sequence
+      steps:
+        - kind: dependency_hydration
+          medium: package_dependencies
+          source:
+            kind: node_package_manager
+            cwd: .
+            manager: pnpm
+            mode: install
+        - kind: dependency_hydration
+          medium: package_dependencies
+          source:
+            kind: uv
+            cwd: .
+    requirements:
+      toolchains:
+        - node
+        - python
+    effects:
+      writes:
+        - node_modules
+        - .venv
+      network: true
+      network_kind: dependency_hydration
+```
+
 ## Lockfile-strict npm hydration
 
 When the repo truth is npm plus `package-lock.json`, prefer first-class dependency hydration with

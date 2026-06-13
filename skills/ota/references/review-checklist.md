@@ -32,6 +32,10 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   hidden in `depends_on`?
 - Does dependency setup use `prepare.kind: dependency_hydration` when Ota owns the package-manager
   lane?
+- If one setup lane spans more than one structural finite step, is that modeled with
+  `prepare.kind: sequence` instead of a fallback shell script?
+- If the repo uses uv for Python dependency setup, is that modeled with `source.kind: uv` instead
+  of a raw `run: uv sync` body?
 - If the repo uses npm with `package-lock.json`, is setup modeled with `manager: npm` and `mode: ci`?
 - If Poetry owns Python dependency truth, is it declared under
   `toolchains.python.package_managers.poetry`?

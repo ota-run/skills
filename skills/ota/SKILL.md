@@ -147,8 +147,12 @@ Prefer these concrete shapes when repo truth matches them:
 - use `launch.kind: command` for long-running service processes instead of opaque `run`
 - use `prepare.kind: dependency_hydration` for dependency setup instead of raw package-manager
   install commands when Ota can own the lane truthfully
+- use `prepare.kind: sequence` when one honest finite setup lane needs more than one structural
+  prepare step in order
 - use lockfile-strict npm hydration with `manager: npm` and `mode: ci` when the repo truth is npm
   plus `package-lock.json`
+- use `source.kind: uv` under `prepare.kind: dependency_hydration` for uv-backed Python setup
+  instead of raw `run: uv sync`
 - use `toolchains.python.package_managers.poetry` instead of standalone `tools.poetry` when Poetry
   owns Python dependency truth
 - use first-class env ownership such as `env_files`, `ensure_env_file`, and workflow-owned env
@@ -214,11 +218,14 @@ When the repo truth supports them, push toward these shapes explicitly:
   - `launch.kind: command` plus `runtime.kind: service` and surfaced readiness
 - package-manager truth:
   - Node package managers under `toolchains.node.package_managers`
+  - uv under `toolchains.python.package_managers.uv` when uv owns Python dependency setup/run
+  - uv-backed Python dependency hydration through `prepare.source.kind: uv`
   - Poetry under `toolchains.python.package_managers.poetry`
   - Bundler under `toolchains.ruby.package_managers.bundler`
 - deterministic setup:
   - `prepare.kind: dependency_hydration` instead of ad hoc install shell bodies where Ota already
     owns the manager lane
+  - `prepare.kind: sequence` when one setup task must compose multiple structural finite steps
 - env and compose truth:
   - `env.sources`, `env.vars`, `env_files`, `ensure_env_file`, and workflow-owned env rendering
     before resorting to inline shell glue
@@ -242,6 +249,8 @@ Watch for the concrete regressions we have repeatedly seen in pressure-test repo
 - fake aggregate bodies such as `run: "true"` where `aggregate` should own the task shape
 - aggregate membership smuggled through `depends_on` instead of `aggregate.tasks`
 - Poetry declared under `tools.poetry` when it actually owns Python dependency truth
+- mixed-ecosystem setup script bodies where `prepare.kind: sequence` should own the lane instead
+- raw `uv sync` setup bodies in Python repos where first-class `prepare.source.kind: uv` now exists
 - raw `npm install` or non-lockfile setup when the repo truth is npm plus `package-lock.json`
 - public CI or proof workflows pinned to an older Ota build than the contract surface they execute
 - env-file ownership baked into shell commands when first-class env surfaces can own that truth
