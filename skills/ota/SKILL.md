@@ -156,11 +156,15 @@ Prefer these concrete shapes when repo truth matches them:
 - use `toolchains.python.package_managers.poetry` instead of standalone `tools.poetry` when Poetry
   owns Python dependency truth
 - use first-class env ownership such as `env_files`, `ensure_env_file`, workflow-owned env
-  materialization, and `adapter_inputs.compose.env_files` for compose interpolation truth instead
-  of baking env-file flags and shell rewrite glue into task commands
-- use `workflows.<name>.env.compose_files` and `.compose_project_name` when one workflow should own
-  the base compose file stack or project naming across its selected compose task closure, instead
-  of repeating that truth in task-local adapter inputs
+  materialization, `adapter_inputs.compose.env_files` for compose interpolation truth, and
+  `adapter_inputs.bake.files` for Bake file selection truth instead of baking adapter flags and
+  shell rewrite glue into task commands
+- use canonical `workflows.<name>.env.adapter_inputs.compose.*` when one workflow should own the
+  base compose file stack or project naming across its selected compose task closure, instead of
+  repeating that truth in task-local adapter inputs
+- use `workflows.<name>.env.adapter_inputs.bake.files` when one workflow should own the base Bake
+  file stack across its selected `docker buildx bake` task closure instead of repeating that truth
+  in task-local adapter inputs
 - set `metadata.ota.minimum_version` when the contract depends on newer parser, validator, or
   runtime surfaces
 
@@ -232,10 +236,12 @@ When the repo truth supports them, push toward these shapes explicitly:
   - `prepare.kind: sequence` when one setup task must compose multiple structural finite steps
 - env and compose truth:
   - `env.sources`, `env.vars`, `env_files`, `ensure_env_file`, workflow-owned env rendering, and
-    `adapter_inputs.compose.env_files` for compose interpolation inputs before resorting to inline
-    shell glue
-  - `workflows.<name>.env.compose_files` / `.compose_project_name` when compose file selection or
-    project naming belongs to the workflow rather than one isolated task body
+    `adapter_inputs.compose.env_files` / `adapter_inputs.bake.files` for adapter-owned input
+    truth before resorting to inline shell glue
+  - `workflows.<name>.env.adapter_inputs.compose.*` when compose file selection or project naming
+    belongs to the workflow rather than one isolated task body
+  - `workflows.<name>.env.adapter_inputs.bake.files` when Bake file selection belongs to the
+    workflow rather than one isolated task body
 - release/governance truth:
   - `metadata.ota.minimum_version` when the contract uses newer Ota capabilities
 
@@ -263,6 +269,9 @@ Watch for the concrete regressions we have repeatedly seen in pressure-test repo
 - env-file ownership baked into shell commands when first-class env surfaces can own that truth
 - compose interpolation files modeled as process `env_files` instead of
   `tasks.<name>.adapter_inputs.compose.env_files`
+- Bake file selection buried in shell `docker buildx bake -f ...` flags instead of
+  `tasks.<name>.adapter_inputs.bake.files` or
+  `workflows.<name>.env.adapter_inputs.bake.files`
 - missing `metadata.ota.minimum_version` when a contract depends on newer Ota parsing or runtime
   behavior
 

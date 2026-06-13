@@ -34,8 +34,9 @@ in `prepare`, dependency/setup truth in `setup`, and the user-facing long-runnin
 task in `run`. When that materialization produces a dotenv artifact for `docker compose`
 interpolation, project it through `tasks.<name>.adapter_inputs.compose.env_files` rather than task
 process `env_files`. When the workflow owns the base compose file stack or compose project name,
-keep that under `workflows.<name>.env.compose_files` / `.compose_project_name` so task-local
-adapter inputs only carry narrower path-specific additions.
+keep that under `workflows.<name>.env.adapter_inputs.compose.*` so task-local adapter inputs only
+carry narrower path-specific additions. Use `workflows.<name>.env.adapter_inputs.bake.files` the
+same way when the workflow owns the base `docker buildx bake` file stack.
 
 ```yaml
 workflows:
