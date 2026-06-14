@@ -66,6 +66,8 @@ services:
     manager:
       kind: compose
       file: docker-compose.yml
+      profiles:
+        - dev
       service: postgres
     endpoints:
       host:
@@ -75,6 +77,10 @@ services:
       from: host
       kind: tcp
 ```
+
+Use `services.<name>.manager.env_file` and `.profiles` when a managed Compose service owns stable
+interpolation or profile selection truth. Do not push that ownership back into shell
+`docker compose --env-file ...` or `--profile ...` flags.
 
 ## Env modeling
 
