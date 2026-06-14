@@ -271,6 +271,24 @@ tasks:
             encoding: hex
 ```
 
+## Deterministic container network bootstrap
+
+Use `action.kind: ensure_container_network` when one setup lane owns shared external Docker
+network readiness and ota should own that truth instead of shell
+`docker network inspect ... || docker network create ...` glue.
+
+```yaml
+tasks:
+  network:ensure:
+    context: host
+    action:
+      kind: ensure_container_network
+      name: penpot_shared
+    requirements:
+      tools:
+        docker: "*"
+```
+
 ## Bake adapter ownership
 
 Use `adapter_inputs.bake.files` when one task or workflow owns the Bake file stack for

@@ -151,6 +151,8 @@ Prefer these concrete shapes when repo truth matches them:
   prepare step in order
 - use `action.kind: ensure_env_file` when one honest setup lane is deterministic env-file
   bootstrap or normalization
+- use `action.kind: ensure_container_network` when one honest setup lane owns shared external
+  Docker network readiness instead of shell `docker network inspect/create` glue
 - use `action.kind: ensure_bundle` when one honest setup lane owns more than one deterministic
   host file or directory mutation and would otherwise become shell orchestration glue
 - use lockfile-strict npm hydration with `manager: npm` and `mode: ci` when the repo truth is npm
@@ -238,6 +240,8 @@ When the repo truth supports them, push toward these shapes explicitly:
   - `prepare.kind: dependency_hydration` instead of ad hoc install shell bodies where Ota already
     owns the manager lane
   - `prepare.kind: sequence` when one setup task must compose multiple structural finite steps
+  - `action.kind: ensure_container_network` when shared external Docker network ownership belongs
+    to one finite setup task
 - env and compose truth:
   - `env.sources`, `env.vars`, `env_files`, `ensure_env_file`, workflow-owned env rendering, and
     `adapter_inputs.compose.env_files` / `adapter_inputs.bake.files` for adapter-owned input
@@ -257,6 +261,8 @@ When the contract could be modeled more than one way, choose by owner boundary:
   image hydration and those steps share one honest setup owner
 - use `action.kind: ensure_bundle` when the lane is deterministic native host file preparation
   built from action primitives
+- use `action.kind: ensure_container_network` when the lane is deterministic external Docker
+  network bootstrap and should stay machine-readable
 - keep steps as separate finite tasks when they need distinct reuse, separate requirements/effects,
   or independent operator entrypoints
 
@@ -268,7 +274,8 @@ For fuller holistic shapes, also use:
   and CI/version-floor governance
 - the public examples repo when a compact copy-ready surface is better than prose alone:
   `reference/bake-adapter-inputs`, `reference/action-ensure-env-file`,
-  `reference/action-ensure-bundle`, and `reference/compose-adapter-inputs`
+  `reference/action-ensure-bundle`, `reference/action-ensure-container-network`, and
+  `reference/compose-adapter-inputs`
 
 ## Known regression traps
 
