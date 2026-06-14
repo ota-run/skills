@@ -35,8 +35,10 @@ task in `run`. When that materialization produces a dotenv artifact for `docker 
 interpolation, project it through `tasks.<name>.adapter_inputs.compose.env_files` rather than task
 process `env_files`. When the workflow owns the base compose file stack or compose project name,
 keep that under `workflows.<name>.env.adapter_inputs.compose.*` so task-local adapter inputs only
-carry narrower path-specific additions. Use `workflows.<name>.env.adapter_inputs.bake.files` the
-same way when the workflow owns the base `docker buildx bake` file stack.
+carry narrower path-specific additions. The same workflow-owned surface also covers
+`adapter_inputs.compose.cwd` when the truthful compose root is a repo subdirectory. Use
+`workflows.<name>.env.adapter_inputs.bake.*` the same way when the workflow owns the Bake adapter
+root or the base `docker buildx bake` file stack.
 
 Choose workflow `prepare` by owner boundary:
 

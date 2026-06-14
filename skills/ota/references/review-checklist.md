@@ -50,6 +50,9 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   `toolchains.python.package_managers.poetry`?
 - Are env-file and env-rendering responsibilities owned by first-class env surfaces before shell
   glue?
+- If `docker compose` or `docker buildx bake` truth lives under a repo subdirectory, is that
+  adapter root modeled with `adapter_inputs.compose.cwd` or `adapter_inputs.bake.cwd` instead of
+  shell `cd ... && ...` or `docker compose --project-directory ...` glue?
 - If the repo uses `docker buildx bake`, is Bake file selection owned by
   `adapter_inputs.bake.files` instead of shell `-f` / `--file` flags?
 - Does the contract declare `metadata.ota.minimum_version` when newer Ota surfaces are in use?

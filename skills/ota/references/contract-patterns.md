@@ -210,6 +210,41 @@ tasks:
         - up
 ```
 
+## Compose and Bake adapter roots
+
+Use `adapter_inputs.compose.cwd` or `adapter_inputs.bake.cwd` when the truthful `docker compose`
+or `docker buildx bake` working directory is a repo subdirectory. That keeps adapter-root truth in
+the contract instead of hiding `cd docker && ...` or `docker compose --project-directory ...`
+inside shell bodies.
+
+```yaml
+tasks:
+  compose:up:
+    adapter_inputs:
+      compose:
+        cwd: docker
+        files:
+          - docker/docker-compose.yml
+    launch:
+      kind: command
+      exe: docker
+      args:
+        - compose
+        - up
+
+workflows:
+  release:
+    env:
+      adapter_inputs:
+        bake:
+          cwd: docker
+          files:
+            - docker/docker-bake.hcl
+            - docker/docker-bake.release.hcl
+    run:
+      task: bake:image
+```
+
 ## Deterministic env bootstrap
 
 Use `action.kind: ensure_env_file` when one setup lane really owns one env file and ota should own

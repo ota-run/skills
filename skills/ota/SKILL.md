@@ -168,12 +168,15 @@ Prefer these concrete shapes when repo truth matches them:
   materialization, `adapter_inputs.compose.env_files` for compose interpolation truth, and
   `adapter_inputs.bake.files` for Bake file selection truth instead of baking adapter flags and
   shell rewrite glue into task commands
+- use `adapter_inputs.compose.cwd` / `adapter_inputs.bake.cwd` when the truthful compose or Bake
+  working directory is a repo subdirectory instead of burying `cd ... && docker ...` or
+  `docker compose --project-directory ...` glue in task bodies
 - use canonical `workflows.<name>.env.adapter_inputs.compose.*` when one workflow should own the
-  base compose file stack, compose profile set, or project naming across its selected compose task
-  closure, instead of repeating that truth in task-local adapter inputs
-- use `workflows.<name>.env.adapter_inputs.bake.files` when one workflow should own the base Bake
-  file stack across its selected `docker buildx bake` task closure instead of repeating that truth
-  in task-local adapter inputs
+  adapter root, base compose file stack, compose profile set, or project naming across its
+  selected compose task closure, instead of repeating that truth in task-local adapter inputs
+- use `workflows.<name>.env.adapter_inputs.bake.*` when one workflow should own the adapter root
+  or base Bake file stack across its selected `docker buildx bake` task closure instead of
+  repeating that truth in task-local adapter inputs
 - set `metadata.ota.minimum_version` when the contract depends on newer parser, validator, or
   runtime surfaces
 
@@ -249,10 +252,14 @@ When the repo truth supports them, push toward these shapes explicitly:
   - `env.sources`, `env.vars`, `env_files`, `ensure_env_file`, workflow-owned env rendering, and
     `adapter_inputs.compose.env_files` / `adapter_inputs.bake.files` for adapter-owned input
     truth before resorting to inline shell glue
+  - `adapter_inputs.compose.cwd` / `adapter_inputs.bake.cwd` when compose or Bake truth lives in a
+    repo subdirectory and the task would otherwise need shell `cd ... && docker ...` or
+    `docker compose --project-directory ...` glue
   - `workflows.<name>.env.adapter_inputs.compose.*` when compose file selection, compose profile
-    selection, or project naming belongs to the workflow rather than one isolated task body
-  - `workflows.<name>.env.adapter_inputs.bake.files` when Bake file selection belongs to the
-    workflow rather than one isolated task body
+    selection, project naming, or adapter-root ownership belongs to the workflow rather than one
+    isolated task body
+  - `workflows.<name>.env.adapter_inputs.bake.*` when Bake file selection or adapter-root
+    ownership belongs to the workflow rather than one isolated task body
 - release/governance truth:
   - `metadata.ota.minimum_version` when the contract uses newer Ota capabilities
 
@@ -297,6 +304,9 @@ Watch for the concrete regressions we have repeatedly seen in pressure-test repo
 - env-file ownership baked into shell commands when first-class env surfaces can own that truth
 - compose interpolation files modeled as process `env_files` instead of
   `tasks.<name>.adapter_inputs.compose.env_files`
+- compose or Bake subdirectory truth still buried in shell `cd ... && docker ...` glue or
+  `docker compose --project-directory ...` instead of `adapter_inputs.compose.cwd` or
+  `adapter_inputs.bake.cwd`
 - Bake file selection buried in shell `docker buildx bake -f ...` flags instead of
   `tasks.<name>.adapter_inputs.bake.files` or
   `workflows.<name>.env.adapter_inputs.bake.files`
