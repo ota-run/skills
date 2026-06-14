@@ -155,7 +155,8 @@ tasks:
 ```
 
 Use `prepare.kind: sequence` only when those steps are still one structural setup lane. If the
-lane is really deterministic host file preparation, use `action.kind: ensure_bundle` instead. If
+lane is really deterministic setup built from action primitives, use `action.kind: ensure_bundle`
+instead. If
 the steps need separate reuse, distinct requirements/effects, or separate operator entrypoints,
 keep them as separate finite tasks wired through `depends_on`.
 
@@ -244,8 +245,8 @@ tasks:
 
 ## Bundled host file preparation
 
-Use `action.kind: ensure_bundle` when one setup lane owns more than one deterministic host
-mutation and those steps should stay in one governed action body instead of shell orchestration.
+Use `action.kind: ensure_bundle` when one setup lane owns more than one deterministic setup
+action and those steps should stay in one governed action body instead of shell orchestration.
 
 ```yaml
 tasks:
@@ -253,6 +254,8 @@ tasks:
     action:
       kind: ensure_bundle
       steps:
+        - kind: ensure_container_network
+          name: local-dev
         - kind: copy_if_missing
           from: .env.example
           to: .env.local
@@ -274,7 +277,7 @@ tasks:
 ## Deterministic container network bootstrap
 
 Use `action.kind: ensure_container_network` when one setup lane owns shared external Docker
-network readiness and ota should own that truth instead of shell
+network readiness as its own setup lane and ota should own that truth instead of shell
 `docker network inspect ... || docker network create ...` glue.
 
 ```yaml

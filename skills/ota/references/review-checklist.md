@@ -38,7 +38,7 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   instead of shell copy-plus-`sed` glue?
 - If one setup lane owns shared external Docker network readiness, does it use
   `action.kind: ensure_container_network` instead of shell `docker network inspect/create` glue?
-- If one setup lane is a bundle of deterministic host file mutations, does it use
+- If one setup lane is a bundle of deterministic setup actions under one owner, does it use
   `action.kind: ensure_bundle` instead of shell orchestration?
 - If a setup lane was collapsed into one parent body, is that the right owner boundary, or should
   those steps stay as separate finite tasks because they have different reuse, requirements, or

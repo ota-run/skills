@@ -152,9 +152,10 @@ Prefer these concrete shapes when repo truth matches them:
 - use `action.kind: ensure_env_file` when one honest setup lane is deterministic env-file
   bootstrap or normalization
 - use `action.kind: ensure_container_network` when one honest setup lane owns shared external
-  Docker network readiness instead of shell `docker network inspect/create` glue
+  Docker network readiness as a standalone lane instead of shell `docker network inspect/create`
+  glue
 - use `action.kind: ensure_bundle` when one honest setup lane owns more than one deterministic
-  host file or directory mutation and would otherwise become shell orchestration glue
+  setup action and would otherwise become shell orchestration glue
 - use lockfile-strict npm hydration with `manager: npm` and `mode: ci` when the repo truth is npm
   plus `package-lock.json`
 - use `source.kind: uv` under `prepare.kind: dependency_hydration` for uv-backed Python setup
@@ -241,7 +242,7 @@ When the repo truth supports them, push toward these shapes explicitly:
     owns the manager lane
   - `prepare.kind: sequence` when one setup task must compose multiple structural finite steps
   - `action.kind: ensure_container_network` when shared external Docker network ownership belongs
-    to one finite setup task
+    to one finite standalone setup task
 - env and compose truth:
   - `env.sources`, `env.vars`, `env_files`, `ensure_env_file`, workflow-owned env rendering, and
     `adapter_inputs.compose.env_files` / `adapter_inputs.bake.files` for adapter-owned input
@@ -259,10 +260,10 @@ When the contract could be modeled more than one way, choose by owner boundary:
 
 - use `prepare.kind: sequence` when the lane is still structural setup such as dependency or
   image hydration and those steps share one honest setup owner
-- use `action.kind: ensure_bundle` when the lane is deterministic native host file preparation
-  built from action primitives
+- use `action.kind: ensure_bundle` when the lane is deterministic setup built from action
+  primitives such as env/file prep plus shared Docker network bootstrap
 - use `action.kind: ensure_container_network` when the lane is deterministic external Docker
-  network bootstrap and should stay machine-readable
+  network bootstrap and should stay machine-readable as its own setup lane
 - keep steps as separate finite tasks when they need distinct reuse, separate requirements/effects,
   or independent operator entrypoints
 
