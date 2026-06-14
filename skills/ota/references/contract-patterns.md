@@ -154,6 +154,11 @@ tasks:
       network_kind: dependency_hydration
 ```
 
+Use `prepare.kind: sequence` only when those steps are still one structural setup lane. If the
+lane is really deterministic host file preparation, use `action.kind: ensure_bundle` instead. If
+the steps need separate reuse, distinct requirements/effects, or separate operator entrypoints,
+keep them as separate finite tasks wired through `depends_on`.
+
 ## Lockfile-strict npm hydration
 
 When the repo truth is npm plus `package-lock.json`, prefer first-class dependency hydration with
@@ -202,6 +207,99 @@ tasks:
       args:
         - compose
         - up
+```
+
+## Deterministic env bootstrap
+
+Use `action.kind: ensure_env_file` when one setup lane really owns one env file and ota should own
+key replacement, stale-key removal, template re-derivation, or secret generation instead of shell
+copy-plus-`sed` glue.
+
+```yaml
+env:
+  vars:
+    DATABASE_URL:
+      required: true
+
+tasks:
+  setup:env:
+    action:
+      kind: ensure_env_file
+      path: .env.local
+      template: .env.example
+      vars:
+        APP_ENV:
+          value: local
+          mode: replace
+        DATABASE_URL:
+          from_env: DATABASE_URL
+          mode: replace
+        APP_SECRET:
+          random:
+            bytes: 24
+            encoding: hex
+        LEGACY_FLAG:
+          mode: remove
+```
+
+## Bundled host file preparation
+
+Use `action.kind: ensure_bundle` when one setup lane owns more than one deterministic host
+mutation and those steps should stay in one governed action body instead of shell orchestration.
+
+```yaml
+tasks:
+  bootstrap:local:
+    action:
+      kind: ensure_bundle
+      steps:
+        - kind: copy_if_missing
+          from: .env.example
+          to: .env.local
+        - kind: ensure_env_file
+          path: .env.local
+          vars:
+            APP_ENV:
+              value: local
+              mode: replace
+        - kind: ensure_directory
+          path: .cache/ota
+        - kind: ensure_file
+          path: .secrets/dev-token
+          random:
+            bytes: 24
+            encoding: hex
+```
+
+## Bake adapter ownership
+
+Use `adapter_inputs.bake.files` when one task or workflow owns the Bake file stack for
+`docker buildx bake` and that truth should stay declarative instead of living in shell `-f` flags.
+
+```yaml
+tasks:
+  bake:image:
+    adapter_inputs:
+      bake:
+        files:
+          - docker-bake.hcl
+    command:
+      exe: docker
+      args:
+        - buildx
+        - bake
+        - app
+
+workflows:
+  release:
+    env:
+      adapter_inputs:
+        bake:
+          files:
+            - docker-bake.hcl
+            - docker-bake.release.hcl
+    run:
+      task: bake:image
 ```
 
 ## Minimum-version governance

@@ -149,6 +149,10 @@ Prefer these concrete shapes when repo truth matches them:
   install commands when Ota can own the lane truthfully
 - use `prepare.kind: sequence` when one honest finite setup lane needs more than one structural
   prepare step in order
+- use `action.kind: ensure_env_file` when one honest setup lane is deterministic env-file
+  bootstrap or normalization
+- use `action.kind: ensure_bundle` when one honest setup lane owns more than one deterministic
+  host file or directory mutation and would otherwise become shell orchestration glue
 - use lockfile-strict npm hydration with `manager: npm` and `mode: ci` when the repo truth is npm
   plus `package-lock.json`
 - use `source.kind: uv` under `prepare.kind: dependency_hydration` for uv-backed Python setup
@@ -247,12 +251,24 @@ When the repo truth supports them, push toward these shapes explicitly:
 
 Prefer the strongest truthful contract surface, not the broadest valid YAML surface.
 
+When the contract could be modeled more than one way, choose by owner boundary:
+
+- use `prepare.kind: sequence` when the lane is still structural setup such as dependency or
+  image hydration and those steps share one honest setup owner
+- use `action.kind: ensure_bundle` when the lane is deterministic native host file preparation
+  built from action primitives
+- keep steps as separate finite tasks when they need distinct reuse, separate requirements/effects,
+  or independent operator entrypoints
+
 For fuller holistic shapes, also use:
 
 - `references/workflow-service-patterns.md` for workflows, services, env modeling,
   `requires_services`, context-bound `execution`, and post-run hooks
 - `references/agent-and-governance-checklist.md` for `agent`, `checks`, `effects`, proof posture,
   and CI/version-floor governance
+- the public examples repo when a compact copy-ready surface is better than prose alone:
+  `reference/bake-adapter-inputs`, `reference/action-ensure-env-file`,
+  `reference/action-ensure-bundle`, and `reference/compose-adapter-inputs`
 
 ## Known regression traps
 

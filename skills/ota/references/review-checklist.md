@@ -34,6 +34,13 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   lane?
 - If one setup lane spans more than one structural finite step, is that modeled with
   `prepare.kind: sequence` instead of a fallback shell script?
+- If one setup lane is deterministic env bootstrap, does it use `action.kind: ensure_env_file`
+  instead of shell copy-plus-`sed` glue?
+- If one setup lane is a bundle of deterministic host file mutations, does it use
+  `action.kind: ensure_bundle` instead of shell orchestration?
+- If a setup lane was collapsed into one parent body, is that the right owner boundary, or should
+  those steps stay as separate finite tasks because they have different reuse, requirements, or
+  effects?
 - If the repo uses uv for Python dependency setup, is that modeled with `source.kind: uv` instead
   of a raw `run: uv sync` body?
 - If the repo uses npm with `package-lock.json`, is setup modeled with `manager: npm` and `mode: ci`?
@@ -41,6 +48,8 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   `toolchains.python.package_managers.poetry`?
 - Are env-file and env-rendering responsibilities owned by first-class env surfaces before shell
   glue?
+- If the repo uses `docker buildx bake`, is Bake file selection owned by
+  `adapter_inputs.bake.files` instead of shell `-f` / `--file` flags?
 - Does the contract declare `metadata.ota.minimum_version` when newer Ota surfaces are in use?
 - Are public CI or proof workflows installing an Ota build new enough to execute the contract they
   validate?
