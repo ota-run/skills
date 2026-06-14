@@ -38,13 +38,26 @@ keep that under `workflows.<name>.env.adapter_inputs.compose.*` so task-local ad
 carry narrower path-specific additions. Use `workflows.<name>.env.adapter_inputs.bake.files` the
 same way when the workflow owns the base `docker buildx bake` file stack.
 
+Choose workflow `prepare` by owner boundary:
+
+- use `prepare.task` when the bootstrap step deserves reuse or its own task identity
+- use `prepare.action` when the workflow itself honestly owns one finite deterministic bootstrap
+  action or bundle and a helper task would only add glue
+
 ```yaml
 workflows:
   app:
     intent: local_development
     description: Canonical local application workflow
     prepare:
-      task: setup:env
+      action:
+        kind: ensure_env_file
+        path: .env.local
+        template: .env.example
+        vars:
+          APP_ENV:
+            value: local
+            mode: replace
     setup:
       task: setup
     run:

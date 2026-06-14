@@ -156,6 +156,8 @@ Prefer these concrete shapes when repo truth matches them:
   glue
 - use `action.kind: ensure_bundle` when one honest setup lane owns more than one deterministic
   setup action and would otherwise become shell orchestration glue
+- use `workflows.<name>.prepare.action` when the workflow itself honestly owns one finite
+  deterministic host bootstrap action or bundle and a reusable helper task would only be glue
 - use lockfile-strict npm hydration with `manager: npm` and `mode: ci` when the repo truth is npm
   plus `package-lock.json`
 - use `source.kind: uv` under `prepare.kind: dependency_hydration` for uv-backed Python setup
@@ -264,6 +266,8 @@ When the contract could be modeled more than one way, choose by owner boundary:
   primitives such as env/file prep plus shared Docker network bootstrap
 - use `action.kind: ensure_container_network` when the lane is deterministic external Docker
   network bootstrap and should stay machine-readable as its own setup lane
+- use `workflows.<name>.prepare.task` when that bootstrap step deserves reuse or its own task
+  identity; use `workflows.<name>.prepare.action` when the workflow itself owns it directly
 - keep steps as separate finite tasks when they need distinct reuse, separate requirements/effects,
   or independent operator entrypoints
 
