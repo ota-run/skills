@@ -158,6 +158,12 @@ Prefer these concrete shapes when repo truth matches them:
   setup action and would otherwise become shell orchestration glue
 - use `workflows.<name>.prepare.action` when the workflow itself honestly owns one finite
   deterministic host bootstrap action or bundle and a reusable helper task would only be glue
+- use manager-specific native prerequisite package lanes (`apt`, `brew`, `winget`, `choco`,
+  `scoop`) when the repo wants Ota-owned host package fulfillment or org-policy approval
+- keep those manager lanes aligned to the OS platform entry they live under instead of mixing
+  likely wrong-OS package-manager lanes into the same native prerequisite platform
+- avoid mixing opaque `install` shell glue with manager-owned native package lanes on the same
+  platform entry when the shell command is only there for host package installation
 - use lockfile-strict npm hydration with `manager: npm` and `mode: ci` when the repo truth is npm
   plus `package-lock.json`
 - use `source.kind: uv` under `prepare.kind: dependency_hydration` for uv-backed Python setup
@@ -300,6 +306,8 @@ Watch for the concrete regressions we have repeatedly seen in pressure-test repo
 - mixed-ecosystem setup script bodies where `prepare.kind: sequence` should own the lane instead
 - raw `uv sync` setup bodies in Python repos where first-class `prepare.source.kind: uv` now exists
 - raw `npm install` or non-lockfile setup when the repo truth is npm plus `package-lock.json`
+- invalid generic native package fields where explicit manager-owned package fields should own
+  fulfillment or policy truth
 - public CI or proof workflows pinned to an older Ota build than the contract surface they execute
 - env-file ownership baked into shell commands when first-class env surfaces can own that truth
 - compose interpolation files modeled as process `env_files` instead of
