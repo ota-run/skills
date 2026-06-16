@@ -160,6 +160,75 @@ instead. If
 the steps need separate reuse, distinct requirements/effects, or separate operator entrypoints,
 keep them as separate finite tasks wired through `depends_on`.
 
+## Java, Rust, and .NET dependency hydration
+
+When the repo truth is standard Java, Rust, or .NET dependency setup, prefer first-class
+dependency hydration instead of raw install shell.
+
+```yaml
+toolchains:
+  java:
+    version: "21"
+  rust:
+    version: "1.94.0"
+  dotnet:
+    version: "8.0"
+
+tasks:
+  setup:java:
+    description: Hydrate Maven dependencies through the repo wrapper
+    prepare:
+      kind: dependency_hydration
+      medium: package_dependencies
+      source:
+        kind: maven
+        cwd: .
+        wrapper: true
+    requirements:
+      toolchains:
+        - java
+    effects:
+      writes:
+        - .mvn
+        - target
+      network: true
+      network_kind: dependency_hydration
+
+  setup:rust:
+    description: Hydrate Cargo dependencies
+    prepare:
+      kind: dependency_hydration
+      medium: package_dependencies
+      source:
+        kind: cargo
+        cwd: .
+    requirements:
+      toolchains:
+        - rust
+    effects:
+      writes:
+        - target
+      network: true
+      network_kind: dependency_hydration
+
+  setup:dotnet:
+    description: Hydrate .NET dependencies
+    prepare:
+      kind: dependency_hydration
+      medium: package_dependencies
+      source:
+        kind: dotnet_restore
+        cwd: .
+    requirements:
+      toolchains:
+        - dotnet
+    effects:
+      writes:
+        - obj
+      network: true
+      network_kind: dependency_hydration
+```
+
 ## Lockfile-strict npm hydration
 
 When the repo truth is npm plus `package-lock.json`, prefer first-class dependency hydration with

@@ -166,6 +166,13 @@ Prefer these concrete shapes when repo truth matches them:
   platform entry when the shell command is only there for host package installation
 - use lockfile-strict npm hydration with `manager: npm` and `mode: ci` when the repo truth is npm
   plus `package-lock.json`
+- use `source.kind: maven` or `source.kind: gradle` under
+  `prepare.kind: dependency_hydration` for Java setup instead of raw `mvn ...` or `gradle ...`
+  shell; set `wrapper: true` when the repo truth is `mvnw` or `gradlew`
+- use `source.kind: cargo` under `prepare.kind: dependency_hydration` for Rust setup instead of
+  raw `run: cargo fetch`
+- use `source.kind: dotnet_restore` under `prepare.kind: dependency_hydration` for .NET setup
+  instead of raw `run: dotnet restore`
 - use `source.kind: uv` under `prepare.kind: dependency_hydration` for uv-backed Python setup
   instead of raw `run: uv sync`
 - use `toolchains.python.package_managers.poetry` instead of standalone `tools.poetry` when Poetry
