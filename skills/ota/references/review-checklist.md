@@ -48,6 +48,9 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
 - If the repo uses npm with `package-lock.json`, is setup modeled with `manager: npm` and `mode: ci`?
 - If Poetry owns Python dependency truth, is it declared under
   `toolchains.python.package_managers.poetry`?
+- If the repo depends on deterministic file inputs, are those checks modeled with `kind: file`
+  instead of shell `test -f ...` glue, and does any sibling relative input use
+  `scope: workspace` explicitly instead of pretending it is repo-local?
 - Are env-file and env-rendering responsibilities owned by first-class env surfaces before shell
   glue?
 - When tasks mutate out-of-repo systems, does `effects.external_state` use shipped canonical

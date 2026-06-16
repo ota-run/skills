@@ -183,6 +183,10 @@ Prefer these concrete shapes when repo truth matches them:
   materialization, `adapter_inputs.compose.env_files` for compose interpolation truth, and
   `adapter_inputs.bake.files` for Bake file selection truth instead of baking adapter flags and
   shell rewrite glue into task commands
+- use `checks[].kind: file` instead of shell `test -f ...` / `test -d ...` glue for deterministic
+  filesystem assertions; keep the default repo-bound scope for in-repo paths and use
+  `checks[].scope: workspace` only when the real contract truth depends on a sibling relative input
+  such as `../task-sdk/schema.json`
 - use canonical `effects.external_state` tokens when the task mutates out-of-repo systems;
   prefer shipped vocabulary such as `docker`, `postgres`, `redis`, `mysql`, `mariadb`, `kafka`,
   `rabbitmq`, `elasticsearch`, `opensearch`, `s3`, `gcs`, `azure_blob`, `cloudflare`,
