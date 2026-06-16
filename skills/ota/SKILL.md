@@ -183,6 +183,11 @@ Prefer these concrete shapes when repo truth matches them:
   materialization, `adapter_inputs.compose.env_files` for compose interpolation truth, and
   `adapter_inputs.bake.files` for Bake file selection truth instead of baking adapter flags and
   shell rewrite glue into task commands
+- use canonical `effects.external_state` tokens when the task mutates out-of-repo systems;
+  prefer shipped vocabulary such as `docker`, `postgres`, `redis`, `mysql`, `mariadb`, `kafka`,
+  `rabbitmq`, `elasticsearch`, `opensearch`, `s3`, `gcs`, `azure_blob`, `cloudflare`,
+  `kubernetes`, or `terraform` instead of repo-local aliases like `docker_compose`,
+  `postgresql`, or `k8s`
 - use `adapter_inputs.compose.cwd` / `adapter_inputs.bake.cwd` when the truthful compose or Bake
   working directory is a repo subdirectory instead of burying `cd ... && docker ...` or
   `docker compose --project-directory ...` glue in task bodies
