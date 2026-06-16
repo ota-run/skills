@@ -168,7 +168,9 @@ Prefer these concrete shapes when repo truth matches them:
   plus `package-lock.json`
 - use `source.kind: maven` or `source.kind: gradle` under
   `prepare.kind: dependency_hydration` for Java setup instead of raw `mvn ...` or `gradle ...`
-  shell; set `wrapper: true` when the repo truth is `mvnw` or `gradlew`
+  shell; set `wrapper: true` when the repo truth is `mvnw` or `gradlew`, and use
+  `mode: go_offline` plus `skip_tests: true` when the real setup lane is
+  `mvn -q -DskipTests dependency:go-offline`
 - use `source.kind: cargo` under `prepare.kind: dependency_hydration` for Rust setup instead of
   raw `run: cargo fetch`
 - use `source.kind: dotnet_restore` under `prepare.kind: dependency_hydration` for .NET setup

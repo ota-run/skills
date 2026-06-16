@@ -184,6 +184,8 @@ tasks:
         kind: maven
         cwd: .
         wrapper: true
+        mode: go_offline
+        skip_tests: true
     requirements:
       toolchains:
         - java
