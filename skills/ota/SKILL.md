@@ -98,8 +98,14 @@ Use the smallest real Ota workflow that fits the task:
   - inspect readiness blockers, warnings, next actions, and agent guidance
 - `ota init`
   - create a starter contract only when the user wants Ota adoption or no contract exists
+  - prefer the emitted starter shapes Ota now owns directly: `toolchains.*`,
+    `prepare.kind: dependency_hydration` for `setup`, and `command` for simple finite task bodies
 - `ota detect`
   - inspect deterministic repo evidence before broadening a contract
+  - treat `ota detect --write` as the conservative first-write lane, not the full starter lane
+  - when reviewing a detect-written contract, read `metadata.ota.detect.field_ownership` together
+    with `metadata.ota.detect.field_admission` so direct detector-owned writes are not confused
+    with conservative starter-policy promotions
 - `ota validate`
   - verify structural and semantic contract correctness
 - `ota tasks`
