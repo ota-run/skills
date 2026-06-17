@@ -205,6 +205,9 @@ Prefer these concrete shapes when repo truth matches them:
 - use `services.<name>.manager.engine: podman` plus `command.exe: podman` / `launch.exe: podman`
   when the repo truth is `podman compose` rather than teaching Podman as a Docker-shaped shell
   variant
+- use `services.<name>.manager.kind: host` with `manager.host.kind: systemd` plus
+  `readiness.kind: systemd_active` when the repo truth is a host-managed systemd unit rather than
+  shell `systemctl start` / `stop` / `is-active` glue
 - use canonical `workflows.<name>.adapter_inputs.compose.*` when one workflow should own the
   adapter root, base compose file stack, compose profile set, or project naming across its
   selected compose task closure, instead of repeating that truth in task-local adapter inputs

@@ -399,6 +399,33 @@ tasks:
         docker: "*"
 ```
 
+## Typed systemd host-service ownership
+
+Use `manager.kind: host` with `manager.host.kind: systemd` when the real service owner is a
+systemd unit and ota should derive lifecycle and readiness instead of hiding `systemctl` glue in
+shell commands.
+
+Validate and doctor now flag direct `systemctl start`, `stop`, and `is-active` task glue when
+that ownership should move onto this typed service surface.
+
+When you want ota to author this shape directly, prefer
+`ota assist declare-service --name <service> --manager host --host-unit <unit> --style systemd-active`.
+
+```yaml
+services:
+  redis:
+    manager:
+      kind: host
+      host:
+        kind: systemd
+        unit: redis.service
+        scope: system
+    readiness:
+      kind: systemd_active
+      interval: 2s
+      retries: 5
+```
+
 ## Bake adapter ownership
 
 Use `adapter_inputs.bake.files` when one task or workflow owns the Bake file stack for
