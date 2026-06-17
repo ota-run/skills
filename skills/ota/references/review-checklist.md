@@ -32,6 +32,10 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   hidden in `depends_on`?
 - Does dependency setup use `prepare.kind: dependency_hydration` when Ota owns the package-manager
   lane?
+- If setup already uses typed dependency hydration, are any remaining warnings about the real
+  network/write blast radius instead of old install-shell glue?
+- If the task is installing a required tool rather than repo dependencies, is that modeled with
+  `prepare.kind: tool_bootstrap` instead of raw shell `pip install ...` glue?
 - If one setup lane spans more than one structural finite step, is that modeled with
   `prepare.kind: sequence` instead of a fallback shell script?
 - If one setup lane is deterministic env bootstrap, does it use `action.kind: ensure_env_file`

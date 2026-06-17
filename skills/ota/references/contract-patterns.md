@@ -108,6 +108,29 @@ tasks:
       network_kind: dependency_hydration
 ```
 
+## uv tool bootstrap
+
+When the task truth is making `uv` available for later contract execution, prefer first-class tool
+bootstrap instead of raw `python -m pip install ... uv` shell.
+
+```yaml
+tasks:
+  setup:tooling:
+    description: Ensure uv is available for this contract slice
+    prepare:
+      kind: tool_bootstrap
+      tool: uv
+      source:
+        kind: pip
+        exe: python
+    requirements:
+      toolchains:
+        - python
+    effects:
+      network: true
+      network_kind: tool_bootstrap
+```
+
 ## Mixed finite setup sequencing
 
 When one repo-level `setup` lane honestly needs more than one structural finite step, use

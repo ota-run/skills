@@ -153,6 +153,16 @@ Prefer these concrete shapes when repo truth matches them:
 - use `launch.kind: command` for long-running service processes instead of opaque `run`
 - use `prepare.kind: dependency_hydration` for dependency setup instead of raw package-manager
   install commands when Ota can own the lane truthfully
+- treat typed dependency hydration as stronger governance, not weaker safety: it removes
+  replaceable install-shell drift, but the task still needs honest `requirements`, `effects`,
+  writable-path boundaries, and usually remains outside routine `agent.safe_tasks` because the
+  networked setup blast radius is still real
+- use `prepare.kind: tool_bootstrap` when the task truth is contract-owned tool installation
+  rather than repo dependency hydration; the first shipped slice is bootstrapping `uv` through
+  `source.kind: pip` with explicit `source.exe`
+- treat typed tool bootstrap the same way: it removes replaceable shell drift, but keep
+  `effects.network_kind: tool_bootstrap` explicit and do not pretend unattended tool installation
+  is automatically routine agent-safe execution
 - use `prepare.kind: sequence` when one honest finite setup lane needs more than one structural
   prepare step in order
 - use `action.kind: ensure_env_file` when one honest setup lane is deterministic env-file
