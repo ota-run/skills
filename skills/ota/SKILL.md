@@ -199,8 +199,12 @@ Prefer these concrete shapes when repo truth matches them:
   `kubernetes`, or `terraform` instead of repo-local aliases like `docker_compose`,
   `postgresql`, or `k8s`
 - use `adapter_inputs.compose.cwd` / `adapter_inputs.bake.cwd` when the truthful compose or Bake
-  working directory is a repo subdirectory instead of burying `cd ... && docker ...` or
-  `docker compose --project-directory ...` glue in task bodies
+  working directory is a repo subdirectory instead of burying `cd ... && docker ...`,
+  `cd ... && podman ...`, `docker compose --project-directory ...`, or
+  `podman compose --project-directory ...` glue in task bodies
+- use `services.<name>.manager.engine: podman` plus `command.exe: podman` / `launch.exe: podman`
+  when the repo truth is `podman compose` rather than teaching Podman as a Docker-shaped shell
+  variant
 - use canonical `workflows.<name>.adapter_inputs.compose.*` when one workflow should own the
   adapter root, base compose file stack, compose profile set, or project naming across its
   selected compose task closure, instead of repeating that truth in task-local adapter inputs

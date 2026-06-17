@@ -256,7 +256,7 @@ Prefer first-class env ownership such as `env_files`, `ensure_env_file`, and
 `adapter_inputs.compose.env_files` before baking env-file flags into task commands. Use
 `env_files` when the task process itself needs the overlay. Use
 `adapter_inputs.compose.env_files` when the file is compose interpolation truth for `docker
-compose`, including workflow-rendered dotenv artifacts.
+compose` or `podman compose`, including workflow-rendered dotenv artifacts.
 
 ```yaml
 tasks:
@@ -283,10 +283,11 @@ tasks:
 
 ## Compose and Bake adapter roots
 
-Use `adapter_inputs.compose.cwd` or `adapter_inputs.bake.cwd` when the truthful `docker compose`
-or `docker buildx bake` working directory is a repo subdirectory. That keeps adapter-root truth in
-the contract instead of hiding `cd docker && ...` or `docker compose --project-directory ...`
-inside shell bodies.
+Use `adapter_inputs.compose.cwd` or `adapter_inputs.bake.cwd` when the truthful `docker compose`,
+`podman compose`, or `docker buildx bake` working directory is a repo subdirectory. That keeps
+adapter-root truth in the contract instead of hiding `cd docker && ...`,
+`docker compose --project-directory ...`, or `podman compose --project-directory ...` inside shell
+bodies.
 
 ```yaml
 tasks:
