@@ -201,10 +201,10 @@ Prefer these concrete shapes when repo truth matches them:
 - use `adapter_inputs.compose.cwd` / `adapter_inputs.bake.cwd` when the truthful compose or Bake
   working directory is a repo subdirectory instead of burying `cd ... && docker ...` or
   `docker compose --project-directory ...` glue in task bodies
-- use canonical `workflows.<name>.env.adapter_inputs.compose.*` when one workflow should own the
+- use canonical `workflows.<name>.adapter_inputs.compose.*` when one workflow should own the
   adapter root, base compose file stack, compose profile set, or project naming across its
   selected compose task closure, instead of repeating that truth in task-local adapter inputs
-- use `workflows.<name>.env.adapter_inputs.bake.*` when one workflow should own the adapter root
+- use `workflows.<name>.adapter_inputs.bake.*` when one workflow should own the adapter root
   or base Bake file stack across its selected `docker buildx bake` task closure instead of
   repeating that truth in task-local adapter inputs
 - set `metadata.ota.minimum_version` when the contract depends on newer parser, validator, or
@@ -285,10 +285,10 @@ When the repo truth supports them, push toward these shapes explicitly:
   - `adapter_inputs.compose.cwd` / `adapter_inputs.bake.cwd` when compose or Bake truth lives in a
     repo subdirectory and the task would otherwise need shell `cd ... && docker ...` or
     `docker compose --project-directory ...` glue
-  - `workflows.<name>.env.adapter_inputs.compose.*` when compose file selection, compose profile
+  - `workflows.<name>.adapter_inputs.compose.*` when compose file selection, compose profile
     selection, project naming, or adapter-root ownership belongs to the workflow rather than one
     isolated task body
-  - `workflows.<name>.env.adapter_inputs.bake.*` when Bake file selection or adapter-root
+  - `workflows.<name>.adapter_inputs.bake.*` when Bake file selection or adapter-root
     ownership belongs to the workflow rather than one isolated task body
 - release/governance truth:
   - `metadata.ota.minimum_version` when the contract uses newer Ota capabilities
@@ -341,7 +341,7 @@ Watch for the concrete regressions we have repeatedly seen in pressure-test repo
   `adapter_inputs.bake.cwd`
 - Bake file selection buried in shell `docker buildx bake -f ...` flags instead of
   `tasks.<name>.adapter_inputs.bake.files` or
-  `workflows.<name>.env.adapter_inputs.bake.files`
+  `workflows.<name>.adapter_inputs.bake.files`
 - missing `metadata.ota.minimum_version` when a contract depends on newer Ota parsing or runtime
   behavior
 
