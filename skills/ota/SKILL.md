@@ -205,9 +205,13 @@ Prefer these concrete shapes when repo truth matches them:
 - use `tools.<name>.platforms.<os>.acquisition` for standalone CLI ownership when the repo truth is
   a host package-manager lane such as Helm via `apt`, `brew`, `winget`, `choco`, or `scoop`;
   keep that CLI in `tools` instead of splitting it into `native_prerequisites`
-- use `tools.<name>.acquisition.source_config` when that package-manager-backed standalone CLI also
-  needs source truth such as a Brew tap, Winget source, Chocolatey feed, Scoop bucket, or apt
-  sources list
+- use `tools.<name>.acquisition.provider: release_asset` when the truthful standalone CLI owner is
+  one exact downloadable binary artifact or release archive and ota should own that selected-path
+  source directly in the contract instead of hiding it in shell glue or org policy only
+- use `tools.<name>.acquisition.source_config` when that package-manager-backed or release-asset
+  standalone CLI also needs source truth such as a Brew tap, Winget source, Chocolatey feed, Scoop
+  bucket, apt sources list, `asset_by_platform` release URLs, or archive extraction metadata such
+  as `archive.format: tar_gz` / `zip` plus `archive.executable_path`
 - use `source.kind: uv` under `prepare.kind: dependency_hydration` for uv-backed Python setup
   instead of raw `run: uv sync`
 - use `toolchains.python.package_managers.poetry` instead of standalone `tools.poetry` when Poetry
