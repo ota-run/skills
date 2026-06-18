@@ -127,6 +127,9 @@ If the repository has no contract yet:
 For agent, Studio, CI, or other integration surfaces, prefer Ota JSON output (`--json`) or documented
 schemas. Do not parse rich human output unless no machine-readable surface exists, and call that out
 as an Ota platform gap.
+For `ota run <task> --dry-run --json`, prefer top-level `provisioning` and `provisioning_request`
+when present instead of scraping `plan.requirement_lines`; that selected-path provisioning truth is
+the machine-readable host-fulfillment surface for direct tool acquisition.
 
 ## Contract authoring workflow
 
