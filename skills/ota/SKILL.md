@@ -197,6 +197,8 @@ Prefer these concrete shapes when repo truth matches them:
   raw `run: cargo fetch`
 - use `source.kind: dotnet_restore` under `prepare.kind: dependency_hydration` for .NET setup
   instead of raw `run: dotnet restore`
+- use `source.kind: helm` under `prepare.kind: dependency_hydration` for Helm chart setup instead
+  of raw `helm dependency build ...` command or shell glue
 - use `source.kind: uv` under `prepare.kind: dependency_hydration` for uv-backed Python setup
   instead of raw `run: uv sync`
 - use `toolchains.python.package_managers.poetry` instead of standalone `tools.poetry` when Poetry

@@ -183,6 +183,31 @@ instead. If
 the steps need separate reuse, distinct requirements/effects, or separate operator entrypoints,
 keep them as separate finite tasks wired through `depends_on`.
 
+## Helm chart hydration
+
+When the repo truth is resolving Helm chart dependencies, prefer first-class dependency hydration
+instead of raw `helm dependency build ...` command bodies.
+
+```yaml
+tasks:
+  setup:
+    description: Resolve Helm chart dependencies
+    prepare:
+      kind: dependency_hydration
+      medium: package_dependencies
+      source:
+        kind: helm
+        cwd: deploy/helm
+    requirements:
+      tools:
+        helm: "*"
+    effects:
+      writes:
+        - deploy/helm/charts
+      network: true
+      network_kind: dependency_hydration
+```
+
 ## Java, Rust, and .NET dependency hydration
 
 When the repo truth is standard Java, Rust, or .NET dependency setup, prefer first-class
