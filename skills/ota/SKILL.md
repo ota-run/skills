@@ -232,8 +232,11 @@ Prefer these concrete shapes when repo truth matches them:
 - use `workflows.<name>.adapter_inputs.overlays.bake.*` when one workflow should own the adapter root
   or base Bake file stack across its selected `docker buildx bake` task closure instead of
   repeating that truth in task-local adapter inputs
+- use `adapter_inputs.overlays.helm.*` or `workflows.<name>.adapter_inputs.overlays.helm.*` when one
+  task path or workflow owns Helm chart root, values-file selection, release naming, or namespace
+  truth instead of hard-coding Helm positionals or `--namespace` flags in argv
 - treat `adapter_inputs.overlays.<family>` as a generalized contract surface with a strict shipped
-  boundary: runtime semantics currently exist only for `compose` and `bake`, and unsupported
+  boundary: runtime semantics currently exist for `compose`, `bake`, and `helm`, and unsupported
   families should be called out as not yet shipped rather than modeled as if they execute
 - set `metadata.ota.minimum_version` when the contract depends on newer parser, validator, or
   runtime surfaces

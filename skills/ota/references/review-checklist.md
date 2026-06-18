@@ -61,10 +61,13 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   tokens like `docker`, `postgres`, `redis`, `s3`, `cloudflare`, or `kubernetes` instead of
   repo-local aliases such as `docker_compose`, `postgresql`, or `k8s`?
 - If `docker compose` or `docker buildx bake` truth lives under a repo subdirectory, is that
-  adapter root modeled with `adapter_inputs.compose.cwd` or `adapter_inputs.bake.cwd` instead of
+  adapter root modeled with `adapter_inputs.overlays.compose.cwd` or `adapter_inputs.overlays.bake.cwd` instead of
   shell `cd ... && ...` or `docker compose --project-directory ...` glue?
 - If the repo uses `docker buildx bake`, is Bake file selection owned by
-  `adapter_inputs.bake.files` instead of shell `-f` / `--file` flags?
+  `adapter_inputs.overlays.bake.files` instead of shell `-f` / `--file` flags?
+- If the repo uses Helm render/install/lint lanes, is chart root, values-file selection, release
+  naming, or namespace truth owned by `adapter_inputs.overlays.helm.*` instead of shell `cd ... && helm ...`,
+  chart positionals, or `--namespace` flags?
 - Does the contract declare `metadata.ota.minimum_version` when newer Ota surfaces are in use?
 - Are public CI or proof workflows installing an Ota build new enough to execute the contract they
   validate?

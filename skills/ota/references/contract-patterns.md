@@ -301,9 +301,9 @@ tasks:
 ## Env ownership
 
 Prefer first-class env ownership such as `env_files`, `ensure_env_file`, and
-`adapter_inputs.compose.env_files` before baking env-file flags into task commands. Use
+`adapter_inputs.overlays.compose.env_files` before baking env-file flags into task commands. Use
 `env_files` when the task process itself needs the overlay. Use
-`adapter_inputs.compose.env_files` when the file is compose interpolation truth for `docker
+`adapter_inputs.overlays.compose.env_files` when the file is compose interpolation truth for `docker
 compose` or `podman compose`, including workflow-rendered dotenv artifacts.
 
 ```yaml
@@ -331,7 +331,7 @@ tasks:
 
 ## Compose and Bake adapter roots
 
-Use `adapter_inputs.compose.cwd` or `adapter_inputs.bake.cwd` when the truthful `docker compose`,
+Use `adapter_inputs.overlays.compose.cwd` or `adapter_inputs.overlays.bake.cwd` when the truthful `docker compose`,
 `podman compose`, or `docker buildx bake` working directory is a repo subdirectory. That keeps
 adapter-root truth in the contract instead of hiding `cd docker && ...`,
 `docker compose --project-directory ...`, or `podman compose --project-directory ...` inside shell
@@ -476,7 +476,7 @@ services:
 
 ## Bake adapter ownership
 
-Use `adapter_inputs.bake.files` when one task or workflow owns the Bake file stack for
+Use `adapter_inputs.overlays.bake.files` when one task or workflow owns the Bake file stack for
 `docker buildx bake` and that truth should stay declarative instead of living in shell `-f` flags.
 
 ```yaml
