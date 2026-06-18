@@ -153,6 +153,9 @@ Prefer these concrete shapes when repo truth matches them:
 - use `launch.kind: command` for long-running service processes instead of opaque `run`
 - use `prepare.kind: dependency_hydration` for dependency setup instead of raw package-manager
   install commands when Ota can own the lane truthfully
+- use `source.kind: node_package_manager` with `manager: yarn`, `mode: install`, and
+  `inline_builds: true` when the repo truth is `yarn install --inline-builds` instead of leaving
+  that lane as raw shell
 - treat typed dependency hydration as stronger governance, not weaker safety: it removes
   replaceable install-shell drift, but the task still needs honest `requirements`, `effects`,
   writable-path boundaries, and usually remains outside routine `agent.safe_tasks` because the
