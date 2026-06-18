@@ -208,6 +208,33 @@ tasks:
       network_kind: dependency_hydration
 ```
 
+## Standalone CLI package-manager ownership
+
+When the repo truth is "this standalone CLI should be fulfilled through the host package manager",
+keep that ownership under `tools` instead of splitting it into `native_prerequisites`.
+
+```yaml
+tools:
+  helm:
+    version: ">=3.8"
+    platforms:
+      linux:
+        acquisition:
+          provider: apt
+          package: helm
+      macos:
+        acquisition:
+          provider: brew
+          package: helm
+          source_config:
+            tap_name: vendor/tap
+            tap_url: https://github.com/vendor/homebrew-tap
+      windows:
+        acquisition:
+          provider: winget
+          package: Helm.Helm
+```
+
 ## Java, Rust, and .NET dependency hydration
 
 When the repo truth is standard Java, Rust, or .NET dependency setup, prefer first-class
