@@ -156,6 +156,9 @@ Prefer these concrete shapes when repo truth matches them:
 - use `source.kind: node_package_manager` with `manager: yarn`, `mode: install`, and
   `inline_builds: true` when the repo truth is `yarn install --inline-builds` instead of leaving
   that lane as raw shell
+- use `source.kind: node_package_manager` with `manager: npm`, `mode: install`, and
+  `force: true` only when the repo truth is explicitly `npm install --force`; treat that as an
+  exceptional override lane, not the normal npm default
 - treat typed dependency hydration as stronger governance, not weaker safety: it removes
   replaceable install-shell drift, but the task still needs honest `requirements`, `effects`,
   writable-path boundaries, and usually remains outside routine `agent.safe_tasks` because the
