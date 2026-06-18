@@ -38,12 +38,12 @@ knowledge.
 
 ## Skill installation and distribution
 
-- Skills CLI install:
-  - `npx skills add ota-run/skills --full-depth`
 - Ota-managed Codex install:
   - `ota skills install --agent codex`
 - Ota-managed Claude Code install:
   - `ota skills install --agent claude`
+- Skills CLI install:
+  - `npx skills add ota-run/skills --full-depth`
 - Raw skill distribution base for tooling:
   - `https://raw.githubusercontent.com/ota-run/skills/main/skills/ota`
 

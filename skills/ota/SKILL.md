@@ -156,9 +156,9 @@ Prefer these concrete shapes when repo truth matches them:
 - use `source.kind: node_package_manager` with `manager: yarn`, `mode: install`, and
   `inline_builds: true` when the repo truth is `yarn install --inline-builds` instead of leaving
   that lane as raw shell
-- use `source.kind: node_package_manager` with `manager: npm`, `mode: install`, and
-  `force: true` only when the repo truth is explicitly `npm install --force`; treat that as an
-  exceptional override lane, not the normal npm default
+- use `source.kind: node_package_manager` with `manager: npm`, `mode: install` or `mode: ci`,
+  and `force: true` only when the repo truth is explicitly `npm install --force` or
+  `npm ci --force`; treat that as an exceptional override lane, not the normal npm default
 - treat typed dependency hydration as stronger governance, not weaker safety: it removes
   replaceable install-shell drift, but the task still needs honest `requirements`, `effects`,
   writable-path boundaries, and usually remains outside routine `agent.safe_tasks` because the
@@ -202,8 +202,8 @@ Prefer these concrete shapes when repo truth matches them:
 - use `toolchains.python.package_managers.poetry` instead of standalone `tools.poetry` when Poetry
   owns Python dependency truth
 - use first-class env ownership such as `env_files`, `ensure_env_file`, workflow-owned env
-  materialization, `adapter_inputs.compose.env_files` for compose interpolation truth, and
-  `adapter_inputs.bake.files` for Bake file selection truth instead of baking adapter flags and
+  materialization, `adapter_inputs.overlays.compose.env_files` for compose interpolation truth, and
+  `adapter_inputs.overlays.bake.files` for Bake file selection truth instead of baking adapter flags and
   shell rewrite glue into task commands
 - use `checks[].kind: file` instead of shell `test -f ...` / `test -d ...` glue for deterministic
   filesystem assertions; keep the default repo-bound scope for in-repo paths and use
@@ -214,7 +214,7 @@ Prefer these concrete shapes when repo truth matches them:
   `rabbitmq`, `elasticsearch`, `opensearch`, `s3`, `gcs`, `azure_blob`, `cloudflare`,
   `kubernetes`, or `terraform` instead of repo-local aliases like `docker_compose`,
   `postgresql`, or `k8s`
-- use `adapter_inputs.compose.cwd` / `adapter_inputs.bake.cwd` when the truthful compose or Bake
+- use `adapter_inputs.overlays.compose.cwd` / `adapter_inputs.overlays.bake.cwd` when the truthful compose or Bake
   working directory is a repo subdirectory instead of burying `cd ... && docker ...`,
   `cd ... && podman ...`, `docker compose --project-directory ...`, or
   `podman compose --project-directory ...` glue in task bodies
@@ -224,12 +224,15 @@ Prefer these concrete shapes when repo truth matches them:
 - use `services.<name>.manager.kind: host` with `manager.host.kind: systemd` plus
   `readiness.kind: systemd_active` when the repo truth is a host-managed systemd unit rather than
   shell `systemctl start` / `stop` / `is-active` glue
-- use canonical `workflows.<name>.adapter_inputs.compose.*` when one workflow should own the
+- use canonical `workflows.<name>.adapter_inputs.overlays.compose.*` when one workflow should own the
   adapter root, base compose file stack, compose profile set, or project naming across its
   selected compose task closure, instead of repeating that truth in task-local adapter inputs
-- use `workflows.<name>.adapter_inputs.bake.*` when one workflow should own the adapter root
+- use `workflows.<name>.adapter_inputs.overlays.bake.*` when one workflow should own the adapter root
   or base Bake file stack across its selected `docker buildx bake` task closure instead of
   repeating that truth in task-local adapter inputs
+- treat `adapter_inputs.overlays.<family>` as a generalized contract surface with a strict shipped
+  boundary: runtime semantics currently exist only for `compose` and `bake`, and unsupported
+  families should be called out as not yet shipped rather than modeled as if they execute
 - set `metadata.ota.minimum_version` when the contract depends on newer parser, validator, or
   runtime surfaces
 
@@ -303,15 +306,15 @@ When the repo truth supports them, push toward these shapes explicitly:
     to one finite standalone setup task
 - env and compose truth:
   - `env.sources`, `env.vars`, `env_files`, `ensure_env_file`, workflow-owned env rendering, and
-    `adapter_inputs.compose.env_files` / `adapter_inputs.bake.files` for adapter-owned input
+    `adapter_inputs.overlays.compose.env_files` / `adapter_inputs.overlays.bake.files` for adapter-owned input
     truth before resorting to inline shell glue
-  - `adapter_inputs.compose.cwd` / `adapter_inputs.bake.cwd` when compose or Bake truth lives in a
+  - `adapter_inputs.overlays.compose.cwd` / `adapter_inputs.overlays.bake.cwd` when compose or Bake truth lives in a
     repo subdirectory and the task would otherwise need shell `cd ... && docker ...` or
     `docker compose --project-directory ...` glue
-  - `workflows.<name>.adapter_inputs.compose.*` when compose file selection, compose profile
+  - `workflows.<name>.adapter_inputs.overlays.compose.*` when compose file selection, compose profile
     selection, project naming, or adapter-root ownership belongs to the workflow rather than one
     isolated task body
-  - `workflows.<name>.adapter_inputs.bake.*` when Bake file selection or adapter-root
+  - `workflows.<name>.adapter_inputs.overlays.bake.*` when Bake file selection or adapter-root
     ownership belongs to the workflow rather than one isolated task body
 - release/governance truth:
   - `metadata.ota.minimum_version` when the contract uses newer Ota capabilities
@@ -358,13 +361,13 @@ Watch for the concrete regressions we have repeatedly seen in pressure-test repo
 - public CI or proof workflows pinned to an older Ota build than the contract surface they execute
 - env-file ownership baked into shell commands when first-class env surfaces can own that truth
 - compose interpolation files modeled as process `env_files` instead of
-  `tasks.<name>.adapter_inputs.compose.env_files`
+  `tasks.<name>.adapter_inputs.overlays.compose.env_files`
 - compose or Bake subdirectory truth still buried in shell `cd ... && docker ...` glue or
-  `docker compose --project-directory ...` instead of `adapter_inputs.compose.cwd` or
-  `adapter_inputs.bake.cwd`
+  `docker compose --project-directory ...` instead of `adapter_inputs.overlays.compose.cwd` or
+  `adapter_inputs.overlays.bake.cwd`
 - Bake file selection buried in shell `docker buildx bake -f ...` flags instead of
-  `tasks.<name>.adapter_inputs.bake.files` or
-  `workflows.<name>.adapter_inputs.bake.files`
+  `tasks.<name>.adapter_inputs.overlays.bake.files` or
+  `workflows.<name>.adapter_inputs.overlays.bake.files`
 - missing `metadata.ota.minimum_version` when a contract depends on newer Ota parsing or runtime
   behavior
 
