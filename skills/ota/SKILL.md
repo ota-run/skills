@@ -89,8 +89,8 @@ Always prefer using the real Ota binary when it is available.
      - `kind: branch` only for active pressure testing
    - when a GitHub Actions job needs direct `ota` commands and the repo already declares
      `agent.bootstrap.ota.source`, prefer the first-party
-     `ota-run/ota/.github/actions/install-ota-from-contract@<sha>` helper over duplicating
-     `OTA_VERSION`, `OTA_GIT_REV`, `OTA_GIT_BRANCH`, or `--from-git` in workflow YAML
+     `ota-run/setup@v1` action with `source: contract` over duplicating `OTA_VERSION`,
+     `OTA_GIT_REV`, `OTA_GIT_BRANCH`, or `--from-git` in workflow YAML
 4. After install, use real Ota commands instead of hand-wavy advice.
 
 Prefer the official install docs and repository references in
@@ -453,7 +453,7 @@ When reviewing an `ota.yaml`, look for:
 - `agent.bootstrap.ota` declared only as raw shell when the contract should use structured
   `agent.bootstrap.ota.source`
 - GitHub Actions jobs that restate ota install truth in workflow YAML instead of consuming the
-  repo-owned `agent.bootstrap.ota.source` through the contract installer helper
+  repo-owned `agent.bootstrap.ota.source` through `ota-run/setup@v1` in `source: contract` mode
 - public CI workflows pinned to older Ota builds than the contract surface they execute
 - protected paths that contradict generated safe setup actions
 - workflow names/descriptions that overclaim the modeled slice
