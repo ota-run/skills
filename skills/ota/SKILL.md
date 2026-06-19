@@ -82,6 +82,11 @@ Always prefer using the real Ota binary when it is available.
      - `curl -fsSL https://dist.ota.run/install.sh | sh`
    - Windows PowerShell:
      - `irm https://dist.ota.run/install.ps1 | iex`
+   - when teaching repo-authored bootstrap truth, prefer structured `agent.bootstrap.ota.source`
+     over raw shell strings:
+     - `kind: version` for released proof
+     - `kind: git_rev` for deterministic unreleased proof
+     - `kind: branch` only for active pressure testing
 4. After install, use real Ota commands instead of hand-wavy advice.
 
 Prefer the official install docs and repository references in
@@ -441,6 +446,8 @@ When reviewing an `ota.yaml`, look for:
 - env-file or env-rendering truth hidden in shell flags instead of first-class env surfaces
 - weak dependency checks such as checking only that `node_modules` exists
 - public CI workflows pinned to unreleased Ota branches or local source installs
+- `agent.bootstrap.ota` declared only as raw shell when the contract should use structured
+  `agent.bootstrap.ota.source`
 - public CI workflows pinned to older Ota builds than the contract surface they execute
 - protected paths that contradict generated safe setup actions
 - workflow names/descriptions that overclaim the modeled slice

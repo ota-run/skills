@@ -42,6 +42,9 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   instead of shell copy-plus-`sed` glue?
 - If one setup lane owns shared external Docker network readiness, does it use
   `action.kind: ensure_container_network` instead of shell `docker network inspect/create` glue?
+- If the repo declares Ota bootstrap truth for agents or CI, does it prefer
+  `agent.bootstrap.ota.source` (`version`, `git_rev`, or pressure-only `branch`) instead of
+  carrying install semantics only in raw shell strings?
 - If one setup lane is a bundle of deterministic setup actions under one owner, does it use
   `action.kind: ensure_bundle` instead of shell orchestration?
 - If a setup lane was collapsed into one parent body, is that the right owner boundary, or should
