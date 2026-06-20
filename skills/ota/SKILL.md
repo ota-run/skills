@@ -87,6 +87,23 @@ Always prefer using the real Ota binary when it is available.
      - `kind: version` for released proof
      - `kind: git_rev` for deterministic unreleased proof
      - `kind: branch` only for active pressure testing
+   - when a repo already declares `agent.bootstrap.ota.source`, apply the canonical mapping
+     directly instead of guessing:
+     - `kind: version`
+       - shell:
+         `curl -fsSL https://dist.ota.run/install.sh | OTA_VERSION=<version> sh`
+       - PowerShell:
+         `$env:OTA_VERSION='<version>'; irm https://dist.ota.run/install.ps1 | iex`
+     - `kind: git_rev`
+       - shell:
+         `curl -fsSL https://dist.ota.run/install.sh | OTA_GIT_REV=<rev> sh -s -- --from-git`
+       - PowerShell:
+         `$env:OTA_GIT_REV='<rev>'; & ([scriptblock]::Create((irm https://dist.ota.run/install.ps1))) -FromGit`
+     - `kind: branch`
+       - shell:
+         `curl -fsSL https://dist.ota.run/install.sh | OTA_GIT_BRANCH=<branch> sh -s -- --from-git`
+       - PowerShell:
+         `$env:OTA_GIT_BRANCH='<branch>'; & ([scriptblock]::Create((irm https://dist.ota.run/install.ps1))) -FromGit`
    - when a GitHub Actions job needs direct `ota` commands and the repo already declares
      `agent.bootstrap.ota.source`, prefer the first-party
      `ota-run/setup@v1` action with `source: contract` over duplicating `OTA_VERSION`,
