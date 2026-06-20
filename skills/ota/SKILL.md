@@ -179,7 +179,11 @@ When creating or refining a contract:
 Prefer these concrete shapes when repo truth matches them:
 
 - use `aggregate` for finite task grouping instead of fake `run: "true"` bodies
+- use `command.cwd` when the task truth is still one finite executable plus stable argv but it
+  should run from a repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `launch.kind: command` for long-running service processes instead of opaque `run`
+- use `launch.cwd` when the service-start truth is one executable plus stable argv rooted in a
+  repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `prepare.kind: dependency_hydration` for dependency setup instead of raw package-manager
   install commands when Ota can own the lane truthfully
 - use `source.kind: node_package_manager` with `manager: yarn`, `mode: install`, and
@@ -460,6 +464,8 @@ When reviewing an `ota.yaml`, look for:
 - readiness that only proves a process started, not that the repo is truly ready
 - long-running dev tasks marked agent-safe or used as the default agent task
 - service tasks that should be `launch.kind: command` but still hide behind opaque `run`
+- finite subdirectory-rooted task bodies that still use shell only to express `cd ... && ...`
+  even though `command.cwd` would be truthful
 - fake aggregate parent tasks that should use `aggregate.tasks`
 - install/setup commands that ignore the repo lockfile or canonical package manager
 - missing first-class dependency hydration where Ota already owns the setup lane
