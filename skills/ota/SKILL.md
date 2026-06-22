@@ -56,6 +56,11 @@ Prefer sources in this order:
    - `README.md`
 3. public references in `references/official-sources.md`
 
+When the question is specifically about archived semantic truth, semantic diff, or receipt
+correlation as a public operator surface, prefer the dedicated public page
+`https://ota.run/docs/reference/semantic-snapshots-and-correlation` after checking the local repo
+sources above.
+
 Do not jump straight to public docs if the local repository already contains the canonical
 answer. If the active repo is not the Ota repo, treat local repo files as evidence about that
 project, not as Ota product documentation.
@@ -134,6 +139,13 @@ Use the smallest real Ota workflow that fits the task:
     with conservative starter-policy promotions
 - `ota validate`
   - verify structural and semantic contract correctness
+- `ota diff`
+  - compare semantic contract truth, including archived receipt-backed snapshot inputs
+- `ota receipt --snapshot ...`
+  - inspect archived normalized semantic contract truth directly
+- `ota receipt --json --baseline ...`
+  - compare current receipt state against archived baseline truth and read contract-drift
+    correlation when the baseline carries snapshot identity
 - `ota tasks`
   - discover named task surfaces
 - `ota run <task>`
