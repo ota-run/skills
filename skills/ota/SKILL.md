@@ -61,6 +61,15 @@ correlation as a public operator surface, prefer the dedicated public page
 `https://ota.run/docs/reference/semantic-snapshots-and-correlation` after checking the local repo
 sources above.
 
+When the active repo is `ota-run/ota`, also prefer the local core spec
+`docs/spec/semantic-snapshots-and-correlation.md` for the shipped contract details behind:
+- `receipt.contract_snapshot_hash`
+- `receipt.assumption_set_hash`
+- `ota receipt --snapshot`
+- `contract_changes[]`
+- `likely_related_changes[]`
+- `summary.comparison.correlation`
+
 Do not jump straight to public docs if the local repository already contains the canonical
 answer. If the active repo is not the Ota repo, treat local repo files as evidence about that
 project, not as Ota product documentation.
@@ -146,6 +155,11 @@ Use the smallest real Ota workflow that fits the task:
 - `ota receipt --json --baseline ...`
   - compare current receipt state against archived baseline truth and read contract-drift
     correlation when the baseline carries snapshot identity
+  - read `summary.comparison.correlation` first, then `contract_changes[]`, then
+    `likely_related_changes[]`
+  - expect sharper declared owners such as reusable `surfaces.<name>` or
+    `readiness.probes.<name>` to outrank weaker adjacent workflow references when Ota can recover
+    them honestly
 - `ota tasks`
   - discover named task surfaces
 - `ota run <task>`
