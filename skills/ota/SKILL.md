@@ -155,6 +155,9 @@ Use the smallest real Ota workflow that fits the task:
 - `ota receipt --json --baseline ...`
   - compare current receipt state against archived baseline truth and read contract-drift
     correlation when the baseline carries snapshot identity
+  - on repos with more than one declared workflow, keep archive, baseline, and snapshot selection
+    scoped with `ota receipt --workflow <name> ...` instead of relying on repo-global `latest` or
+    `promoted` receipt history
   - read `summary.comparison.correlation` first, then `contract_changes[]`, then
     `likely_related_changes[]`
   - expect sharper declared owners such as reusable `surfaces.<name>` or
