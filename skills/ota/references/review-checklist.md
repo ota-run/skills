@@ -36,6 +36,9 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   network/write blast radius instead of old install-shell glue?
 - If the task is installing a required tool rather than repo dependencies, is that modeled with
   `prepare.kind: tool_bootstrap` instead of raw shell `pip install ...` glue?
+- If a verification lane depends on real services, staging credentials, or other remote-backed
+  state, does it use `effects.network_kind: integration_test` plus explicit `requirements.env`
+  and `effects.external_state` instead of collapsing that truth into a generic broad network lane?
 - If one setup lane spans more than one structural finite step, is that modeled with
   `prepare.kind: sequence` instead of a fallback shell script?
 - If one setup lane is deterministic env bootstrap, does it use `action.kind: ensure_env_file`

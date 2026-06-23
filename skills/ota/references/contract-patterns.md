@@ -131,6 +131,36 @@ tasks:
       network_kind: tool_bootstrap
 ```
 
+## Live or staging integration testing
+
+When the verification lane depends on real services, staging credentials, or seeded remote state,
+keep that narrower truth explicit with `effects.network_kind: integration_test` instead of
+collapsing it into generic broad network prose.
+
+```yaml
+env:
+  vars:
+    STAGING_API_TOKEN:
+      required: false
+
+tasks:
+  test:live:
+    description: Run the staging-backed integration suite
+    command:
+      exe: npm
+      args:
+        - run
+        - test:live
+    requirements:
+      env:
+        - STAGING_API_TOKEN
+    effects:
+      network: true
+      network_kind: integration_test
+      external_state:
+        - cloudflare
+```
+
 ## Mixed finite setup sequencing
 
 When one repo-level `setup` lane honestly needs more than one structural finite step, use

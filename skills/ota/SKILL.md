@@ -231,6 +231,9 @@ Prefer these concrete shapes when repo truth matches them:
 - treat typed tool bootstrap the same way: it removes replaceable shell drift, but keep
   `effects.network_kind: tool_bootstrap` explicit and do not pretend unattended tool installation
   is automatically routine agent-safe execution
+- use `effects.network_kind: integration_test` for live, staging, or remote-backed verification
+  lanes that depend on real services or non-local credentials; keep `requirements.env` and any
+  real `effects.external_state` explicit, and do not treat those paths as routine `agent.safe_tasks`
 - use `prepare.kind: sequence` when one honest finite setup lane needs more than one structural
   prepare step in order
 - use `action.kind: ensure_env_file` when one honest setup lane is deterministic env-file
