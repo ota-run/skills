@@ -45,6 +45,10 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   instead of shell copy-plus-`sed` glue?
 - If one setup lane owns shared external Docker network readiness, does it use
   `action.kind: ensure_container_network` instead of shell `docker network inspect/create` glue?
+- If one destructive local recovery lane owns stopping a Compose-managed service, removing one
+  named volume, and restarting the service, does it use
+  `action.kind: reset_compose_service_volume` instead of shell `docker compose stop/rm` plus
+  `docker volume rm` glue?
 - If the repo declares Ota bootstrap truth for agents or CI, does it prefer
   `agent.bootstrap.ota.source` (`version`, `git_rev`, or pressure-only `branch`) instead of
   carrying install semantics only in raw shell strings?

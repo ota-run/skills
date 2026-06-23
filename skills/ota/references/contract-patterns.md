@@ -504,6 +504,35 @@ tasks:
         docker: "*"
 ```
 
+## Deterministic Compose-managed service volume reset
+
+Use `action.kind: reset_compose_service_volume` when one destructive local recovery lane really
+owns stopping a Compose-managed service, removing one named volume, and restarting the service
+instead of hiding `docker compose stop/rm` plus `docker volume rm` glue in shell.
+
+```yaml
+tasks:
+  postgres:reset:
+    context: host
+    action:
+      kind: reset_compose_service_volume
+      service: postgres
+      volume: app_postgres-data
+      compose:
+        cwd: docker
+        files:
+          - docker/docker-compose.yml
+        project_name: app
+    requirements:
+      tools:
+        docker: "*"
+    effects:
+      external_state:
+        - docker
+        - postgres
+    safe_for_agent: false
+```
+
 ## Typed systemd host-service ownership
 
 Use `manager.kind: host` with `manager.host.kind: systemd` when the real service owner is a

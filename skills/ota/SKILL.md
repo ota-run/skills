@@ -185,6 +185,9 @@ as an Ota platform gap.
 For `ota run <task> --dry-run --json`, prefer top-level `provisioning` and `provisioning_request`
 when present instead of scraping `plan.requirement_lines`; that selected-path provisioning truth is
 the machine-readable host-fulfillment surface for direct tool acquisition.
+For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
+`receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
+backend selection from task names or advisory prose.
 
 ## Contract authoring workflow
 
@@ -241,6 +244,10 @@ Prefer these concrete shapes when repo truth matches them:
 - use `action.kind: ensure_container_network` when one honest setup lane owns shared external
   Docker network readiness as a standalone lane instead of shell `docker network inspect/create`
   glue
+- use `action.kind: reset_compose_service_volume` when one destructive local recovery or reset
+  lane truthfully owns stopping a Compose-managed service, removing one declared volume, and
+  restarting the service instead of hiding `docker compose stop/rm` plus `docker volume rm`
+  shell glue in the task body
 - use `action.kind: ensure_bundle` when one honest setup lane owns more than one deterministic
   setup action and would otherwise become shell orchestration glue
 - use `workflows.<name>.prepare.action` when the workflow itself honestly owns one finite
@@ -384,10 +391,15 @@ When the repo truth supports them, push toward these shapes explicitly:
   - `prepare.kind: sequence` when one setup task must compose multiple structural finite steps
   - `action.kind: ensure_container_network` when shared external Docker network ownership belongs
     to one finite standalone setup task
+  - `action.kind: reset_compose_service_volume` when one destructive local reset lane owns one
+    Compose-managed service volume reset and restart sequence
 - env and compose truth:
   - `env.sources`, `env.vars`, `env_files`, `ensure_env_file`, workflow-owned env rendering, and
     `adapter_inputs.overlays.compose.env_files` / `adapter_inputs.overlays.bake.files` for adapter-owned input
     truth before resorting to inline shell glue
+  - `OTA_HOST_WORKSPACE` and `OTA_HOST_UID` when a native or compose task truthfully needs the
+    real host repo path or host uid for deterministic env interpolation; do not fall back to shell
+    `pwd` or `id -u` glue when ota already owns that lane
   - `adapter_inputs.overlays.compose.cwd` / `adapter_inputs.overlays.bake.cwd` when compose or Bake truth lives in a
     repo subdirectory and the task would otherwise need shell `cd ... && docker ...` or
     `docker compose --project-directory ...` glue
@@ -409,6 +421,8 @@ When the contract could be modeled more than one way, choose by owner boundary:
   primitives such as env/file prep plus shared Docker network bootstrap
 - use `action.kind: ensure_container_network` when the lane is deterministic external Docker
   network bootstrap and should stay machine-readable as its own setup lane
+- use `action.kind: reset_compose_service_volume` when the lane is a destructive local
+  Compose-managed service-data reset and should stay explicit instead of disappearing into shell
 - use `workflows.<name>.prepare.task` when that bootstrap step deserves reuse or its own task
   identity; use `workflows.<name>.prepare.action` when the workflow itself owns it directly
 - keep steps as separate finite tasks when they need distinct reuse, separate requirements/effects,
@@ -445,6 +459,8 @@ Watch for the concrete regressions we have repeatedly seen in pressure-test repo
 - compose or Bake subdirectory truth still buried in shell `cd ... && docker ...` glue or
   `docker compose --project-directory ...` instead of `adapter_inputs.overlays.compose.cwd` or
   `adapter_inputs.overlays.bake.cwd`
+- fake host alias tasks such as `typecheck:host` or `build:host` where one task identity plus
+  `execution.modes.<mode>.depends_on` should own the plane-specific prerequisite truth
 - Bake file selection buried in shell `docker buildx bake -f ...` flags instead of
   `tasks.<name>.adapter_inputs.overlays.bake.files` or
   `workflows.<name>.adapter_inputs.overlays.bake.files`
