@@ -288,6 +288,8 @@ Prefer these concrete shapes when repo truth matches them:
   instead of raw `run: uv sync`
 - use `toolchains.python.package_managers.poetry` instead of standalone `tools.poetry` when Poetry
   owns Python dependency truth
+- use `${OTA_HOST_HOME}` when truthful instance or runtime input ownership depends on one host-home
+  clone or cache root instead of shell `echo $HOME` / `%USERPROFILE%` glue
 - use first-class env ownership such as `env_files`, `ensure_env_file`, workflow-owned env
   materialization, `adapter_inputs.overlays.compose.env_files` for compose interpolation truth, and
   `adapter_inputs.overlays.bake.files` for Bake file selection truth instead of baking adapter flags and
@@ -314,6 +316,11 @@ Prefer these concrete shapes when repo truth matches them:
 - use canonical `workflows.<name>.adapter_inputs.overlays.compose.*` when one workflow should own the
   adapter root, base compose file stack, compose profile set, or project naming across its
   selected compose task closure, instead of repeating that truth in task-local adapter inputs
+- use `workflows.<name>.instances` when one workflow is really a named runtime family such as
+  `ws0`, `ws1`, or `preview`; select it as `workflow@instance` instead of cloning pseudo-workflows
+- use `workflows.<name>.instances.<instance>.env` for selected-instance host-clone or cache roots,
+  and use `workflows.<name>.instances.<instance>.tasks.<task>.adapter_inputs` for instance-specific
+  compose project naming or other adapter-owned runtime inputs
 - use `workflows.<name>.adapter_inputs.overlays.bake.*` when one workflow should own the adapter root
   or base Bake file stack across its selected `docker buildx bake` task closure instead of
   repeating that truth in task-local adapter inputs

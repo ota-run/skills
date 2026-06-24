@@ -40,6 +40,17 @@ carry narrower path-specific additions. The same workflow-owned surface also cov
 `workflows.<name>.adapter_inputs.overlays.bake.*` the same way when the workflow owns the Bake adapter
 root or the base `docker buildx bake` file stack.
 
+Use `workflows.<name>.instances` when one workflow is really a named runtime family such as `ws0`,
+`ws1`, or `preview` instead of separate pseudo-workflows. Select that path as
+`ota up --workflow <name>@<instance>`. Keep the instance overlay bounded and explicit:
+
+- use `workflows.<name>.instances.<instance>.env` for selected-instance host clone or cache roots,
+  often with `${OTA_HOST_HOME}` when the truthful path lives under the operator's home directory
+- use `workflows.<name>.instances.<instance>.tasks.<task>.adapter_inputs` for instance-specific
+  compose project naming or other adapter-owned runtime inputs
+- use `workflows.<name>.instances.<instance>.surfaces.<surface>` when the same selected runtime
+  publishes the same logical UI/API surface on different host ports per instance
+
 Choose workflow `prepare` by owner boundary:
 
 - use `prepare.task` when the bootstrap step deserves reuse or its own task identity
