@@ -119,6 +119,20 @@ tasks:
         name: DATABASE_URL
 ```
 
+For host-launched compose or service tasks that need the real repo path or host uid for
+interpolation, prefer ota-owned execution env over shell discovery:
+
+```yaml
+tasks:
+  devenv:up:
+    env:
+      PENPOT_SOURCE_PATH: ${OTA_HOST_WORKSPACE}
+      CURRENT_USER_ID: ${OTA_HOST_UID}
+```
+
+That keeps repo-root bind mounts and host-uid interpolation machine-readable instead of hiding
+`pwd` or `id -u` in shell wrappers.
+
 ## Service-backed task requirements
 
 When a task truly depends on a managed service, declare that with `requires_services`.
@@ -143,6 +157,8 @@ parallel tasks.
 ```yaml
 tasks:
   build:
+    depends_on:
+      - setup
     command:
       exe: npm
       args:
@@ -156,6 +172,33 @@ tasks:
         container:
           context: app
 ```
+
+If the prerequisite truth also changes by plane, keep one task identity and move that prerequisite
+truth under `execution.modes.<mode>.depends_on` instead of inventing `build:host`,
+`typecheck:host`, or similar alias tasks.
+
+```yaml
+tasks:
+  typecheck:
+    depends_on:
+      - setup
+    command:
+      exe: npm
+      args: [run, typecheck]
+    execution:
+      modes:
+        native:
+          context: host
+          depends_on:
+            - setup:host
+```
+
+That keeps the contract honest:
+
+- task identity stays `typecheck`
+- host/container preflight stays explicit
+- a host-selected parent task can inherit the same plane into this dependency when the branch is
+  truthfully declared
 
 ## Post-run hooks
 
