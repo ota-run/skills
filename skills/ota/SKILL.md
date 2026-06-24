@@ -339,6 +339,10 @@ Prefer these concrete shapes when repo truth matches them:
 - use `workflows.<name>.instances.<instance>.env` for selected-instance host-clone or cache roots,
   and use `workflows.<name>.instances.<instance>.tasks.<task>.adapter_inputs` for instance-specific
   compose project naming or other adapter-owned runtime inputs
+- use `workflows.<name>.instances.<instance>.tasks.<task>.runtime` when one selected service task
+  keeps the same runtime identity but needs instance-specific listener bind/project ports or
+  readiness listener selection; treat it as a strict overlay on the base task runtime instead of
+  inventing a workflow-local listener model
 - use `workflows.<name>.adapter_inputs.overlays.bake.*` when one workflow should own the adapter root
   or base Bake file stack across its selected `docker buildx bake` task closure instead of
   repeating that truth in task-local adapter inputs

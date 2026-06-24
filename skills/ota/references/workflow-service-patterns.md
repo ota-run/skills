@@ -50,6 +50,9 @@ Use `workflows.<name>.instances` when one workflow is really a named runtime fam
   often with `${OTA_HOST_HOME}` when the truthful path lives under the operator's home directory
 - use `workflows.<name>.instances.<instance>.tasks.<task>.adapter_inputs` for instance-specific
   compose project naming or other adapter-owned runtime inputs
+- use `workflows.<name>.instances.<instance>.tasks.<task>.runtime` when the base service task
+  already owns explicit runtime listeners and one selected instance needs different listener bind or
+  projected host ports without splitting runtime truth into a workflow-local side channel
 - use `workflows.<name>.instances.<instance>.surfaces.<surface>` when the same selected runtime
   publishes the same logical UI/API surface on different host ports per instance
 
