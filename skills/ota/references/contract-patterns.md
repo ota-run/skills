@@ -366,6 +366,47 @@ tasks:
       network_kind: dependency_hydration
 ```
 
+## Compose-wrapped typed dependency hydration
+
+When the package hydration lane truthfully runs inside a declared Compose service, keep the typed
+dependency source under `prepare.source.kind: ...` and use `prepare.source.compose` only as the
+service-side wrapper instead of collapsing back to `docker compose run ... npm ci` shell.
+
+```yaml
+tasks:
+  setup:
+    description: Hydrate app dependencies through the api Compose service
+    adapter_inputs:
+      compose:
+        cwd: docker
+        files:
+          - docker/docker-compose.yml
+    prepare:
+      kind: dependency_hydration
+      medium: package_dependencies
+      source:
+        kind: node_package_manager
+        cwd: app
+        manager: npm
+        mode: ci
+        compose:
+          kind: run
+          service: api
+          workdir: /workspace
+    requirements:
+      tools:
+        docker: "*"
+    effects:
+      writes:
+        - app/node_modules
+      network: true
+      network_kind: dependency_hydration
+```
+
+Do not add fake host `requirements.toolchains.node` here just because the in-service command is
+`npm ci`. In this shape the host prerequisite is the compose engine; the typed package-manager
+truth still lives under `prepare.source.kind: node_package_manager`.
+
 ## Lockfile-strict npm hydration
 
 When the repo truth is npm plus `package-lock.json`, prefer first-class dependency hydration with

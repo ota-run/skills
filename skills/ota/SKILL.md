@@ -228,6 +228,10 @@ Prefer these concrete shapes when repo truth matches them:
   repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `prepare.kind: dependency_hydration` for dependency setup instead of raw package-manager
   install commands when Ota can own the lane truthfully
+- when that typed dependency lane truthfully runs inside a declared Compose service, keep the
+  package-manager truth under `prepare.source.kind: ...` and add `prepare.source.compose` only as
+  the service wrapper; in that shape the host requirement stays `requirements.tools.docker` or
+  `requirements.tools.podman`, not a duplicate host language toolchain
 - use `source.kind: node_package_manager` with `manager: yarn`, `mode: install`, and
   `inline_builds: true` when the repo truth is `yarn install --inline-builds` instead of leaving
   that lane as raw shell
