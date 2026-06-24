@@ -214,6 +214,9 @@ Prefer these concrete shapes when repo truth matches them:
 - use `command.cwd` when the task truth is still one finite executable plus stable argv but it
   should run from a repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `launch.kind: command` for long-running service processes instead of opaque `run`
+- use `tasks.<name>.compose` when the repo truth is a finite `docker|podman compose exec/run`
+  command inside a declared service, and use `compose.detach: true` only with `compose.kind: exec`
+  when that truthful lane starts a detached in-service bootstrap or session process
 - use `launch.cwd` when the service-start truth is one executable plus stable argv rooted in a
   repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `prepare.kind: dependency_hydration` for dependency setup instead of raw package-manager
