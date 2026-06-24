@@ -224,6 +224,11 @@ Prefer these concrete shapes when repo truth matches them:
   `compose.kind: down` for `compose down -v`, keep `compose.service` for
   `exec`/`run`/`attach`, and use `compose.services[]` for staged `compose.kind: up` or
   `compose.kind: build`
+- use `launch.kind: compose` when the repo truth is a long-running `docker|podman compose up`
+  runtime start rather than a finite Compose lane; keep host-side Compose cwd, env-file, file,
+  profile, and project-name ownership under `adapter_inputs.overlays.compose.*`, then keep only
+  `launch.engine`, `launch.action: up`, optional `launch.services[]`, and optional
+  `launch.detach: true` under `launch`
 - use `launch.cwd` when the service-start truth is one executable plus stable argv rooted in a
   repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `prepare.kind: dependency_hydration` for dependency setup instead of raw package-manager
