@@ -44,6 +44,8 @@ Use `workflows.<name>.instances` when one workflow is really a named runtime fam
 `ws1`, or `preview` instead of separate pseudo-workflows. Select that path as
 `ota up --workflow <name>@<instance>`. Keep the instance overlay bounded and explicit:
 
+- use `workflows.<name>.instances.<instance>.topology.requires_instances` when one selected
+  instance truthfully needs another declared instance up first, such as `ws1+` requiring `ws0`
 - use `workflows.<name>.instances.<instance>.env` for selected-instance host clone or cache roots,
   often with `${OTA_HOST_HOME}` when the truthful path lives under the operator's home directory
 - use `workflows.<name>.instances.<instance>.tasks.<task>.adapter_inputs` for instance-specific

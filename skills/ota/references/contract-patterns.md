@@ -55,6 +55,36 @@ tasks:
               primary: true
 ```
 
+## Interactive workflow attach
+
+When the truthful developer path starts in the background and then re-attaches to an existing
+interactive session, declare that session as a first-class workflow attach lane instead of hiding
+it in shell glue.
+
+```yaml
+tasks:
+  devenv:attach:
+    requirements:
+      tools:
+        docker: "*"
+    compose:
+      kind: attach
+      service: main
+      exe: tmux
+      args:
+        - attach
+        - -t
+        - penpot
+
+workflows:
+  default: devenv
+  devenv:
+    run:
+      task: devenv:start
+    attach:
+      task: devenv:attach
+```
+
 ## Aggregate verification
 
 Use `aggregate.tasks` for bounded parent verification tasks instead of fake `run: "true"` bodies.
@@ -361,7 +391,9 @@ Prefer first-class env ownership such as `env_files`, `ensure_env_file`, and
 `adapter_inputs.overlays.compose.env_files` before baking env-file flags into task commands. Use
 `env_files` when the task process itself needs the overlay. Use
 `adapter_inputs.overlays.compose.env_files` when the file is compose interpolation truth for `docker
-compose` or `podman compose`, including workflow-rendered dotenv artifacts.
+compose` or `podman compose`, including workflow-rendered dotenv artifacts. When one selected
+workflow also owns generated JSON/TOML client config, prefer `env.profiles.<name>.render.files[]`
+over repo-local merge scripts.
 
 ```yaml
 tasks:

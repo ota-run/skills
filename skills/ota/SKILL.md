@@ -214,9 +214,15 @@ Prefer these concrete shapes when repo truth matches them:
 - use `command.cwd` when the task truth is still one finite executable plus stable argv but it
   should run from a repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `launch.kind: command` for long-running service processes instead of opaque `run`
-- use `tasks.<name>.compose` when the repo truth is a finite `docker|podman compose exec/run`
-  command inside a declared service, and use `compose.detach: true` only with `compose.kind: exec`
-  when that truthful lane starts a detached in-service bootstrap or session process
+- use `tasks.<name>.compose` when the repo truth is a finite `docker|podman compose`
+  lane ota should own directly, whether that is an in-service `exec`/`run`/`attach` command or a
+  staged `compose up`, `compose build`, or project-scoped `compose down` task; use
+  omitted `compose.engine` to use the default Docker Compose CLI, or set `compose.engine: podman`
+  when the same body should execute through Podman Compose; use
+  `compose.detach: true` only with `compose.kind: exec` or `compose.kind: up`, keep
+  `compose.rm: true` only with `compose.kind: run`, keep `compose.service` for
+  `exec`/`run`/`attach`, and use `compose.services[]` for staged `compose.kind: up` or
+  `compose.kind: build`
 - use `launch.cwd` when the service-start truth is one executable plus stable argv rooted in a
   repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `prepare.kind: dependency_hydration` for dependency setup instead of raw package-manager
@@ -318,6 +324,8 @@ Prefer these concrete shapes when repo truth matches them:
   selected compose task closure, instead of repeating that truth in task-local adapter inputs
 - use `workflows.<name>.instances` when one workflow is really a named runtime family such as
   `ws0`, `ws1`, or `preview`; select it as `workflow@instance` instead of cloning pseudo-workflows
+- use `workflows.<name>.instances.<instance>.topology.requires_instances` when one selected
+  instance truthfully needs another instance up first, such as `ws1+` requiring `ws0`
 - use `workflows.<name>.instances.<instance>.env` for selected-instance host-clone or cache roots,
   and use `workflows.<name>.instances.<instance>.tasks.<task>.adapter_inputs` for instance-specific
   compose project naming or other adapter-owned runtime inputs
