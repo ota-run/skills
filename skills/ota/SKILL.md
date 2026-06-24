@@ -220,7 +220,8 @@ Prefer these concrete shapes when repo truth matches them:
   omitted `compose.engine` to use the default Docker Compose CLI, or set `compose.engine: podman`
   when the same body should execute through Podman Compose; use
   `compose.detach: true` only with `compose.kind: exec` or `compose.kind: up`, keep
-  `compose.rm: true` only with `compose.kind: run`, keep `compose.service` for
+  `compose.rm: true` only with `compose.kind: run`, keep `compose.remove_volumes: true` only with
+  `compose.kind: down` for `compose down -v`, keep `compose.service` for
   `exec`/`run`/`attach`, and use `compose.services[]` for staged `compose.kind: up` or
   `compose.kind: build`
 - use `launch.cwd` when the service-start truth is one executable plus stable argv rooted in a
