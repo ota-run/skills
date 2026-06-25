@@ -664,6 +664,52 @@ workflows:
       task: bake:image
 ```
 
+## Native Docker Compose published host-port remap
+
+Use `runtime.listeners.<name>.project.publication.compose.service` when one native structured
+Docker Compose lane owns the published host URL for one Compose service and ota should own one-run
+`--host-port` remap truth without changing the workload's internal bind port.
+
+```yaml
+tasks:
+  compose:native:published:
+    adapter_inputs:
+      compose:
+        cwd: docker
+        files:
+          - docker/docker-compose.yml
+    compose:
+      kind: up
+      detach: true
+      services:
+        - published
+    runtime:
+      kind: service
+      listeners:
+        http:
+          protocol: http
+          bind:
+            address: 0.0.0.0
+            port:
+              mode: fixed
+              value: 3000
+          project:
+            host:
+              address: 127.0.0.1
+              primary: true
+              port:
+                mode: fixed
+                value: 3000
+              path: /
+            publication:
+              compose:
+                service: published
+```
+
+That contract keeps the service bind on `3000` and lets operators run
+`ota run compose:native:published --host-port 4000` to remap only the published host port for one
+run.
+
 ## Minimum-version governance
 
 When a contract depends on newer Ota parser, validator, or runtime behavior, set

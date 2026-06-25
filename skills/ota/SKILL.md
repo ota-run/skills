@@ -229,6 +229,10 @@ Prefer these concrete shapes when repo truth matches them:
   profile, and project-name ownership under `adapter_inputs.overlays.compose.*`, then keep only
   `launch.engine`, `launch.action: up`, optional `launch.services[]`, and optional
   `launch.detach: true` under `launch`
+- when a native structured Docker Compose lane owns one published host URL and operators may need
+  one-run `--host-port` overrides, keep the Docker command/task truthful and declare
+  `runtime.listeners.<name>.project.publication.compose.service` so ota can remap the published
+  host port without changing the internal bind port or editing compose YAML
 - use `launch.cwd` when the service-start truth is one executable plus stable argv rooted in a
   repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `prepare.kind: dependency_hydration` for dependency setup instead of raw package-manager
