@@ -43,6 +43,9 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   `prepare.kind: sequence` instead of a fallback shell script?
 - If one setup lane is deterministic env bootstrap, does it use `action.kind: ensure_env_file`
   instead of shell copy-plus-`sed` glue?
+- If one setup lane truthfully owns clone-if-missing materialization of a sibling or vendored
+  repo checkout, does it use `action.kind: ensure_git_checkout` instead of shell `git clone`
+  glue?
 - If one setup lane owns shared external Docker network readiness, does it use
   `action.kind: ensure_container_network` instead of shell `docker network inspect/create` glue?
 - If one destructive local recovery lane owns stopping a Compose-managed service, removing one

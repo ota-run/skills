@@ -559,6 +559,27 @@ tasks:
             encoding: hex
 ```
 
+## Deterministic Git checkout bootstrap
+
+Use `action.kind: ensure_git_checkout` when one setup lane owns clone-if-missing materialization
+of a sibling or vendored repo checkout and ota should own that bootstrap truth instead of shell
+`git clone` glue.
+
+```yaml
+tasks:
+  bootstrap:deps:
+    action:
+      kind: ensure_bundle
+      steps:
+        - kind: ensure_directory
+          path: vendor
+        - kind: ensure_git_checkout
+          path: vendor/wagtail
+          source:
+            git: https://github.com/wagtail/wagtail.git
+            ref: main
+```
+
 ## Deterministic container network bootstrap
 
 Use `action.kind: ensure_container_network` when one setup lane owns shared external Docker

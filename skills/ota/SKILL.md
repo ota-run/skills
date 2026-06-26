@@ -241,6 +241,12 @@ Prefer these concrete shapes when repo truth matches them:
   package-manager truth under `prepare.source.kind: ...` and add `prepare.source.compose` only as
   the service wrapper; in that shape the host requirement stays `requirements.tools.docker` or
   `requirements.tools.podman`, not a duplicate host language toolchain
+- when the durable install state for that Compose-wrapped lane lives in a service volume instead
+  of a repo path, declare it under `effects.adapter_state` with a token such as
+  `compose_volume:node_modules` or `compose_volume:bundle_data` instead of faking repo writes
+- for `source.kind: bundler`, keep `source.path` only when the repo truth is a repo-local gem
+  lane such as `vendor/bundle`; omit it for compose-wrapped lanes that truthfully use the
+  container-default Bundler path and declare the durable state under `effects.adapter_state`
 - use `source.kind: node_package_manager` with `manager: yarn`, `mode: install`, and
   `inline_builds: true` when the repo truth is `yarn install --inline-builds` instead of leaving
   that lane as raw shell
@@ -264,6 +270,9 @@ Prefer these concrete shapes when repo truth matches them:
   prepare step in order
 - use `action.kind: ensure_env_file` when one honest setup lane is deterministic env-file
   bootstrap or normalization
+- use `action.kind: ensure_git_checkout` when one honest setup lane owns clone-if-missing
+  materialization of a sibling or vendored repo checkout instead of hiding `git clone` plus
+  optional `git checkout` shell glue in a helper script
 - use `action.kind: ensure_container_network` when one honest setup lane owns shared external
   Docker network readiness as a standalone lane instead of shell `docker network inspect/create`
   glue
@@ -336,6 +345,12 @@ Prefer these concrete shapes when repo truth matches them:
 - use canonical `workflows.<name>.adapter_inputs.overlays.compose.*` when one workflow should own the
   adapter root, base compose file stack, compose profile set, or project naming across its
   selected compose task closure, instead of repeating that truth in task-local adapter inputs
+- use `tasks.<name>.variants.<i>.env`, `.env_files`, `.env_bindings`, `.inputs`,
+  `.requirements`, or `.adapter_inputs` when one task keeps the same body but needs an
+  OS-scoped process, prerequisite, or adapter overlay such as Linux-only host uid/gid
+  interpolation, service-derived URLs, input defaults/allowed values, platform-specific tool
+  requirements, Compose files, env files, or profiles; do not clone the whole task body into
+  shell-only variants just to express input drift
 - use `workflows.<name>.instances` when one workflow is really a named runtime family such as
   `ws0`, `ws1`, or `preview`; select it as `workflow@instance` instead of cloning pseudo-workflows
 - use `workflows.<name>.instances.<instance>.topology.requires_instances` when one selected
@@ -433,9 +448,10 @@ When the repo truth supports them, push toward these shapes explicitly:
   - `env.sources`, `env.vars`, `env_files`, `ensure_env_file`, workflow-owned env rendering, and
     `adapter_inputs.overlays.compose.env_files` / `adapter_inputs.overlays.bake.files` for adapter-owned input
     truth before resorting to inline shell glue
-  - `OTA_HOST_WORKSPACE` and `OTA_HOST_UID` when a native or compose task truthfully needs the
-    real host repo path or host uid for deterministic env interpolation; do not fall back to shell
-    `pwd` or `id -u` glue when ota already owns that lane
+  - `OTA_HOST_WORKSPACE`, `OTA_HOST_UID`, and `OTA_HOST_GID` when a native or compose task
+    truthfully needs the real host repo path or Unix user/group ids for deterministic env
+    interpolation; do not fall back to shell `pwd`, `id -u`, or `id -g` glue when ota already
+    owns that lane
   - `adapter_inputs.overlays.compose.cwd` / `adapter_inputs.overlays.bake.cwd` when compose or Bake truth lives in a
     repo subdirectory and the task would otherwise need shell `cd ... && docker ...` or
     `docker compose --project-directory ...` glue
@@ -455,6 +471,9 @@ When the contract could be modeled more than one way, choose by owner boundary:
   image hydration and those steps share one honest setup owner
 - use `action.kind: ensure_bundle` when the lane is deterministic setup built from action
   primitives such as env/file prep plus shared Docker network bootstrap
+- use `action.kind: ensure_git_checkout` when the lane is deterministic repo-local Git
+  materialization and should stay on the same governed setup surface as file/env prep instead of
+  shell bootstrap glue
 - use `action.kind: ensure_container_network` when the lane is deterministic external Docker
   network bootstrap and should stay machine-readable as its own setup lane
 - use `action.kind: reset_compose_service_volume` when the lane is a destructive local
@@ -472,7 +491,8 @@ For fuller holistic shapes, also use:
   and CI/version-floor governance
 - the public examples repo when a compact copy-ready surface is better than prose alone:
   `reference/bake-adapter-inputs`, `reference/action-ensure-env-file`,
-  `reference/action-ensure-bundle`, `reference/action-ensure-container-network`, and
+  `reference/action-ensure-bundle`, `reference/action-ensure-git-checkout`,
+  `reference/action-ensure-container-network`, and
   `reference/compose-adapter-inputs`
 
 ## Known regression traps
