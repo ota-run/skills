@@ -109,9 +109,10 @@ services:
       kind: tcp
 ```
 
-Use `services.<name>.manager.env_file` and `.profiles` when a managed Compose service owns stable
-interpolation or profile selection truth. Do not push that ownership back into shell
-`docker compose --env-file ...` or `--profile ...` flags.
+Use `services.<name>.manager.file` / `.files`, `manager.env_file` / `.env_files`, and `.profiles`
+when a managed Compose service owns stable compose file selection, interpolation, or profile
+selection truth. Do not push that ownership back into shell `docker compose -f ...`,
+`--env-file ...`, or `--profile ...` flags.
 
 ## Env modeling
 
