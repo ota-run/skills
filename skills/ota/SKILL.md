@@ -226,8 +226,8 @@ Prefer these concrete shapes when repo truth matches them:
   `compose.follow: true` only with `compose.kind: logs`, keep
   `compose.remove_volumes: true` only with `compose.kind: down` for `compose down -v`, keep
   `compose.service` for `exec`/`run`/`attach`, and use `compose.services[]` for staged
-  `compose.kind: up`, `compose.kind: build`, `compose.kind: restart`, `compose.kind: rm`, or
-  `compose.kind: logs`
+  `compose.kind: up`, `compose.kind: build`, `compose.kind: stop`, `compose.kind: restart`,
+  `compose.kind: rm`, or `compose.kind: logs`
 - use `launch.kind: compose` when the repo truth is a long-running `docker|podman compose up`
   runtime start rather than a finite Compose lane; keep host-side Compose cwd, env-file, file,
   profile, and project-name ownership under `adapter_inputs.overlays.compose.*`, then keep only
