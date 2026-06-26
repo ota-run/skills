@@ -216,14 +216,18 @@ Prefer these concrete shapes when repo truth matches them:
 - use `launch.kind: command` for long-running service processes instead of opaque `run`
 - use `tasks.<name>.compose` when the repo truth is a finite `docker|podman compose`
   lane ota should own directly, whether that is an in-service `exec`/`run`/`attach` command or a
-  staged `compose up`, `compose build`, or project-scoped `compose down` task; use
+  staged `compose up`, `compose build`, `compose restart`, `compose rm`, `compose logs`, or
+  project-scoped `compose down` task; use
   omitted `compose.engine` to use the default Docker Compose CLI, or set `compose.engine: podman`
   when the same body should execute through Podman Compose; use
   `compose.detach: true` only with `compose.kind: exec` or `compose.kind: up`, keep
-  `compose.rm: true` only with `compose.kind: run`, keep `compose.remove_volumes: true` only with
-  `compose.kind: down` for `compose down -v`, keep `compose.service` for
-  `exec`/`run`/`attach`, and use `compose.services[]` for staged `compose.kind: up` or
-  `compose.kind: build`
+  `compose.rm: true` only with `compose.kind: run`, keep `compose.force_recreate: true` only with
+  `compose.kind: up`, keep `compose.force: true` only with `compose.kind: rm`, keep
+  `compose.follow: true` only with `compose.kind: logs`, keep
+  `compose.remove_volumes: true` only with `compose.kind: down` for `compose down -v`, keep
+  `compose.service` for `exec`/`run`/`attach`, and use `compose.services[]` for staged
+  `compose.kind: up`, `compose.kind: build`, `compose.kind: restart`, `compose.kind: rm`, or
+  `compose.kind: logs`
 - use `launch.kind: compose` when the repo truth is a long-running `docker|podman compose up`
   runtime start rather than a finite Compose lane; keep host-side Compose cwd, env-file, file,
   profile, and project-name ownership under `adapter_inputs.overlays.compose.*`, then keep only
