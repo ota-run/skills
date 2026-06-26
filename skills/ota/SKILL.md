@@ -225,9 +225,10 @@ Prefer these concrete shapes when repo truth matches them:
   `compose.kind: up`, keep `compose.force: true` only with `compose.kind: rm`, keep
   `compose.follow: true` only with `compose.kind: logs`, keep
   `compose.remove_volumes: true` only with `compose.kind: down` for `compose down -v`, keep
+  `compose.timeout_seconds: <seconds>` only with `compose.kind: down` for `compose down -t <seconds>`, keep
   `compose.service` for `exec`/`run`/`attach`, and use `compose.services[]` for staged
   `compose.kind: up`, `compose.kind: build`, `compose.kind: stop`, `compose.kind: restart`,
-  `compose.kind: rm`, or `compose.kind: logs`
+  `compose.kind: rm`, `compose.kind: logs`, or `compose.kind: ps`
 - use `launch.kind: compose` when the repo truth is a long-running `docker|podman compose up`
   runtime start rather than a finite Compose lane; keep host-side Compose cwd, env-file, file,
   profile, and project-name ownership under `adapter_inputs.overlays.compose.*`, then keep only
@@ -241,6 +242,9 @@ Prefer these concrete shapes when repo truth matches them:
   repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `prepare.kind: dependency_hydration` for dependency setup instead of raw package-manager
   install commands when Ota can own the lane truthfully
+- when `prepare.source.kind: docker_compose` owns image hydration, keep Compose file selection and
+  interpolation input on `prepare.source.files` / `prepare.source.env_files` instead of burying
+  `docker compose -f ... --env-file ... pull ...` in raw shell
 - when that typed dependency lane truthfully runs inside a declared Compose service, keep the
   package-manager truth under `prepare.source.kind: ...` and add `prepare.source.compose` only as
   the service wrapper; in that shape the host requirement stays `requirements.tools.docker` or
