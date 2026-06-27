@@ -43,6 +43,34 @@ schema-only completion.
 - If the repo needs ugly glue because Ota lacks a product feature, call it out as an Ota
   gap instead of normalizing the workaround.
 
+## Architecture loop
+
+Keep the Ota mental model in this order:
+
+1. contract truth
+2. execution truth
+3. proof and receipt truth
+4. semantic diff and correlation
+5. policy and governance truth
+
+Use the matching surface for the real question:
+
+- contract truth: `ota.yaml`, `ota.workspace.yaml`, `ota validate`
+- execution truth: `ota doctor`, `ota up`, `ota run`, `ota tasks`, `ota execution plan`
+- proof and receipt truth: `ota receipt`
+- semantic diff and correlation: `ota diff`, `ota receipt --snapshot`, `ota receipt --json --baseline ...`
+- policy and governance truth: `.ota/org-policy.yaml`, `ota policy`, `ota policy review`
+
+Do not collapse these into one artifact mentally or in guidance. The contract declares, execution
+selects, proof records, diff compares semantic truth, and policy constrains approval.
+
+For workspace contracts, keep one more boundary explicit:
+
+- use `repos.<name>.tasks.<workspace_task>.task` when one shared workspace verb should map to a
+  different repo-local task name
+- do not force mixed-name cross-repo flows back into shell wrappers just because the repos do not
+  share one literal task name
+
 ## Source priority
 
 Prefer sources in this order:
@@ -60,6 +88,10 @@ When the question is specifically about archived semantic truth, semantic diff, 
 correlation as a public operator surface, prefer the dedicated public page
 `https://ota.run/docs/reference/semantic-snapshots-and-correlation` after checking the local repo
 sources above.
+
+When the question is broader than one command or one receipt and you need the public architecture
+loop itself, prefer `https://ota.run/docs/reference/execution-governance-loop` after checking the
+local repo sources above.
 
 When the active repo is `ota-run/ota`, also prefer the local core spec
 `docs/spec/semantic-snapshots-and-correlation.md` for the shipped contract details behind:
