@@ -39,8 +39,8 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
 - If a verification lane depends on real services, staging credentials, or other remote-backed
   state, does it use `effects.network_kind: integration_test` plus explicit `requirements.env`
   and `effects.external_state` instead of collapsing that truth into a generic broad network lane?
-- If one setup lane spans more than one structural finite step, is that modeled with
-  `prepare.kind: sequence` instead of a fallback shell script?
+- If one setup lane spans more than one typed finite setup step under shared requirements/effects,
+  is that modeled with `prepare.kind: sequence` instead of a fallback shell script?
 - If one setup lane is deterministic env bootstrap, does it use `action.kind: ensure_env_file`
   instead of shell copy-plus-`sed` glue?
 - If one setup lane truthfully owns clone-if-missing materialization of a sibling or vendored

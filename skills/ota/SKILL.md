@@ -274,8 +274,10 @@ Prefer these concrete shapes when repo truth matches them:
 - use `effects.network_kind: integration_test` for live, staging, or remote-backed verification
   lanes that depend on real services or non-local credentials; keep `requirements.env` and any
   real `effects.external_state` explicit, and do not treat those paths as routine `agent.safe_tasks`
-- use `prepare.kind: sequence` when one honest finite setup lane needs more than one structural
-  prepare step in order
+- use `prepare.kind: sequence` when one honest finite setup lane needs more than one typed setup
+  step in order, including structural prepare steps (`dependency_hydration`, `tool_bootstrap`) and
+  deterministic bootstrap steps such as `ensure_env_file`, `ensure_file`, `ensure_directory`,
+  `ensure_git_checkout`, `ensure_container_network`, or `reset_compose_service_volume`
 - use `action.kind: ensure_env_file` when one honest setup lane is deterministic env-file
   bootstrap or normalization
 - use `action.kind: ensure_git_checkout` when one honest setup lane owns clone-if-missing

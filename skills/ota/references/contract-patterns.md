@@ -193,55 +193,50 @@ tasks:
 
 ## Mixed finite setup sequencing
 
-When one repo-level `setup` lane honestly needs more than one structural finite step, use
+When one repo-level `setup` lane honestly needs more than one typed finite step, use
 `prepare.kind: sequence` instead of collapsing everything back into one shell script.
 
 ```yaml
 toolchains:
-  node:
-    version: "22"
-    package_managers:
-      pnpm: "10"
   python:
     version: "3.12"
     package_managers:
-      uv: "*"
+      poetry: ">=2.3.4,<2.4.0"
 
 tasks:
   setup:
-    description: Hydrate frontend and backend dependencies
+    description: Materialize local env and bootstrap Playwright browsers
     prepare:
       kind: sequence
       steps:
-        - kind: dependency_hydration
-          medium: package_dependencies
+        - kind: ensure_env_file
+          path: .env.local
+          vars:
+            APP_ENV:
+              value: local
+        - kind: tool_bootstrap
+          tool: playwright_browsers
+          browsers:
+            - chromium
+          with_deps: true
           source:
-            kind: node_package_manager
-            cwd: .
-            manager: pnpm
-            mode: install
-        - kind: dependency_hydration
-          medium: package_dependencies
-          source:
-            kind: uv
+            kind: poetry
             cwd: .
     requirements:
       toolchains:
-        - node
         - python
     effects:
       writes:
-        - node_modules
-        - .venv
+        - .env.local
       network: true
-      network_kind: dependency_hydration
+      network_kind: tool_bootstrap
 ```
 
-Use `prepare.kind: sequence` only when those steps are still one structural setup lane. If the
-lane is really deterministic setup built from action primitives, use `action.kind: ensure_bundle`
-instead. If
-the steps need separate reuse, distinct requirements/effects, or separate operator entrypoints,
-keep them as separate finite tasks wired through `depends_on`.
+Use `prepare.kind: sequence` only when those steps are still one typed setup lane with shared
+requirements and effects. If the lane is purely deterministic setup built from action primitives,
+`action.kind: ensure_bundle` is still the narrower fit. If the steps need separate reuse, distinct
+requirements/effects, or separate operator entrypoints, keep them as separate finite tasks wired
+through `depends_on`.
 
 ## Helm chart hydration
 
