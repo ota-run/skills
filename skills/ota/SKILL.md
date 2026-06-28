@@ -227,10 +227,11 @@ For interactive workspace automation with `ota workspace doctor --json --progres
 `ota workspace refresh --json --progress-json`, keep one output contract boundary explicit: final
 machine JSON stays on stdout, while live NDJSON workspace progress events stream on stderr. Do not
 treat stderr progress as the final roll-up payload, and when workspace task bindings are in play
-expect progress events that carry both `task` and `repo_task` before the final receipt or repo
-report lands; for `ota workspace status` and `ota workspace receipt`, expect `tail` to carry the
-repo drift state, and for `ota workspace diff`, expect `status` to carry the diff verdict while
-`tail` carries the machine `drift_kind`.
+expect progress events that carry `command` plus, when relevant, both `task` and `repo_task`
+before the final receipt or repo report lands; for `ota workspace status` and
+`ota workspace receipt`, expect `tail` to carry the repo drift state, and for
+`ota workspace diff`, expect `status` to carry the diff verdict while `tail` carries the machine
+`drift_kind`.
 
 ## Contract authoring workflow
 
