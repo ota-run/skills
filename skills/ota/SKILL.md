@@ -220,7 +220,8 @@ the machine-readable host-fulfillment surface for direct tool acquisition.
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
 backend selection from task names or advisory prose.
-For interactive workspace automation with `ota workspace run --json --progress-json`,
+For interactive workspace automation with `ota workspace doctor --json --progress-json`,
+`ota workspace check --json --progress-json`, `ota workspace run --json --progress-json`,
 `ota workspace up --json --progress-json`, or
 `ota workspace refresh --json --progress-json`, keep one output contract boundary explicit: final
 machine JSON stays on stdout, while live NDJSON workspace progress events stream on stderr. Do not
