@@ -222,12 +222,14 @@ For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 backend selection from task names or advisory prose.
 For interactive workspace automation with `ota workspace doctor --json --progress-json`,
 `ota workspace check --json --progress-json`, `ota workspace status --json --progress-json`,
-`ota workspace run --json --progress-json`, `ota workspace up --json --progress-json`, or
+`ota workspace receipt --json --progress-json`, `ota workspace run --json --progress-json`,
+`ota workspace up --json --progress-json`, or
 `ota workspace refresh --json --progress-json`, keep one output contract boundary explicit: final
 machine JSON stays on stdout, while live NDJSON workspace progress events stream on stderr. Do not
 treat stderr progress as the final roll-up payload, and when workspace task bindings are in play
 expect progress events that carry both `task` and `repo_task` before the final receipt or repo
-report lands; for `ota workspace status`, expect `tail` to carry the repo drift state.
+report lands; for `ota workspace status` and `ota workspace receipt`, expect `tail` to carry the
+repo drift state.
 
 ## Contract authoring workflow
 
