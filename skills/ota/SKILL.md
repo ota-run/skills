@@ -301,6 +301,10 @@ Prefer these concrete shapes when repo truth matches them:
   repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `prepare.kind: dependency_hydration` for dependency setup instead of raw package-manager
   install commands when Ota can own the lane truthfully
+- when that typed setup lane must run inside a declared repo orchestrator such as `devbox` or
+  `devenv`, use `execution.orchestrator.mode: exec` on command-backed
+  `prepare.kind: dependency_hydration` or `prepare.kind: tool_bootstrap`; do not pretend mixed
+  native `prepare.kind: sequence` can be orchestrator-mediated until Ota has a step-level model
 - when `prepare.source.kind: docker_compose` owns image hydration, keep Compose file selection and
   interpolation input on `prepare.source.files` / `prepare.source.env_files` instead of burying
   `docker compose -f ... --env-file ... pull ...` in raw shell
