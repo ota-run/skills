@@ -168,6 +168,10 @@ Use the smallest real Ota workflow that fits the task:
 
 - `ota doctor`
   - inspect readiness blockers, warnings, next actions, and agent guidance
+  - use `ota doctor --fix --dry-run` to preview the currently shipped deterministic fix lane
+  - use `ota doctor --fix` when the repo truth should allow safe deterministic repair such as
+    repo-hygiene cleanup or native command-acquired tool activation; plain `ota doctor` should
+    stay non-mutating
 - `ota init`
   - create a starter contract only when the user wants Ota adoption or no contract exists
   - prefer the emitted starter shapes Ota now owns directly: `toolchains.*`,
