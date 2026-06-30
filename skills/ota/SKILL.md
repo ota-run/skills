@@ -223,6 +223,8 @@ When reading receipt/proof machine output, prefer explicit stage ownership over 
 labels:
 - `receipt.steps[*].stage_family` carries the broad governance family
 - `ota proof runtime --json` carries `stage_family: "proof"` alongside the finer proof `phase`
+- `artifact_routing[]` points to the next receipt/proof artifact or capture command with typed
+  `role`, `kind`, and `stage_family`
 For `ota run <task> --dry-run --json`, prefer top-level `provisioning` and `provisioning_request`
 when present instead of scraping `plan.requirement_lines`; that selected-path provisioning truth is
 the machine-readable host-fulfillment surface for direct tool acquisition.
@@ -240,7 +242,8 @@ For interactive workspace automation with `ota workspace doctor --json --progres
 machine JSON stays on stdout, while live NDJSON workspace progress events stream on stderr. Do not
 treat stderr progress as the final roll-up payload, and when workspace task bindings are in play
 expect progress events that carry `command` plus, when relevant, both `task` and `repo_task`
-before the final receipt or repo report lands; for `ota workspace status` and
+before the final receipt or repo report lands. Prefer additive `phase` plus `stage_family`
+instead of inferring operational meaning from `status` text alone. For `ota workspace status` and
 `ota workspace receipt`, expect `tail` to carry the repo drift state, and for
 `ota workspace diff`, expect `status` to carry the diff verdict while `tail` carries the machine
 `drift_kind`.
