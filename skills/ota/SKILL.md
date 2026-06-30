@@ -222,6 +222,9 @@ as an Ota platform gap.
 For `ota run <task> --dry-run --json`, prefer top-level `provisioning` and `provisioning_request`
 when present instead of scraping `plan.requirement_lines`; that selected-path provisioning truth is
 the machine-readable host-fulfillment surface for direct tool acquisition.
+Also prefer the additive top-level `governance` block for the selected lane’s safety posture,
+review requirement, runnable mode commands, effect surface, and receipt follow-up command instead
+of reconstructing those facts from task text or from the raw `requested_task` payload by hand.
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
 backend selection from task names or advisory prose.
