@@ -33,6 +33,10 @@ Use this checklist when deciding whether a contract is trustworthy for humans, C
 - Does `verify_after_changes` point to the real bounded verification surface?
 - Do `writable_paths` and `protected_paths` match the effects of safe tasks, generated files, and
   dependency hydration?
+- If `AGENTS.md` or `CLAUDE.md` exists, is it the right kind of source for the job:
+  Ota-generated guidance should stay self-origin and excluded from detect evidence, prose-only
+  docs should not be over-interpreted, and only structured external boundary lists should be
+  treated as admissible detect truth?
 - Are task `effects` explicit when the task writes, touches external state, or uses the network?
 - Are blocker `checks` present when the repo has known preconditions that should fail early in
   `ota doctor`?
