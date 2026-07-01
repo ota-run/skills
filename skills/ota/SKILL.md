@@ -499,6 +499,16 @@ Do not duplicate ownership across `toolchains`, `runtimes`, and `tools`. If a pa
 runtime, or command is owned by a declared toolchain, task requirements may select it, but top-level
 runtime/tool ownership should not be duplicated.
 
+Requirements should live at the narrowest truthful owner.
+
+- use context-level `requirements` only when every task in that context genuinely needs them
+- prefer task-level `requirements` for most tool/runtime ownership
+- keep pure `action.kind:*`, file-prep, env-prep, and other deterministic non-runtime tasks free of
+  heavyweight inherited requirements unless they actually execute that tool
+- when a file action, env action, or other finite host prep lane fails only because a context
+  inherited Docker, Node, Python, or another heavyweight tool, treat that as a contract issue first
+  and tighten the owner boundary before changing the workflow
+
 ## Preferred modern contract shapes
 
 When the repo truth supports them, push toward these shapes explicitly:
@@ -539,6 +549,15 @@ When the repo truth supports them, push toward these shapes explicitly:
     ownership belongs to the workflow rather than one isolated task body
 - release/governance truth:
   - `metadata.ota.minimum_version` when the contract uses newer Ota capabilities
+
+- pressure workflow truth:
+  - separate contract/dry-run coverage lanes from real runtime proof lanes
+  - execute heavyweight runtime paths once per meaningful proof lane instead of re-running the same
+    expensive task through task, aggregate, and workflow entrypoints in one job
+  - only run setup or runtime tasks on matrix lanes that truthfully advertise the required host
+    capabilities
+  - materialize declared file/env/setup prerequisites before broad task dry-run enumeration when the
+    task surface depends on those artifacts
 
 Prefer the strongest truthful contract surface, not the broadest valid YAML surface.
 
@@ -599,6 +618,12 @@ Watch for the concrete regressions we have repeatedly seen in pressure-test repo
   `workflows.<name>.adapter_inputs.overlays.bake.files`
 - missing `metadata.ota.minimum_version` when a contract depends on newer Ota parsing or runtime
   behavior
+- context-level heavyweight requirements such as `docker`, `node`, or `python` that accidentally
+  make pure file/env/action tasks unrunnable on contract-only lanes
+- pressure workflows that dry-run or execute tasks before materializing declared file/env bootstrap
+  truth such as `ensure_env_file`, `copy_if_missing`, or other deterministic setup lanes
+- pressure workflows that prove the same heavyweight runtime lane multiple times in one job through
+  direct task execution, aggregate execution, and workflow execution without gaining new coverage
 
 ## Production-readiness gates
 
@@ -664,6 +689,13 @@ When reviewing an `ota.yaml`, look for:
 - missing bounded verification tasks for the repo's known preflight checks
 - missing `metadata.ota.minimum_version` when newer contract surfaces are in use
 - duplicated ownership across toolchains, runtimes, and tools
+- context-level requirements that are broader than the actual task bodies in that context
+- pure `action.kind:*` or file/env/bootstrap tasks that inherit heavyweight runtime requirements
+  they do not execute
+- pressure workflows that execute setup/runtime tasks on lanes that intentionally do not advertise
+  the needed host capabilities
+- pressure workflows that prove the same heavyweight runtime path multiple times instead of keeping
+  one real proof lane plus broader dry-run/contract coverage
 
 A good review should separate:
 
