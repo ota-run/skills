@@ -361,12 +361,15 @@ Prefer these concrete shapes when repo truth matches them:
 - use `prepare.kind: sequence` when one honest finite setup lane needs more than one typed setup
   step in order, including structural prepare steps (`dependency_hydration`, `tool_bootstrap`) and
   deterministic bootstrap steps such as `ensure_env_file`, `ensure_file`, `ensure_directory`,
-  `ensure_git_checkout`, `ensure_container_network`, or `reset_compose_service_volume`
+  `ensure_git_checkout`, `ensure_git_template`, `ensure_container_network`, or `reset_compose_service_volume`
 - use `action.kind: ensure_env_file` when one honest setup lane is deterministic env-file
   bootstrap or normalization
 - use `action.kind: ensure_git_checkout` when one honest setup lane owns clone-if-missing
   materialization of a sibling or vendored repo checkout instead of hiding `git clone` plus
   optional `git checkout` or deterministic remote-wiring shell glue in a helper script
+- use `action.kind: ensure_git_template` when one honest setup lane owns deterministic scaffold or
+  factory materialization from a Git-backed template instead of hiding `git clone`, inherited
+  `.git` removal, and fresh `git init` glue in a helper script
 - use `action.kind: ensure_container_network` when one honest setup lane owns shared external
   Docker network readiness as a standalone lane instead of shell `docker network inspect/create`
   glue

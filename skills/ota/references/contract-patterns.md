@@ -603,6 +603,27 @@ tasks:
               git: git@github.com:wagtail/wagtail.git
 ```
 
+## Deterministic Git template bootstrap
+
+Use `action.kind: ensure_git_template` when one setup lane owns deterministic scaffold or factory
+materialization from a Git-backed template and ota should own that bootstrap truth instead of shell
+`git clone`, `rm -rf .git`, and `git init` glue.
+
+```yaml
+tasks:
+  scaffold:sample:
+    action:
+      kind: ensure_bundle
+      steps:
+        - kind: ensure_directory
+          path: .ota-pressure
+        - kind: ensure_git_template
+          path: .ota-pressure/sample-extension
+          source:
+            git: https://github.com/codyhxyz/create-chrome-extension.git
+            ref: main
+```
+
 ## Deterministic container network bootstrap
 
 Use `action.kind: ensure_container_network` when one setup lane owns shared external Docker

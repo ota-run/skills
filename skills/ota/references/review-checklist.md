@@ -46,6 +46,9 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
 - If one setup lane truthfully owns clone-if-missing materialization of a sibling or vendored
   repo checkout, does it use `action.kind: ensure_git_checkout` instead of shell `git clone`
   glue?
+- If one setup lane truthfully owns deterministic scaffold or factory materialization from a
+  Git-backed template, does it use `action.kind: ensure_git_template` instead of shell `git clone`
+  plus `rm -rf .git` and `git init` glue?
 - If one setup lane owns shared external Docker network readiness, does it use
   `action.kind: ensure_container_network` instead of shell `docker network inspect/create` glue?
 - If one destructive local recovery lane owns stopping a Compose-managed service, removing one
