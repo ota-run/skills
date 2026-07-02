@@ -366,7 +366,7 @@ Prefer these concrete shapes when repo truth matches them:
   bootstrap or normalization
 - use `action.kind: ensure_git_checkout` when one honest setup lane owns clone-if-missing
   materialization of a sibling or vendored repo checkout instead of hiding `git clone` plus
-  optional `git checkout` shell glue in a helper script
+  optional `git checkout` or deterministic remote-wiring shell glue in a helper script
 - use `action.kind: ensure_container_network` when one honest setup lane owns shared external
   Docker network readiness as a standalone lane instead of shell `docker network inspect/create`
   glue
@@ -588,8 +588,8 @@ When the contract could be modeled more than one way, choose by owner boundary:
 - use `action.kind: ensure_bundle` when the lane is deterministic setup built from action
   primitives such as env/file prep plus shared Docker network bootstrap
 - use `action.kind: ensure_git_checkout` when the lane is deterministic repo-local Git
-  materialization and should stay on the same governed setup surface as file/env prep instead of
-  shell bootstrap glue
+  materialization, including optional declared remote reconciliation, and should stay on the same
+  governed setup surface as file/env prep instead of shell bootstrap glue
 - use `action.kind: ensure_container_network` when the lane is deterministic external Docker
   network bootstrap and should stay machine-readable as its own setup lane
 - use `action.kind: reset_compose_service_volume` when the lane is a destructive local

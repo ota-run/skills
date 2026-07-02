@@ -583,7 +583,7 @@ tasks:
 
 Use `action.kind: ensure_git_checkout` when one setup lane owns clone-if-missing materialization
 of a sibling or vendored repo checkout and ota should own that bootstrap truth instead of shell
-`git clone` glue.
+`git clone`, `git checkout`, or deterministic remote-wiring glue.
 
 ```yaml
 tasks:
@@ -598,6 +598,9 @@ tasks:
           source:
             git: https://github.com/wagtail/wagtail.git
             ref: main
+          remotes:
+            - name: upstream
+              git: git@github.com:wagtail/wagtail.git
 ```
 
 ## Deterministic container network bootstrap
