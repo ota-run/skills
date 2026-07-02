@@ -294,7 +294,9 @@ Prefer these concrete shapes when repo truth matches them:
   omitted `compose.engine` to use the default Docker Compose CLI, or set `compose.engine: podman`
   when the same body should execute through Podman Compose; use
   `compose.detach: true` only with `compose.kind: exec` or `compose.kind: up`, keep
-  `compose.rm: true` only with `compose.kind: run`, keep `compose.force_recreate: true` only with
+  `compose.rm: true` only with `compose.kind: run`, keep
+  `compose.service_ports: true` only with `compose.kind: run` for one-off service shells that
+  must publish the service's declared ports, keep `compose.force_recreate: true` only with
   `compose.kind: up`, keep `compose.force: true` only with `compose.kind: rm`, keep
   `compose.follow: true` only with `compose.kind: logs`, keep
   `compose.remove_volumes: true` only with `compose.kind: down` for `compose down -v`, keep
