@@ -295,6 +295,8 @@ Prefer these concrete shapes when repo truth matches them:
   when the same body should execute through Podman Compose; use
   `compose.detach: true` only with `compose.kind: exec` or `compose.kind: up`, keep
   `compose.rm: true` only with `compose.kind: run`, keep
+  `compose.build: true` only with `compose.kind: run` for one-off service shells that must
+  rebuild the selected service image before execution, keep
   `compose.service_ports: true` only with `compose.kind: run` for one-off service shells that
   must publish the service's declared ports, keep `compose.force_recreate: true` only with
   `compose.kind: up`, keep `compose.force: true` only with `compose.kind: rm`, keep
