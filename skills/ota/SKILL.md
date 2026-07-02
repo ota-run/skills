@@ -350,8 +350,9 @@ Prefer these concrete shapes when repo truth matches them:
   writable-path boundaries, and usually remains outside routine `agent.safe_tasks` because the
   networked setup blast radius is still real
 - use `prepare.kind: tool_bootstrap` when the task truth is contract-owned tool installation
-  rather than repo dependency hydration; the first shipped slice is bootstrapping `uv` through
-  `source.kind: pip` with explicit `source.exe`
+  rather than repo dependency hydration; the shipped slices are bootstrapping `uv` through
+  `source.kind: pip` with explicit `source.exe`, plus Node package-manager browser bootstrap
+  through `prepare.tool: playwright_browsers` or `prepare.tool: cypress_browsers`
 - treat typed tool bootstrap the same way: it removes replaceable shell drift, but keep
   `effects.network_kind: tool_bootstrap` explicit and do not pretend unattended tool installation
   is automatically routine agent-safe execution

@@ -186,6 +186,36 @@ tasks:
       network_kind: tool_bootstrap
 ```
 
+## Cypress browser bootstrap
+
+When the repo truth is `npx|pnpm|yarn|bunx cypress install`, prefer first-class tool bootstrap
+instead of burying Cypress browser/bootstrap setup inside a larger verification shell.
+
+```yaml
+toolchains:
+  node:
+    version: "^20.20.2"
+    package_managers:
+      pnpm: "10.26.0"
+
+tasks:
+  setup:browsers:
+    description: Install Cypress browsers through the repo package manager
+    prepare:
+      kind: tool_bootstrap
+      tool: cypress_browsers
+      source:
+        kind: node_package_manager
+        cwd: .
+        manager: pnpm
+    requirements:
+      toolchains:
+        - node
+    effects:
+      network: true
+      network_kind: tool_bootstrap
+```
+
 ## Live or staging integration testing
 
 When the verification lane depends on real services, staging credentials, or seeded remote state,
