@@ -55,6 +55,9 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
 - If the repo declares Ota bootstrap truth for agents or CI, does it prefer
   `agent.bootstrap.ota.source` (`version`, `git_rev`, or pressure-only `branch`) instead of
   carrying install semantics only in raw shell strings?
+- If GitHub Actions already has repo-owned bootstrap truth available, does it consume that through
+  `ota-run/setup@v1 source: contract` or `ota-run/action@v1 source: contract` instead of
+  restating Ota version, git revision, branch, or source-install refs in workflow YAML?
 - If one setup lane is a bundle of deterministic setup actions under one owner, does it use
   `action.kind: ensure_bundle` instead of shell orchestration?
 - If a setup lane was collapsed into one parent body, is that the right owner boundary, or should
