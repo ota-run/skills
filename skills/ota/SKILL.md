@@ -332,6 +332,9 @@ Prefer these concrete shapes when repo truth matches them:
 - for `source.kind: bundler`, keep `source.path` only when the repo truth is a repo-local gem
   lane such as `vendor/bundle`; omit it for compose-wrapped lanes that truthfully use the
   container-default Bundler path and declare the durable state under `effects.adapter_state`
+- use `source.kind: composer` under `prepare.kind: dependency_hydration` for PHP dependency setup
+  instead of raw `composer install`; keep durable install state such as `vendor` under
+  `effects.writes`, or use `effects.adapter_state` when the lane is Compose-volume-backed
 - use `source.kind: node_package_manager` with `manager: yarn`, `mode: install`, and
   `inline_builds: true` when the repo truth is `yarn install --inline-builds` instead of leaving
   that lane as raw shell
@@ -390,6 +393,8 @@ Prefer these concrete shapes when repo truth matches them:
   instead of raw `run: dotnet restore`
 - use `source.kind: helm` under `prepare.kind: dependency_hydration` for Helm chart setup instead
   of raw `helm dependency build ...` command or shell glue
+- use `source.kind: composer` under `prepare.kind: dependency_hydration` for PHP setup instead of
+  raw `run: composer install`
 - use `tools.<name>.platforms.<os>.acquisition` for standalone CLI ownership when the repo truth is
   a host package-manager lane such as Helm via `apt`, `brew`, `winget`, `choco`, or `scoop`;
   keep that CLI in `tools` instead of splitting it into `native_prerequisites`
@@ -529,6 +534,7 @@ When the repo truth supports them, push toward these shapes explicitly:
   - `launch.kind: command` plus `runtime.kind: service` and surfaced readiness
 - package-manager truth:
   - Node package managers under `toolchains.node.package_managers`
+  - Composer-backed PHP dependency hydration through `prepare.source.kind: composer`
   - uv under `toolchains.python.package_managers.uv` when uv owns Python dependency setup/run
   - uv-backed Python dependency hydration through `prepare.source.kind: uv`
   - Poetry under `toolchains.python.package_managers.poetry`

@@ -138,6 +138,31 @@ tasks:
       network_kind: dependency_hydration
 ```
 
+## Composer hydration
+
+When a PHP repo uses Composer for dependency setup, prefer first-class dependency hydration instead
+of raw `run: composer install`.
+
+```yaml
+tasks:
+  setup:
+    description: Hydrate PHP dependencies
+    prepare:
+      kind: dependency_hydration
+      medium: package_dependencies
+      source:
+        kind: composer
+        cwd: .
+    requirements:
+      tools:
+        composer: "*"
+    effects:
+      writes:
+        - vendor
+      network: true
+      network_kind: dependency_hydration
+```
+
 ## uv tool bootstrap
 
 When the task truth is making `uv` available for later contract execution, prefer first-class tool
