@@ -154,6 +154,9 @@ Always prefer using the real Ota binary when it is available.
      `agent.bootstrap.ota.source`, prefer the first-party
      `ota-run/setup@v1` action with `source: contract` over duplicating `OTA_VERSION`,
      `OTA_GIT_REV`, `OTA_GIT_BRANCH`, or `--from-git` in workflow YAML
+   - once `agent.bootstrap.ota.source` exists, treat explicit workflow-owned Ota install truth as
+     governance drift unless the lane is an intentional unreleased pressure path; `ota doctor`
+     should be allowed to call out that duplication or conflict
 4. After install, use real Ota commands instead of hand-wavy advice.
 
 Prefer the official install docs and repository references in
@@ -183,10 +186,12 @@ Use the smallest real Ota workflow that fits the task:
     with `metadata.ota.detect.field_admission` so direct detector-owned writes are not confused
     with conservative starter-policy promotions
   - for `AGENTS.md` / `CLAUDE.md` pressure, keep the boundary explicit:
-    structured external boundary lists may be admitted as detect evidence, prose should stay
-    ignored, and Ota-generated agent docs from `ota agents` should be treated as self-origin
-    guidance and excluded from detect evidence, including older generated docs that only say
-    `Generated from \`./ota.yaml\`.` without the newer `by ota agents` marker
+    structured external boundary lists may be admitted as detect evidence, narrow labeled command
+    sections and exact `| Task | Command |` tables inside those command sections may be admitted
+    as low-authority task guidance, prose should stay ignored, and Ota-generated agent docs from
+    `ota agents` should be treated as self-origin guidance and excluded from detect evidence,
+    including older generated docs that only say `Generated from \`./ota.yaml\`.` without the
+    newer `by ota agents` marker
 - `ota validate`
   - verify structural and semantic contract correctness
 - `ota diff`
@@ -688,6 +693,8 @@ When reviewing an `ota.yaml`, look for:
   `agent.bootstrap.ota.source`
 - GitHub Actions jobs that restate ota install truth in workflow YAML instead of consuming the
   repo-owned `agent.bootstrap.ota.source` through `ota-run/setup@v1` in `source: contract` mode
+- GitHub Actions jobs that conflict with `agent.bootstrap.ota.source` by pinning a different Ota
+  release, git revision, branch, or source-install ref than the contract declares
 - generated `AGENTS.md` / `CLAUDE.md` being treated as external detect evidence instead of
   self-origin repo guidance
 - structured external agent-boundary docs being ignored when they match Ota's admitted detect
