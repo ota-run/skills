@@ -189,8 +189,11 @@ Use the smallest real Ota workflow that fits the task:
     structured external boundary lists may be admitted as detect evidence, narrow labeled command
     sections and bounded structured command tables inside those command sections may be admitted
     as low-authority task guidance, including exact `| Task | Command |` and adjacent
-    `| Command | description |` forms when ota can still recover a stable canonical task name
-    from the command itself; prose should stay ignored, and Ota-generated agent docs from
+    `| Command | description |` forms under headings such as `Commands`, `Individual Commands`,
+    `Common Commands`, `Quick Reference Commands`, `Build/Test Commands`, and
+    `Build & Development Commands` when ota can still recover a stable canonical task name from
+    the command itself or from a bounded task label such as `Run all unit tests`, `Run type
+    checking`, or `Format code`; prose should stay ignored, and Ota-generated agent docs from
     `ota agents` should be treated as self-origin guidance and excluded from detect evidence,
     including older generated docs that only say `Generated from \`./ota.yaml\`.` without the
     newer `by ota agents` marker
