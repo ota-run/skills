@@ -709,6 +709,14 @@ When reviewing an `ota.yaml`, look for:
   repo-owned `agent.bootstrap.ota.source` through `ota-run/setup@v1` in `source: contract` mode
 - GitHub Actions jobs that conflict with `agent.bootstrap.ota.source` by pinning a different Ota
   release, git revision, branch, or source-install ref than the contract declares
+- CI verification drift that is being judged from deploy/release/sync workflows instead of the
+  repo's verification-oriented workflow files
+- declared verifier aggregates that are split truthfully across multiple verification-oriented
+  workflow files but are being reviewed as if one workflow file had to restate the whole set
+- GitHub Actions `run:` lines containing `${{ ... }}` interpolation being treated as local task
+  command truth instead of CI templating
+- verifier-shaped inferred tasks such as `docker:test` being treated as agent-safe merely because
+  the name contains `test` even though the lane still owns orchestration or adapter control
 - generated `AGENTS.md` / `CLAUDE.md` being treated as external detect evidence instead of
   self-origin repo guidance
 - structured external agent-boundary docs being ignored when they match Ota's admitted detect
