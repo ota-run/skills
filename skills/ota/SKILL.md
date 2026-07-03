@@ -187,8 +187,10 @@ Use the smallest real Ota workflow that fits the task:
     with conservative starter-policy promotions
   - for `AGENTS.md` / `CLAUDE.md` pressure, keep the boundary explicit:
     structured external boundary lists may be admitted as detect evidence, narrow labeled command
-    sections and exact `| Task | Command |` tables inside those command sections may be admitted
-    as low-authority task guidance, prose should stay ignored, and Ota-generated agent docs from
+    sections and bounded structured command tables inside those command sections may be admitted
+    as low-authority task guidance, including exact `| Task | Command |` and adjacent
+    `| Command | description |` forms when ota can still recover a stable canonical task name
+    from the command itself; prose should stay ignored, and Ota-generated agent docs from
     `ota agents` should be treated as self-origin guidance and excluded from detect evidence,
     including older generated docs that only say `Generated from \`./ota.yaml\`.` without the
     newer `by ota agents` marker
