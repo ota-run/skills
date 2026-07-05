@@ -193,7 +193,9 @@ Use the smallest real Ota workflow that fits the task:
     `Common Commands`, `Quick Reference Commands`, `Build/Test Commands`, and
     `Build & Development Commands` when ota can still recover a stable canonical task name from
     the command itself or from a bounded task label such as `Run all unit tests`, `Run type
-    checking`, or `Format code`; prose should stay ignored, and Ota-generated agent docs from
+    checking`, or `Format code`; placeholder-heavy command templates like `<PROJECT>`,
+    `<tests>`, or obvious `path/to/...` scaffolding should stay ignored because they are guidance,
+    not runnable task truth; prose should stay ignored, and Ota-generated agent docs from
     `ota agents` should be treated as self-origin guidance and excluded from detect evidence,
     including older generated docs that only say `Generated from \`./ota.yaml\`.` without the
     newer `by ota agents` marker
@@ -680,6 +682,10 @@ serious OSS repo, evaluate these gates explicitly:
   and keep workflow-installed Ota in sync with that floor.
 - Container/native parity: container and native workflows are both modeled only when the repo
   actually supports them, and lifecycle choices are intentional.
+- Concurrency truth: when truthful parallel container lanes need the same logical dependency path,
+  keep them on distinct execution contexts with matching `attachments.isolated_paths`; ota now
+  distinguishes those owned paths by effective isolation namespace instead of blocking on raw path
+  text alone, but still blocks when the write plane is actually shared.
 - Ota gap honesty: missing provider/features are called out as Ota gaps instead of hidden in
   scripts.
 
