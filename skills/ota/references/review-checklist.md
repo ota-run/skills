@@ -67,7 +67,9 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   those steps stay as separate finite tasks because they have different reuse, requirements, or
   effects?
 - If the repo uses uv for Python dependency setup, is that modeled with `source.kind: uv` instead
-  of a raw `run: uv sync` body?
+  of a raw `run: uv sync` or raw `uv pip install -r ...` body?
+- If the repo truthfully owns creation of one repo-local Python virtualenv such as `.venv`, is
+  that modeled with `action.kind: ensure_virtualenv` instead of `uv venv ...` shell glue?
 - If the repo uses npm with `package-lock.json`, is setup modeled with `manager: npm` and `mode: ci`?
 - If Poetry owns Python dependency truth, is it declared under
   `toolchains.python.package_managers.poetry`?

@@ -433,7 +433,10 @@ Prefer these concrete shapes when repo truth matches them:
   bucket, apt sources list, `asset_by_platform` release URLs, or archive extraction metadata such
   as `archive.format: tar_gz` / `zip` plus `archive.executable_path`
 - use `source.kind: uv` under `prepare.kind: dependency_hydration` for uv-backed Python setup
-  instead of raw `run: uv sync`
+  instead of raw `run: uv sync` or raw `uv pip install -r requirements.txt` shell
+- use `action.kind: ensure_virtualenv` when the repo truthfully owns deterministic creation of one
+  repo-local Python virtualenv such as `.venv`, and keep dependency installation itself under
+  `prepare.kind: dependency_hydration`
 - use `toolchains.python.package_managers.poetry` instead of standalone `tools.poetry` when Poetry
   owns Python dependency truth
 - use `${OTA_HOST_HOME}` when truthful instance or runtime input ownership depends on one host-home
@@ -643,7 +646,8 @@ Watch for the concrete regressions we have repeatedly seen in pressure-test repo
 - aggregate membership smuggled through `depends_on` instead of `aggregate.tasks`
 - Poetry declared under `tools.poetry` when it actually owns Python dependency truth
 - mixed-ecosystem setup script bodies where `prepare.kind: sequence` should own the lane instead
-- raw `uv sync` setup bodies in Python repos where first-class `prepare.source.kind: uv` now exists
+- raw `uv sync` or `uv pip install -r ...` setup bodies in Python repos where first-class
+  `prepare.source.kind: uv` now exists
 - raw `npm install` or non-lockfile setup when the repo truth is npm plus `package-lock.json`
 - invalid generic native package fields where explicit manager-owned package fields should own
   fulfillment or policy truth

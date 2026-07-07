@@ -116,7 +116,7 @@ toolchains:
 ## uv hydration
 
 When a Python repo uses uv for dependency setup, prefer first-class dependency hydration instead of
-raw `run: uv sync`.
+raw `run: uv sync` or raw `uv pip install -r requirements.txt`.
 
 ```yaml
 tasks:
