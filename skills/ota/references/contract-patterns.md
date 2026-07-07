@@ -42,17 +42,31 @@ tasks:
         - exec
         - rails
         - server
-        - -b
-        - 0.0.0.0
-        - -p
-        - "3000"
+      runtime_projection:
+        listener: api
+        adapter: rails
     runtime:
       kind: service
-      surfaces:
+      listeners:
         api:
+          protocol: http
+          bind:
+            address: 0.0.0.0
+            port:
+              mode: fixed
+              value: 3000
           project:
             host:
+              address: 127.0.0.1
+              port:
+                mode: fixed
+                value: 3000
+              path: /
               primary: true
+      surfaces: [api]
+
+Use `launch.runtime_projection` only when the adapter is explicitly supported and the bind truth
+already lives under explicit `runtime.listeners`.
 ```
 
 ## Interactive workflow attach

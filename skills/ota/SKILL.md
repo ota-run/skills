@@ -306,6 +306,10 @@ Prefer these concrete shapes when repo truth matches them:
 - use `command.cwd` when the task truth is still one finite executable plus stable argv but it
   should run from a repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `launch.kind: command` for long-running service processes instead of opaque `run`
+- when a supported long-running server adapter would otherwise duplicate bind flags already owned
+  by explicit `runtime.listeners`, use `launch.runtime_projection` so ota projects bind argv from
+  canonical runtime listener truth instead of repeating `--host` / `--port` or `-b` / `-p` in
+  `launch.args`
 - use `tasks.<name>.compose` when the repo truth is a finite `docker|podman compose`
   lane ota should own directly, whether that is an in-service `exec`/`run`/`attach` command or a
   staged `compose up`, `compose build`, `compose restart`, `compose rm`, `compose logs`, or
@@ -642,6 +646,9 @@ For fuller holistic shapes, also use:
 Watch for the concrete regressions we have repeatedly seen in pressure-test repos:
 
 - `runtime.kind: service` paired with opaque `run` instead of `launch.kind: command`
+- supported server launch adapters still duplicating bind flags in `launch.args` even though
+  explicit `runtime.listeners` already own the canonical bind host/port and
+  `launch.runtime_projection` should carry the translation
 - fake aggregate bodies such as `run: "true"` where `aggregate` should own the task shape
 - aggregate membership smuggled through `depends_on` instead of `aggregate.tasks`
 - Poetry declared under `tools.poetry` when it actually owns Python dependency truth
