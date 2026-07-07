@@ -479,6 +479,9 @@ Prefer these concrete shapes when repo truth matches them:
   shell-only variants just to express input drift
 - use `workflows.<name>.instances` when one workflow is really a named runtime family such as
   `ws0`, `ws1`, or `preview`; select it as `workflow@instance` instead of cloning pseudo-workflows
+- use `workflows.<name>.instances.generated.<family>` when that runtime family has a bounded
+  repeated selector range such as `ws1..ws8` and the repeated overlays should stay on the
+  existing instance boundary instead of being duplicated across many explicit named instances
 - use `workflows.<name>.instances.<instance>.topology.requires_instances` when one selected
   instance truthfully needs another instance up first, such as `ws1+` requiring `ws0`
 - use `workflows.<name>.instances.<instance>.env` for selected-instance host-clone or cache roots,
@@ -488,6 +491,9 @@ Prefer these concrete shapes when repo truth matches them:
   keeps the same runtime identity but needs instance-specific listener bind/project ports or
   readiness listener selection; treat it as a strict overlay on the base task runtime instead of
   inventing a workflow-local listener model
+- generated instance templates may interpolate `${OTA_WORKFLOW_INSTANCE}` and
+  `${OTA_WORKFLOW_INSTANCE_INDEX}` in string-valued overlay fields, and may derive repeated
+  surface/runtime ports with `port_stride` / `stride` instead of falling back to shell math
 - use `workflows.<name>.adapter_inputs.overlays.bake.*` when one workflow should own the adapter root
   or base Bake file stack across its selected `docker buildx bake` task closure instead of
   repeating that truth in task-local adapter inputs
