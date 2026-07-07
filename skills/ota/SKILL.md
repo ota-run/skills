@@ -252,6 +252,18 @@ the machine-readable host-fulfillment surface for direct tool acquisition.
 Also prefer the additive top-level `governance` block for the selected lane’s safety posture,
 review requirement, runnable mode commands, effect surface, and receipt follow-up command instead
 of reconstructing those facts from task text or from the raw `requested_task` payload by hand.
+For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows --json`
+`capability_profile` over hand-built agent policy:
+- read `preflight` for the canonical callable vs refused decision
+- read `environment_boundary` for declared writable/protected path posture
+- read additive `sandbox_policy` for the first compiled runtime target, `codex_local`
+- treat `sandbox_policy.filesystem.state: "compiled"` as derived from declared
+  `agent.writable_paths` / `agent.protected_paths`
+- treat `sandbox_policy.filesystem.state: "unavailable"` as insufficient declared boundary truth,
+  not as an implicit allow
+- treat `sandbox_policy.network.default: "deny"` / `scope: "none"` and
+  `default: "allow"` / `scope: "broad"` as the current honest broad effect posture; do not invent
+  host or destination allowlists that the contract does not yet declare
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
 backend selection from task names or advisory prose.
