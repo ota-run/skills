@@ -218,9 +218,9 @@ Use the smallest real Ota workflow that fits the task:
     them honestly
 - `ota tasks`
   - discover named task surfaces
-  - prefer `ota tasks --use` when you need the runnable lane itself, including command preview,
-    default versus alternate modes, safety posture, effect surface, and the dry-run / receipt
-    follow-up commands that match that task
+  - prefer `ota tasks --use` when you need the runnable lane itself, including explicit
+    `Humans` and `Agents` commands, command preview, default versus alternate modes, safety
+    posture, effect surface, and the dry-run / receipt follow-up commands that match that task
   - prefer `ota tasks --safe --use` first for agent-oriented execution because it keeps the
     routine runnable surface bounded before you decide whether any non-safe lane needs review
 - `ota run <task>`
