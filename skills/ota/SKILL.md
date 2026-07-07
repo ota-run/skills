@@ -259,11 +259,16 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
 - read additive `sandbox_policy` for the first compiled runtime target, `codex_local`
 - treat `sandbox_policy.filesystem.state: "compiled"` as derived from declared
   `agent.writable_paths` / `agent.protected_paths`
+- prefer canonical `runtime_boundary` truth when present on `execution`, `workflows.<name>`, or
+  `tasks.<name>`; `sandbox_policy.filesystem.source` / `network.source` tells you which selected
+  lane actually owns the compiled boundary
 - treat `sandbox_policy.filesystem.state: "unavailable"` as insufficient declared boundary truth,
   not as an implicit allow
 - treat `sandbox_policy.network.default: "deny"` / `scope: "none"` and
   `default: "allow"` / `scope: "broad"` as the current honest broad effect posture; do not invent
   host or destination allowlists that the contract does not yet declare
+- when `sandbox_policy.network.scope: "targeted"`, consume declared `outbound_targets[]` directly
+  and keep `enforcement: "advisory_only"` honest until ota compiles a real sandbox target
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
 backend selection from task names or advisory prose.
