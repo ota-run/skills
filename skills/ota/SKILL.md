@@ -358,6 +358,9 @@ Prefer these concrete shapes when repo truth matches them:
   package-manager truth under `prepare.source.kind: ...` and add `prepare.source.compose` only as
   the service wrapper; in that shape the host requirement stays `requirements.tools.docker` or
   `requirements.tools.podman`, not a duplicate host language toolchain
+- if you need one concrete contract shape for that lane, point authors at the dedicated reference
+  example `reference/task-prepare-compose-hydration` instead of making them infer it from the
+  broader Compose adapter example
 - when the durable install state for that Compose-wrapped lane lives in a service volume instead
   of a repo path, declare it under `effects.adapter_state` with a token such as
   `compose_volume:node_modules` or `compose_volume:bundle_data` instead of faking repo writes
