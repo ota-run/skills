@@ -655,6 +655,9 @@ For fuller holistic shapes, also use:
   `requires_services`, context-bound `execution`, and post-run hooks
 - `references/agent-and-governance-checklist.md` for `agent`, `checks`, `effects`, proof posture,
   and CI/version-floor governance
+- `references/pressure-testing-protocol.md` before selecting, modeling, or declaring a pressure
+  repo complete; it defines the required proof matrix, Ota-gap review, and first-party
+  propagation decision
 - the public examples repo when a compact copy-ready surface is better than prose alone:
   `reference/bake-adapter-inputs`, `reference/action-ensure-env-file`,
   `reference/action-ensure-bundle`, `reference/action-ensure-git-checkout`,
@@ -864,6 +867,10 @@ service ownership, env modeling, `requires_services`, `execution`, or post-run h
 
 Read `references/agent-and-governance-checklist.md` when you want a compact pass over `agent`,
 `checks`, `effects`, proof posture, and CI/version-floor governance.
+
+Read `references/pressure-testing-protocol.md` before pressure testing a repo. Do not call a
+pressure pass complete solely because existing Ota surfaces validated: it must also state whether
+the repo exposed a real Ota widening opportunity.
 
 ## Expected output style
 

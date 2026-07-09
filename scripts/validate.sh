@@ -16,6 +16,7 @@ fail() {
 [ -f "${skill_dir}/references/review-checklist.md" ] || fail "missing review checklist reference"
 [ -f "${skill_dir}/references/workflow-service-patterns.md" ] || fail "missing workflow/service patterns reference"
 [ -f "${skill_dir}/references/agent-and-governance-checklist.md" ] || fail "missing agent/governance checklist reference"
+[ -f "${skill_dir}/references/pressure-testing-protocol.md" ] || fail "missing pressure-testing protocol reference"
 [ -f "${skill_dir}/agents/openai.yaml" ] || fail "missing agents/openai.yaml"
 
 first_line="$(sed -n '1p' "${skill_dir}/SKILL.md")"
@@ -44,6 +45,7 @@ grep -q 'references/contract-patterns.md' "${skill_dir}/SKILL.md" || fail "SKILL
 grep -q 'references/review-checklist.md' "${skill_dir}/SKILL.md" || fail "SKILL.md must route to review checklist reference"
 grep -q 'references/workflow-service-patterns.md' "${skill_dir}/SKILL.md" || fail "SKILL.md must route to workflow/service patterns reference"
 grep -q 'references/agent-and-governance-checklist.md' "${skill_dir}/SKILL.md" || fail "SKILL.md must route to agent/governance checklist reference"
+grep -q 'references/pressure-testing-protocol.md' "${skill_dir}/SKILL.md" || fail "SKILL.md must route to pressure-testing protocol reference"
 grep -q 'https://github.com/ota-run/skills' "${skill_dir}/references/official-sources.md" || fail "official sources must reference ota-run/skills"
 grep -q '`launch.kind: command`' "${skill_dir}/references/contract-patterns.md" || fail "contract patterns must cover service launch"
 grep -q '`aggregate.tasks`' "${skill_dir}/references/contract-patterns.md" || fail "contract patterns must cover aggregate tasks"
