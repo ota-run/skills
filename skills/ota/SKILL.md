@@ -251,6 +251,9 @@ When reading receipt/proof machine output, prefer explicit stage ownership over 
 labels:
 - `receipt.steps[*].stage_family` carries the broad governance family
 - `ota proof runtime --json` carries `stage_family: "proof"` alongside the finer proof `phase`
+- `proof_verdict` is the terminal selected-lane result: treat
+  `passed_with_unproven_boundaries` as a qualified proof, never as repo-global completion; parse
+  or contract-load failures do not enter that proof carrier
 - `proof_scope` is the canonical machine-readable boundary for the selected runtime path; do not
   read a green runtime proof as repo-global success
 - `not_proved[]` is relative to `proof_scope`: treat entries with `source: contract_lane` and
@@ -259,6 +262,10 @@ labels:
   that narrow proof
 - `artifact_routing[]` points to the next receipt/proof artifact or capture command with typed
   `role`, `kind`, and `stage_family`
+- receipt comparison `summary.comparison.artifact_trust[]` is runner-derived and scoped to the
+  named input class. A matching `semantic_contract_snapshot` is `acquitting` for
+  `contract_truth` only; it does not clear dependency, environment, runtime, or external-state
+  drift that the receipts did not capture
 For `ota run <task> --dry-run --json`, prefer top-level `provisioning` and `provisioning_request`
 when present instead of scraping `plan.requirement_lines`; that selected-path provisioning truth is
 the machine-readable host-fulfillment surface for direct tool acquisition.
