@@ -213,6 +213,10 @@ Use the smallest real Ota workflow that fits the task:
     `promoted` receipt history
   - read `summary.comparison.correlation` first, then `contract_changes[]`, then
     `likely_related_changes[]`
+  - read `baseline.evaluated_inputs[]`, `current.evaluated_inputs[]`, and
+    `summary.comparison.artifact_trust[]` only as receipt-authored evidence. A matching
+    `pnpm-lock.yaml` currently acquits `declared_dependency_resolution` only; never replace it
+    with a later filesystem read or over-read it as runtime, environment, or external-state proof
   - expect sharper declared owners such as reusable `surfaces.<name>` or
     `readiness.probes.<name>` to outrank weaker adjacent workflow references when Ota can recover
     them honestly
@@ -266,6 +270,9 @@ labels:
   named input class. A matching `semantic_contract_snapshot` is `acquitting` for
   `contract_truth` only; it does not clear dependency, environment, runtime, or external-state
   drift that the receipts did not capture
+- a matching receipt-authored `pnpm-lock.yaml` is likewise `acquitting` only for
+  `declared_dependency_resolution`; it proves the declared lockfile identity matched between
+  receipts, not that ambient registry, runtime, env, or external-state inputs were unchanged
 For `ota run <task> --dry-run --json`, prefer top-level `provisioning` and `provisioning_request`
 when present instead of scraping `plan.requirement_lines`; that selected-path provisioning truth is
 the machine-readable host-fulfillment surface for direct tool acquisition.
