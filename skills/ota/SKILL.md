@@ -218,9 +218,16 @@ Use the smallest real Ota workflow that fits the task:
     them honestly
 - `ota tasks`
   - discover named task surfaces
-  - prefer `ota tasks --use` when you need the runnable lane itself, including explicit
-    `Humans` and `Agents` commands, command preview, default versus alternate modes, safety
-    posture, effect surface, and the dry-run / receipt follow-up commands that match that task
+  - prefer `ota tasks --use` when you need the runnable lane itself, including `Human Run`,
+    closure-aware `Agent Run`, `Agent Policy`, command preview, and modes in stable `Container`,
+    `Native`, then `Remote` order with the selected lane marked `(Default)`, plus effect surface
+    plus required inputs and dry-run / receipt follow-up commands; use plain `ota tasks` for the
+    full declaration view. Unavailable Container or Native planes must be shown explicitly, and a
+    declared-safe task is agent-callable only when its full dependency closure is callable
+  - for machine consumers, use `ota tasks --json` and read `tasks[].use.modes[]` as the canonical
+    per-mode human/agent capability matrix; `use.human` and `use.agent` remain compatibility
+    projections of the selected default mode, while `availability: unavailable` is contract
+    support truth rather than a substitute for environment readiness checks
   - prefer `ota tasks --safe --use` first for agent-oriented execution because it keeps the
     routine runnable surface bounded before you decide whether any non-safe lane needs review
 - `ota run <task>`
