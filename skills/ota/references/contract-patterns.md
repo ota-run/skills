@@ -420,6 +420,8 @@ tasks:
       source:
         kind: dotnet_restore
         cwd: .
+        # Use this when the repository itself owns NuGet source selection.
+        config_file: NuGet.Config
     requirements:
       toolchains:
         - dotnet

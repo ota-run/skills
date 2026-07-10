@@ -435,7 +435,9 @@ Prefer these concrete shapes when repo truth matches them:
 - use `source.kind: cargo` under `prepare.kind: dependency_hydration` for Rust setup instead of
   raw `run: cargo fetch`
 - use `source.kind: dotnet_restore` under `prepare.kind: dependency_hydration` for .NET setup
-  instead of raw `run: dotnet restore`
+  instead of raw `run: dotnet restore`; when the repo owns NuGet feed selection in `NuGet.Config`,
+  declare `source.config_file` and let `ota up --json` recover resolved feed identities instead of
+  duplicating those URLs as `source.sources[]` command overrides
 - use `source.kind: helm` under `prepare.kind: dependency_hydration` for Helm chart setup instead
   of raw `helm dependency build ...` command or shell glue
 - use `source.kind: composer` under `prepare.kind: dependency_hydration` for PHP setup instead of
