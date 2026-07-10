@@ -437,7 +437,10 @@ Prefer these concrete shapes when repo truth matches them:
 - use `source.kind: dotnet_restore` under `prepare.kind: dependency_hydration` for .NET setup
   instead of raw `run: dotnet restore`; when the repo owns NuGet feed selection in `NuGet.Config`,
   declare `source.config_file` and let `ota up --json` recover resolved feed identities instead of
-  duplicating those URLs as `source.sources[]` command overrides
+  duplicating those URLs as `source.sources[]` command overrides; when an ephemeral container
+  restore must feed later `dotnet build --no-restore` or `dotnet test --no-restore` tasks, declare
+  `attachments.isolated_paths: [.nuget/packages]` on that context so Ota owns one shared NuGet
+  package cache through derived `NUGET_PACKAGES`
 - use `source.kind: helm` under `prepare.kind: dependency_hydration` for Helm chart setup instead
   of raw `helm dependency build ...` command or shell glue
 - use `source.kind: composer` under `prepare.kind: dependency_hydration` for PHP setup instead of

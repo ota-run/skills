@@ -432,6 +432,23 @@ tasks:
       network_kind: dependency_hydration
 ```
 
+For an ephemeral container-backed .NET lane, attach the package cache once at the execution
+context. Ota derives `NUGET_PACKAGES` from this attachment, so the typed restore and later
+`--no-restore` commands share packages without committing cache state into the worktree.
+
+```yaml
+execution:
+  contexts:
+    dotnet:container:
+      backend: container
+      lifecycle: ephemeral
+      container:
+        image: mcr.microsoft.com/dotnet/sdk:10.0.103
+      attachments:
+        isolated_paths:
+          - .nuget/packages
+```
+
 ## Compose-wrapped typed dependency hydration
 
 When the package hydration lane truthfully runs inside a declared Compose service, keep the typed
