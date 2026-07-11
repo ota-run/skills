@@ -30,6 +30,22 @@
 Pressure testing proves Ota against real repo truth and deliberately searches for the next Ota
 product boundary. It is not a contract-formatting exercise.
 
+## Governance Completion Bar
+
+The bar for a pressure repo is complete execution governance, not merely a passing Ota matrix.
+Every material setup, verification, runtime, lifecycle, input, and external-effect behavior must
+end in exactly one honest state:
+
+- **contract-owned**: Ota declares and can execute or evaluate the behavior through a first-class
+  surface
+- **explicitly bounded**: the contract names the external dependency, selected proof scope, or
+  `not_proved` boundary so a green lane cannot be over-read
+- **named Ota platform gap**: the behavior cannot yet be modeled without shell glue, duplicate
+  truth, or a false narrowing; record the precise missing surface and prioritize it by reuse
+
+Do not claim that Ota operates an external cloud system just because the repo declares it. The
+goal is that nothing material remains silently implicit or gets hidden in prose and helper scripts.
+
 ## Select The Repo
 
 Prefer an existing pressure repo when it exercises a materially new Ota surface. Clone and fork a
@@ -100,6 +116,9 @@ Classify each finding explicitly:
 An Ota platform gap should be fixed in Ota before teaching a repo-local workaround when it is
 feasible and repeated or architecturally important.
 
+Do not close a pressure repo as "fully governed" while a material behavior remains only in a
+note, README, CI shell, or helper script without one of the three explicit states above.
+
 ## Propagate Connected Changes
 
 For every Ota product change, make an explicit connected-surface decision before completion:
@@ -122,4 +141,3 @@ Close every pressure pass with:
 3. the exact Ota version, branch, or revision tested
 4. repo contract issues, repo implementation issues, and Ota platform gaps separately
 5. first-party propagation completed or deliberately not required
-

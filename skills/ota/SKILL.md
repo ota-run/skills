@@ -223,6 +223,9 @@ Use the smallest real Ota workflow that fits the task:
   - expect sharper declared owners such as reusable `surfaces.<name>` or
     `readiness.probes.<name>` to outrank weaker adjacent workflow references when Ota can recover
     them honestly
+  - use `tasks.<name>.replay_inputs` only for immutable repo files a deterministic selected lane
+    actually consumes; Ota captures their identities before the full closure starts and treats a
+    match as narrowing evidence, never as proof that runtime or external state was unchanged
 - `ota tasks`
   - discover named task surfaces
   - prefer `ota tasks --use` when you need the runnable lane itself, including `Human Run`,
