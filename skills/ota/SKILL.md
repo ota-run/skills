@@ -896,8 +896,8 @@ Read `references/official-sources.md` when you need canonical install links, off
 or public GitHub references for examples and contract behavior.
 
 Read `references/contract-patterns.md` when you want compact canonical shapes for service launch,
-aggregate verification, Poetry ownership, lockfile-strict npm hydration, env ownership, and
-minimum-version governance.
+aggregate verification, generated artifact producer/consumer lineage, Poetry ownership,
+lockfile-strict npm hydration, env ownership, and minimum-version governance.
 
 Read `references/review-checklist.md` when you want a compact review pass that focuses on modern
 contract-shape regressions rather than generic YAML validity.

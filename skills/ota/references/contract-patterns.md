@@ -516,6 +516,40 @@ Do not add fake host `requirements.toolchains.node` here just because the in-ser
 `npm ci`. In this shape the host prerequisite is the compose engine; the typed package-manager
 truth still lives under `prepare.source.kind: node_package_manager`.
 
+## Generated artifact lineage
+
+When a generator produces source that another task consumes, declare the generated output once at
+top level and make each consumer name it explicitly. Do not use broad `effects.writes` plus task
+ordering alone as the only ownership story.
+
+```yaml
+artifacts:
+  typescript-sdk:
+    kind: generated_source
+    producer: sdk:generate
+    paths:
+      - sdk/typescript/src/api/client.gen.ts
+    inputs:
+      - schema/api.graphql
+
+tasks:
+  sdk:generate:
+    command:
+      exe: api-generator
+      args: [generate, typescript]
+  sdk:verify:
+    command:
+      exe: npm
+      args: [run, test:sdk]
+    depends_on: [sdk:generate]
+    requires_artifacts: [typescript-sdk]
+```
+
+Ota validates the direct producer dependency and checks the declared output paths after the
+producer closure runs. Task JSON and receipts carry the named producer/consumer lineage. Presence
+does not prove freshness: do not claim that an existing generated file reflects current inputs
+until a later receipt-backed derivation identity is available.
+
 ## Lockfile-strict npm hydration
 
 When the repo truth is npm plus `package-lock.json`, prefer first-class dependency hydration with
