@@ -26,6 +26,32 @@
 
 Use these canonical snippets when the repo truth supports the stronger Ota surface.
 
+## Compose image hydration
+
+Use the dedicated container-image network effect when Ota owns a finite Compose image-pull lane.
+This is registry acquisition, not package dependency hydration; immutable image receipt evidence is
+a separate runtime-identity claim.
+
+```yaml
+tasks:
+  setup:images:
+    prepare:
+      kind: dependency_hydration
+      medium: container_images
+      source:
+        kind: docker_compose
+        cwd: docker
+        files: [compose.yaml]
+      targets: [database]
+    requirements:
+      tools:
+        docker: "*"
+    effects:
+      network: true
+      network_kind: container_image_hydration
+      external_state: [docker]
+```
+
 ## Service launch
 
 Use `launch.kind: command` for long-running service processes instead of hiding service startup

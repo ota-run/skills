@@ -390,7 +390,11 @@ Prefer these concrete shapes when repo truth matches them:
   native `prepare.kind: sequence` can be orchestrator-mediated until Ota has a step-level model
 - when `prepare.source.kind: docker_compose` owns image hydration, keep Compose file selection and
   interpolation input on `prepare.source.files` / `prepare.source.env_files` instead of burying
-  `docker compose -f ... --env-file ... pull ...` in raw shell
+  `docker compose -f ... --env-file ... pull ...` in raw shell; declare
+  `prepare.medium: container_images`, explicit image `targets`, `requirements.tools.docker`,
+  `effects.network: true`, and `effects.network_kind: container_image_hydration`. Use the same
+  effect kind for a Compose `up` or `launch.kind: compose` lane that may pull declared images, and
+  keep immutable image receipt evidence separate from the registry-access declaration
 - when that typed dependency lane truthfully runs inside a declared Compose service, keep the
   package-manager truth under `prepare.source.kind: ...` and add `prepare.source.compose` only as
   the service wrapper; in that shape the host requirement stays `requirements.tools.docker` or
