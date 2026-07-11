@@ -550,6 +550,10 @@ producer closure runs. Task JSON and receipts carry the named producer/consumer 
 does not prove freshness: do not claim that an existing generated file reflects current inputs
 until a later receipt-backed derivation identity is available.
 
+For a pnpm workspace generator slice, use `prepare.source.filter` on the typed hydration source
+instead of hydrating unrelated workspace packages or writing `pnpm --filter ... install` in shell.
+Ota supports this selector only for `manager: pnpm` and renders it before `install`.
+
 ## Lockfile-strict npm hydration
 
 When the repo truth is npm plus `package-lock.json`, prefer first-class dependency hydration with
