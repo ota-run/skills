@@ -215,9 +215,11 @@ Use the smallest real Ota workflow that fits the task:
     `likely_related_changes[]`
   - read `baseline.evaluated_inputs[]`, `current.evaluated_inputs[]`, and
     `summary.comparison.artifact_trust[]` only as receipt-authored evidence. A matching
-    typed Node lockfile currently acquits `declared_dependency_resolution` only. The paired
-    `runtime:node` version record only narrows `selected_runtime_version`; never replace either
-    with a later filesystem read or over-read them as environment or external-state proof
+    typed Node lockfile currently acquits `declared_dependency_resolution` only. A static
+    digest-pinned Compose image for an explicitly selected service in an explicitly declared file
+    acquits only its `selected_runtime_artifact`. The paired `runtime:node` version record only
+    narrows `selected_runtime_version`; never replace any of these with a later filesystem read
+    or over-read them as environment or external-state proof
   - expect sharper declared owners such as reusable `surfaces.<name>` or
     `readiness.probes.<name>` to outrank weaker adjacent workflow references when Ota can recover
     them honestly
@@ -274,9 +276,12 @@ labels:
 - a matching receipt-authored typed Node lockfile is likewise `acquitting` only for
   `declared_dependency_resolution`; it proves the declared lockfile identity matched between
   receipts, not that ambient registry, runtime, env, or external-state inputs were unchanged
+- a matching receipt-authored static digest-pinned Compose image is `acquitting` only for its
+  named `selected_runtime_artifact`; mutable tags, interpolation, and inferred Compose files do
+  not produce this evidence
 - a matching receipt-authored `runtime:node` version is `narrowing` for
-  `selected_runtime_version`; only a future immutable executable or image digest can acquit the
-  broader runtime artifact
+  `selected_runtime_version`; it does not establish binary, image, host, environment, or
+  external-state identity
 For `ota run <task> --dry-run --json`, prefer top-level `provisioning` and `provisioning_request`
 when present instead of scraping `plan.requirement_lines`; that selected-path provisioning truth is
 the machine-readable host-fulfillment surface for direct tool acquisition.
