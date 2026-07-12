@@ -226,6 +226,9 @@ Use the smallest real Ota workflow that fits the task:
   - use `tasks.<name>.replay_inputs` only for immutable repo files a deterministic selected lane
     actually consumes; Ota captures their identities before the full closure starts and treats a
     match as narrowing evidence, never as proof that runtime or external state was unchanged
+  - use `tasks.<name>.witnessed_observations.query_traces` for prior-run JSONL query evidence;
+    Ota preserves these as attested observations in the receipt, never as current-run evaluated
+    inputs. A divergent identity names changed query shape only; it does not establish causality.
 - `ota tasks`
   - discover named task surfaces
   - prefer `ota tasks --use` when you need the runnable lane itself, including `Human Run`,
