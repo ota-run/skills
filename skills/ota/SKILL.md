@@ -359,8 +359,9 @@ Prefer these concrete shapes when repo truth matches them:
 - use `launch.kind: command` for long-running service processes instead of opaque `run`
 - when a supported long-running server adapter would otherwise duplicate bind flags already owned
   by explicit `runtime.listeners`, use `launch.runtime_projection` so ota projects bind argv from
-  canonical runtime listener truth instead of repeating `--host` / `--port` or `-b` / `-p` in
-  `launch.args`
+  canonical runtime listener truth instead of repeating `--host` / `--port`, `-b` / `-p`, or
+  Next.js `--hostname` / `--port` in `launch.args`; use the `nextjs` adapter with a direct
+  structured `next dev` invocation rather than a package-script wrapper that owns those flags
 - use `tasks.<name>.compose` when the repo truth is a finite `docker|podman compose`
   lane ota should own directly, whether that is an in-service `exec`/`run`/`attach` command or a
   staged `compose up`, `compose build`, `compose restart`, `compose rm`, `compose logs`, or
