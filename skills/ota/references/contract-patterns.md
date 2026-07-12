@@ -52,6 +52,24 @@ tasks:
       external_state: [docker]
 ```
 
+## Task platform support
+
+Use `tasks.<name>.only_on` when a task body itself is supported only on specific hosts. This is
+different from `variants.<i>.when.os`, which chooses an alternate body on a host that the task
+supports, and from `execution.contexts.<name>.only_on`, which scopes one execution environment.
+
+```yaml
+tasks:
+  verify:native:
+    only_on: [linux, macos]
+    command:
+      exe: bin/verify
+```
+
+Ota refuses the selected task closure before provisioning when a dependency is unsupported on the
+current host. Keep a container branch or context separate when the task remains portable through
+that execution plane.
+
 ## Service launch
 
 Use `launch.kind: command` for long-running service processes instead of hiding service startup
