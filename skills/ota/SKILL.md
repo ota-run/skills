@@ -273,6 +273,9 @@ labels:
   `declared_by_workflows[]` as contract-declared adjacent paths, matched through declared external
   state, that were not exercised; `source: proof_scope` is the generic broader-repo remainder for
   that narrow proof
+- `dependency_exercise_not_proved` names a `requires_services` seam in the selected proof closure
+  that Ota did not independently observe crossing. It is not a service failure or unused-service
+  claim; do not upgrade it to `exercised` from reachability, a caller trace, or a green proof.
 - `artifact_routing[]` points to the next receipt/proof artifact or capture command with typed
   `role`, `kind`, and `stage_family`
 - receipt comparison `summary.comparison.artifact_trust[]` is runner-derived and scoped to the
