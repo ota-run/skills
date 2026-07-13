@@ -280,9 +280,11 @@ labels:
   that Ota did not independently observe crossing. It is not a service failure or unused-service
   claim; do not upgrade it to `exercised` from reachability, a caller trace, or a green proof.
 - A marker-bound `workflows.<name>.proof.seam_observations[]` observer is the first honest path to
-  `exercised`: Ota issues the opaque marker, injects it into the runtime and finite observer, and
-  records `exercised` only when the observer confirms it before teardown. Keep its prerequisites
-  inside the normal workflow closure; do not claim exercise from an unrun observer or prose.
+  `exercised`: Ota gives the opaque marker to a declared producer in the selected closure, never
+  to the finite observer. The observer must recover it through the dependency and write the
+  runner-owned transaction attestation. Ota records `exercised` only after verifying that
+  attestation before teardown. Keep producer and observer prerequisites inside the normal workflow
+  closure; do not claim exercise from an unrun, inert, or prose-only observer.
 - `artifact_routing[]` points to the next receipt/proof artifact or capture command with typed
   `role`, `kind`, and `stage_family`
 - receipt comparison `summary.comparison.artifact_trust[]` is runner-derived and scoped to the
