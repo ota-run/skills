@@ -285,6 +285,11 @@ labels:
   runner-owned transaction attestation. Ota records `exercised` only after verifying that
   attestation before teardown. Keep producer and observer prerequisites inside the normal workflow
   closure; do not claim exercise from an unrun, inert, or prose-only observer.
+- A `workflows.<name>.proof.negative_controls[]` entry is the only path to `fault_tested`. It must
+  reference one observed seam `obligation`, stay outside the normal closure, and declare a typed
+  `expected_failure`. The finite control receives transaction and attestation coordinates, not a
+  caller-authored verdict; a generic non-zero exit is `invalid` until Ota verifies the matching
+  same-obligation failure attestation.
 - `artifact_routing[]` points to the next receipt/proof artifact or capture command with typed
   `role`, `kind`, and `stage_family`
 - receipt comparison `summary.comparison.artifact_trust[]` is runner-derived and scoped to the
