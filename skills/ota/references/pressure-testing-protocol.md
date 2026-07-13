@@ -77,6 +77,11 @@ or action surface where possible.
 
 ## Required Proof
 
+Every pressure repo must prove both native and Ota-owned container execution for the selected
+portable slice. Native and container execution are both first-class Ota value surfaces. The absence
+of repo-owned Docker or Compose files is not an exemption: model an Ota-owned execution image when
+the documented setup and verification path can run there.
+
 Every pressure repo should prove, where the contract advertises the relevant surface:
 
 - `ota validate`
@@ -87,13 +92,15 @@ Every pressure repo should prove, where the contract advertises the relevant sur
 - real task execution for the meaningful executable surface
 - workflow dry-run coverage
 - real workflow/runtime proof for truthful primary runtime paths
-- native and container coverage where advertised
+- native coverage for every supported host path
+- container coverage and Ubuntu matrix proof for the selected portable slice
 - matrix coverage across intended OS/runtime lanes
 - bootstrap/install truth for the exact released version, branch, or git revision under test
 
-Do not manufacture coverage. A repo without a truthful container lane should not pretend to prove
-one. A non-hermetic or credentialed runtime must declare its boundary and prove only the honest
-narrow path.
+Do not manufacture coverage. A container exception is allowed only after attempting the selected
+slice and recording a concrete technical blocker that makes an Ota-owned execution image dishonest
+or impossible; missing repo Docker files alone is not a blocker. A non-hermetic or credentialed
+runtime must declare its boundary and prove only the honest narrow path.
 
 ## Mandatory Gap Review
 
