@@ -267,6 +267,8 @@ When reading receipt/proof machine output, prefer explicit stage ownership over 
 labels:
 - `receipt.steps[*].stage_family` carries the broad governance family
 - `ota proof runtime --json` carries `stage_family: "proof"` alongside the finer proof `phase`
+- `ok` is execution/readiness success only. It is necessary but insufficient for proof breadth;
+  consumers must read `proof_verdict` with `not_proved[]`.
 - `proof_verdict` is the terminal selected-lane result: treat
   `passed_with_unproven_boundaries` as a qualified proof, never as repo-global completion; parse
   or contract-load failures do not enter that proof carrier
@@ -290,6 +292,10 @@ labels:
   `expected_failure`. The finite control receives transaction and attestation coordinates, not a
   caller-authored verdict; a generic non-zero exit is `invalid` until Ota verifies the matching
   same-obligation failure attestation.
+- Every marker-bound seam retains `dependency_output_shaping_not_proved`, whether its evidence is
+  `exercised` or `fault_tested`; absence is reserved for a future explicit output-proof carrier.
+  The nested dependency-level negative-control object is a self-describing
+  `evidence_class: derived` projection of the canonical control record, not a second authority.
 - `artifact_routing[]` points to the next receipt/proof artifact or capture command with typed
   `role`, `kind`, and `stage_family`
 - receipt comparison `summary.comparison.artifact_trust[]` is runner-derived and scoped to the
