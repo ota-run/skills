@@ -278,6 +278,10 @@ labels:
   `declared_by_workflows[]` as contract-declared adjacent paths, matched through declared external
   state, that were not exercised; `source: proof_scope` is the generic broader-repo remainder for
   that narrow proof
+- For governance previews, a preflight refusal remains `post_execution.state: not_run` because
+  execution never began. Read `post_execution.refusal_occurred`, its refusal record, and
+  `not_run_reason: preflight_refusal` together; do not infer that no refusal happened from a
+  non-executed lane.
 - `dependency_exercise_not_proved` names a `requires_services` seam in the selected proof closure
   that Ota did not independently observe crossing. It is not a service failure or unused-service
   claim; do not upgrade it to `exercised` from reachability, a caller trace, or a green proof.
