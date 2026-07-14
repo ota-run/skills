@@ -480,6 +480,10 @@ For an ephemeral container-backed .NET lane, attach the package cache once at th
 context. Ota derives `NUGET_PACKAGES` from this attachment, so the typed restore and later
 `--no-restore` commands share packages without committing cache state into the worktree.
 
+After `ota up --json`, read the typed `receipt.evaluated_inputs[]` record with
+`kind: hydration_provenance` for the declared-versus-resolved feed posture Ota captured before
+execution. Do not reconstruct that evidence from a later `NuGet.Config` read.
+
 ```yaml
 execution:
   contexts:
