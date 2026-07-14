@@ -498,7 +498,8 @@ Prefer these concrete shapes when repo truth matches them:
   declare `source.config_file` and let `ota up --json` recover resolved feed identities instead of
   duplicating those URLs as `source.sources[]` command overrides. Read the resulting typed
   `receipt.evaluated_inputs[]` `hydration_provenance` record rather than re-reading `NuGet.Config`
-  after the run; when an ephemeral container
+  after the run. Treat `resolution: unavailable` as narrowing evidence, never a hermetic replay
+  anchor; when an ephemeral container
   restore must feed later `dotnet build --no-restore` or `dotnet test --no-restore` tasks, declare
   `attachments.isolated_paths: [.nuget/packages]` on that context so Ota owns one shared NuGet
   package cache through derived `NUGET_PACKAGES`

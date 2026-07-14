@@ -482,7 +482,8 @@ context. Ota derives `NUGET_PACKAGES` from this attachment, so the typed restore
 
 After `ota up --json`, read the typed `receipt.evaluated_inputs[]` record with
 `kind: hydration_provenance` for the declared-versus-resolved feed posture Ota captured before
-execution. Do not reconstruct that evidence from a later `NuGet.Config` read.
+execution. Do not reconstruct that evidence from a later `NuGet.Config` read; an unavailable
+resolution only narrows replay diagnosis and cannot establish a hermetic dependency source.
 
 ```yaml
 execution:
