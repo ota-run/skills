@@ -529,6 +529,9 @@ Prefer these concrete shapes when repo truth matches them:
   as `archive.format: tar_gz` / `zip` plus `archive.executable_path`
 - use `source.kind: uv` under `prepare.kind: dependency_hydration` for uv-backed Python setup
   instead of raw `run: uv sync` or raw `uv pip install -r requirements.txt` shell
+  - declare `default_index`, ordered `indexes[]`, and `offline: true` when package-source or
+    cache-only posture materially affects replay or supply-chain trust; do not let user/global uv
+    configuration silently stand in for contract-owned source truth
 - use `action.kind: ensure_virtualenv` when the repo truthfully owns deterministic creation of one
   repo-local Python virtualenv such as `.venv`, and keep dependency installation itself under
   `prepare.kind: dependency_hydration`

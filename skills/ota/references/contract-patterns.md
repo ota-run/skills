@@ -186,6 +186,7 @@ tasks:
       source:
         kind: uv
         cwd: .
+        default_index: https://pypi.org/simple
     requirements:
       toolchains:
         - python
