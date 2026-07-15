@@ -51,6 +51,9 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   plus `rm -rf .git` and `git init` glue?
 - If one setup lane owns shared external Docker network readiness, does it use
   `action.kind: ensure_container_network` instead of shell `docker network inspect/create` glue?
+- If one task materializes a Dockerfile-backed local image, does it use
+  `action.kind: build_container_image` with explicit `file`, `context`, and `tag` instead of
+  raw `docker build` glue?
 - If one destructive local recovery lane owns stopping a Compose-managed service, removing one
   named volume, and restarting the service, does it use
   `action.kind: reset_compose_service_volume` instead of shell `docker compose stop/rm` plus

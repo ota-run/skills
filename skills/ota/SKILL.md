@@ -480,6 +480,10 @@ Prefer these concrete shapes when repo truth matches them:
 - use `action.kind: ensure_container_network` when one honest setup lane owns shared external
   Docker network readiness as a standalone lane instead of shell `docker network inspect/create`
   glue
+- use `action.kind: build_container_image` when one direct task truthfully owns Dockerfile-backed
+  local image materialization for a declared container or Compose lane; keep `file`, `context`,
+  `tag`, Docker external state, and any network posture explicit instead of hiding `docker build`
+  in a shell command, and do not place image builds inside `prepare.steps` or `ensure_bundle`
 - use `action.kind: reset_compose_service_volume` when one destructive local recovery or reset
   lane truthfully owns stopping a Compose-managed service, removing one declared volume, and
   restarting the service instead of hiding `docker compose stop/rm` plus `docker volume rm`
