@@ -300,6 +300,9 @@ labels:
   `exercised` or `fault_tested`; absence is reserved for a future explicit output-proof carrier.
   The nested dependency-level negative-control object is a self-describing
   `evidence_class: derived` projection of the canonical control record, not a second authority.
+- Use the public `ota-run/examples/reference/runtime-proof-evidence` example when authors need a
+  copy-ready producer, observer, and negative-control pattern. Keep that evidence on
+  `ota proof runtime`; generic readiness and receipt lanes did not execute the proof obligation.
 - `artifact_routing[]` points to the next receipt/proof artifact or capture command with typed
   `role`, `kind`, and `stage_family`
 - receipt comparison `summary.comparison.artifact_trust[]` is runner-derived and scoped to the
