@@ -154,6 +154,11 @@ Always prefer using the real Ota binary when it is available.
      `agent.bootstrap.ota.source`, prefer the first-party
      `ota-run/setup@v1` action with `source: contract` over duplicating `OTA_VERSION`,
      `OTA_GIT_REV`, `OTA_GIT_BRANCH`, or `--from-git` in workflow YAML
+   - when a repository declares contract-owned CI bootstrap or verification truth, add a dedicated
+     pull-request gate with `ota-run/action@v1`, `command: doctor`, `source: contract`, and
+     `fail-on-ci-drift: true`; it fails only on Ota-established CI bootstrap or verification drift,
+     not ordinary Doctor warnings. Keep it separate from general readiness reporting so the blocking
+     reason stays explicit.
    - once `agent.bootstrap.ota.source` exists, treat explicit workflow-owned Ota install truth as
      governance drift unless the lane is an intentional unreleased pressure path; `ota doctor`
      should be allowed to call out that duplication or conflict
@@ -226,6 +231,9 @@ Use the smallest real Ota workflow that fits the task:
   - use `tasks.<name>.replay_inputs` only for immutable repo files a deterministic selected lane
     actually consumes; Ota captures their identities before the full closure starts and treats a
     match as narrowing evidence, never as proof that runtime or external state was unchanged
+  - add `expected_identity: sha256:<64 lowercase hex characters>` only when that file must be
+    independently pinned. Ota blocks the selected closure before execution when the observed
+    content differs; never let Ota or an agent rewrite the pin automatically
   - within `tasks.<name>.replay_inputs`, use `kind: static_file` for generic immutable repo files,
     `kind: presentation_profile` for files that define output-shaping or normalization posture, and
     `kind: comparator_profile` for files that define equivalence, tolerance, or comparison rules
