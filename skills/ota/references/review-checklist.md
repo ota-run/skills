@@ -64,6 +64,10 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
 - If GitHub Actions already has repo-owned bootstrap truth available, does it consume that through
   `ota-run/setup@v1 source: contract` or `ota-run/action@v1 source: contract` instead of
   restating Ota version, git revision, branch, or source-install refs in workflow YAML?
+- When a repository declares contract-owned CI verification truth, does its required pull-request
+  check use `ota-run/action@v1` with `command: doctor`, `install: never`, and
+  `fail-on-ci-drift: true` so workflow drift fails without treating unrelated Doctor warnings as
+  merge blockers?
 - If one setup lane is a bundle of deterministic setup actions under one owner, does it use
   `action.kind: ensure_bundle` instead of shell orchestration?
 - If a setup lane was collapsed into one parent body, is that the right owner boundary, or should
