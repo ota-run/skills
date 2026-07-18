@@ -281,6 +281,10 @@ labels:
   claim. Then read `ota doctor --json` `claim_assurance[]`: proof breadth is supported only by a
   content-addressed witness archive matching current semantic contract, clean source identity, and
   resolved execution scope; a matching failed proof is contradicted and stale evidence is unknown.
+- use `workflows.<name>.proof.claim: bounded` for a real archive-backed verification lane that has
+  no declared dependency seam, such as an offline replay, build, or deterministic test gate. It
+  creates a bounded `proof_breadth` claim, not a repo-wide pass: Doctor remains `unknown` until a
+  matching archive exists. Do not invent `seam_observations` or negative controls merely to opt in.
 - `proof_verdict` is the terminal selected-lane result: treat
   `passed_with_unproven_boundaries` as a qualified proof, never as repo-global completion; parse
   or contract-load failures do not enter that proof carrier
