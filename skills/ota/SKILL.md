@@ -167,7 +167,10 @@ Always prefer using the real Ota binary when it is available.
      and non-Ota jobs in the caller; never duplicate Ota bootstrap or verification commands there.
      Generated lanes retain agent admission. A workflow that declares `proof` still must be
      agent-admitted; proof breadth is not execution authority, and proof-required lanes use the
-     runtime-proof wrapper as their sole real execution path.
+     runtime-proof wrapper as their sole real execution path. Every declared
+     `agent.refusal_canaries` control is projected as its own generated provider check and executed
+     through Ota's `--expect-refusal` boundary; do not replace those checks with provider shell/JQ
+     glue.
      Omit `--mode` only when the contract default is intended; an explicit unavailable mode must
      be treated as a projection refusal. Read JSON refusal projections rather than scraping error
      text. The caller must bind both the exact projection identity and the projection target OS;
