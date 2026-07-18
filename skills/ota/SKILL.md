@@ -159,6 +159,19 @@ Always prefer using the real Ota binary when it is available.
      `fail-on-ci-drift: true`; it fails only on Ota-established CI bootstrap or verification drift,
      not ordinary Doctor warnings. Keep it separate from general readiness reporting so the blocking
      reason stays explicit.
+   - when a repository wants Ota to own the CI verification lane itself, generate a dedicated
+     provider-neutral contract lane with `ota ci projection --workflow <name> --mode <mode> --target-os <linux|macos|windows> --json`,
+     then generate the GitHub reusable workflow with `ota ci github render --workflow <name> --mode <mode> --target-os <linux|macos|windows>` and use
+     `ota ci github check` and explicit `ota ci github sync` against an Ota-owned output and a
+     human-owned caller. Keep triggers, permissions, runners, secrets, environments, deployment,
+     and non-Ota jobs in the caller; never duplicate Ota bootstrap or verification commands there.
+     Generated lanes retain agent admission. A workflow that declares `proof` still must be
+     agent-admitted; proof breadth is not execution authority, and proof-required lanes use the
+     runtime-proof wrapper as their sole real execution path.
+     Omit `--mode` only when the contract default is intended; an explicit unavailable mode must
+     be treated as a projection refusal. Read JSON refusal projections rather than scraping error
+     text. The caller must bind both the exact projection identity and the projection target OS;
+     Ota verifies the identity without relying on a provider shell.
    - once `agent.bootstrap.ota.source` exists, treat explicit workflow-owned Ota install truth as
      governance drift unless the lane is an intentional unreleased pressure path; `ota doctor`
      should be allowed to call out that duplication or conflict
