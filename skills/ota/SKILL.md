@@ -828,6 +828,11 @@ serious OSS repo, evaluate these gates explicitly:
   supports them.
 - Bounded agent defaults: `agent.default_task`, `agent.safe_tasks`, and `verify_after_changes`
   prefer finite verification tasks over long-running dev loops.
+- Refusal controls: when a repo has an unsafe publish, deploy, or release lane, declare it under
+  `agent.refusal_canaries` and prove the real runner boundary with
+  `ota run --agent --expect-refusal <task>` or
+  `ota up --agent --expect-refusal --workflow <workflow>`. Do not model this as a shell test or
+  declare an expected reason: Ota must derive the refusal from the current closure.
 - Strong task-body modeling: aggregate verification is modeled with `aggregate`, and long-running
   services use `launch.kind: command` when Ota owns that surface.
 - Readiness truth: surfaces/checks prove the declared workflow is usable, not just that a process
