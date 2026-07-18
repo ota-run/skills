@@ -277,6 +277,10 @@ labels:
 - `ota proof runtime --json` carries `stage_family: "proof"` alongside the finer proof `phase`
 - `ok` is execution/readiness success only. It is necessary but insufficient for proof breadth;
   consumers must read `proof_verdict` with `not_proved[]`.
+- use `ota proof runtime --json --archive` when a runtime proof must later support a governance
+  claim. Then read `ota doctor --json` `claim_assurance[]`: proof breadth is supported only by a
+  content-addressed witness archive matching current semantic contract, clean source identity, and
+  resolved execution scope; a matching failed proof is contradicted and stale evidence is unknown.
 - `proof_verdict` is the terminal selected-lane result: treat
   `passed_with_unproven_boundaries` as a qualified proof, never as repo-global completion; parse
   or contract-load failures do not enter that proof carrier
