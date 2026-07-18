@@ -169,8 +169,9 @@ Always prefer using the real Ota binary when it is available.
      agent-admitted; proof breadth is not execution authority, and proof-required lanes use the
      runtime-proof wrapper as their sole real execution path. Every declared
      `agent.refusal_canaries` control is projected as its own generated provider check and executed
-     through Ota's `--expect-refusal` boundary; do not replace those checks with provider shell/JQ
-     glue.
+     through Ota's `--expect-refusal` boundary. GitHub qualifies the check name by target OS and
+     mode while retaining its canonical merge identity; do not replace those checks with provider
+     shell/JQ glue.
      Omit `--mode` only when the contract default is intended; an explicit unavailable mode must
      be treated as a projection refusal. Read JSON refusal projections rather than scraping error
      text. The caller must bind both the exact projection identity and the projection target OS;
