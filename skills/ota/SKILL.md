@@ -176,8 +176,9 @@ Always prefer using the real Ota binary when it is available.
      Go release selectors, immutable Node setup for `toolchains.node` with `source: corepack`, and
      immutable Ruby setup for `toolchains.ruby` with `source: ruby` while preserving declared version
      selectors. It refuses unsupported sources instead of trusting a hosted runner image.
-     Omit `--mode` only when the contract default is intended; an explicit unavailable mode must
-     be treated as a projection refusal. Read JSON refusal projections rather than scraping error
+     Ota also refuses any target OS that the selected executable closure or resolved context does
+     not support. Omit `--mode` only when the contract default is intended; an explicit unavailable
+     mode must be treated as a projection refusal. Read JSON refusal projections rather than scraping error
      text. The caller must bind both the exact projection identity and the projection target OS;
      Ota verifies the identity without relying on a provider shell.
    - once `agent.bootstrap.ota.source` exists, treat explicit workflow-owned Ota install truth as
