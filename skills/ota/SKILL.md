@@ -171,7 +171,9 @@ Always prefer using the real Ota binary when it is available.
      `agent.refusal_canaries` control is projected as its own generated provider check and executed
      through Ota's `--expect-refusal` boundary. GitHub qualifies the check name by target OS and
      mode while retaining its canonical merge identity; do not replace those checks with provider
-     shell/JQ glue.
+     shell/JQ glue. Required selected-closure toolchains are projected from `ota.yaml`; GitHub
+     renders immutable Go setup for `source: go` and refuses unsupported sources instead of
+     trusting a hosted runner image.
      Omit `--mode` only when the contract default is intended; an explicit unavailable mode must
      be treated as a projection refusal. Read JSON refusal projections rather than scraping error
      text. The caller must bind both the exact projection identity and the projection target OS;
