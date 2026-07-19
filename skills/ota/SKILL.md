@@ -165,9 +165,10 @@ Always prefer using the real Ota binary when it is available.
      `ota ci github check` and explicit `ota ci github sync` against an Ota-owned output and a
      human-owned caller. Keep triggers, permissions, runners, secrets, environments, deployment,
      and non-Ota jobs in the caller; never duplicate Ota bootstrap or verification commands there.
-     Generated lanes retain agent admission. A workflow that declares `proof` still must be
-     agent-admitted; proof breadth is not execution authority, and proof-required lanes use the
-     runtime-proof wrapper as their sole real execution path. Every declared
+     Generated lanes retain full workflow agent admission across prepare, setup, run, and attach
+     roots. A workflow that declares `proof` still must be agent-admitted; proof breadth is not
+     execution authority, and proof-required lanes use the runtime-proof wrapper as their sole
+     real execution path. Every declared
      `agent.refusal_canaries` control is projected as its own generated provider check and executed
      through Ota's `--expect-refusal` boundary. GitHub qualifies the check name by target OS and
      mode while retaining its canonical merge identity; do not replace those checks with provider
