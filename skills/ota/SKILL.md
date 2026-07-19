@@ -168,7 +168,9 @@ Always prefer using the real Ota binary when it is available.
      Generated lanes retain full workflow agent admission across prepare, setup, run, and attach
      roots. A workflow that declares `proof` still must be agent-admitted; proof breadth is not
      execution authority, and proof-required lanes use the runtime-proof wrapper as their sole
-     real execution path. Every declared
+     real execution path. Finite verification lanes prepare through `ota up` and then execute
+     their selected task through `ota run --agent`; service-runtime lanes retain their single
+     runtime-owned execution path. Every declared
      `agent.refusal_canaries` control is projected as its own generated provider check and executed
      through Ota's `--expect-refusal` boundary. GitHub qualifies the check name by target OS and
      mode while retaining its canonical merge identity; do not replace those checks with provider
