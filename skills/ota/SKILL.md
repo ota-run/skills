@@ -172,10 +172,12 @@ Always prefer using the real Ota binary when it is available.
      through Ota's `--expect-refusal` boundary. GitHub qualifies the check name by target OS and
      mode while retaining its canonical merge identity; do not replace those checks with provider
      shell/JQ glue. Required selected-closure toolchains are projected from `ota.yaml`; GitHub
-     renders immutable Go setup for `source: go`, translating supported lower-bound ranges into
-     Go release selectors, immutable Node setup for `toolchains.node` with `source: corepack`, and
-     immutable Ruby setup for `toolchains.ruby` with `source: ruby` while preserving declared version
-     selectors. It refuses unsupported sources instead of trusting a hosted runner image.
+     carries `execution_scopes` per selected toolchain and renders immutable Go setup for native
+     `source: go`, translating supported lower-bound ranges into Go release selectors, native Node
+     setup for `toolchains.node` with `source: corepack`, and native Ruby setup for
+     `toolchains.ruby` with `source: ruby` while preserving declared version selectors. Container
+     and remote toolchains remain owned by their declared runtime boundary. It refuses unsupported
+     native sources instead of trusting a hosted runner image.
      Ota also refuses any target OS that the selected executable closure or resolved context does
      not support. Omit `--mode` only when the contract default is intended; an explicit unavailable
      mode must be treated as a projection refusal. Read JSON refusal projections rather than scraping error
