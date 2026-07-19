@@ -174,10 +174,11 @@ Always prefer using the real Ota binary when it is available.
      shell/JQ glue. Required selected-closure toolchains are projected from `ota.yaml`; GitHub
      carries `execution_scopes` per selected toolchain and renders immutable Go setup for native
      `source: go`, translating supported lower-bound ranges into Go release selectors, native Node
-     setup for `toolchains.node` with `source: corepack`, and native Ruby setup for
-     `toolchains.ruby` with `source: ruby` while preserving declared version selectors. Container
-     and remote toolchains remain owned by their declared runtime boundary. It refuses unsupported
-     native sources instead of trusting a hosted runner image.
+     setup for `toolchains.node` with `source: corepack`, native Ruby setup for
+     `toolchains.ruby` with `source: ruby`, and native Python plus uv setup for
+     `toolchains.python` with `source: uv`. Container and remote toolchains remain owned by their
+     declared runtime boundary. It refuses unsupported native sources instead of trusting a hosted
+     runner image.
      Ota also refuses any target OS that the selected executable closure or resolved context does
      not support. Omit `--mode` only when the contract default is intended; an explicit unavailable
      mode must be treated as a projection refusal. Read JSON refusal projections rather than scraping error
