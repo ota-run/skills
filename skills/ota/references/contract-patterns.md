@@ -70,6 +70,31 @@ Ota refuses the selected task closure before provisioning when a dependency is u
 current host. Keep a container branch or context separate when the task remains portable through
 that execution plane.
 
+## Interactive finite command
+
+Use `command.interaction` when terminal capability is part of the real task boundary. The default
+`auto` permits a human native TTY when available. Use `forbidden` for deterministic captured
+verification, and `required` when the command cannot proceed without a terminal. Agent, container,
+remote, and ordinary non-TTY CI execution do not receive this capability.
+For `required`, terminal passthrough takes precedence over `--stream`; Ota does not claim captured
+task output for that invocation.
+
+```yaml
+tasks:
+  cloudflare:login:
+    description: Authenticate a human operator through Wrangler OAuth
+    command:
+      exe: wrangler
+      args: [login]
+      interaction: required
+    safe_for_agent: false
+```
+
+Do not apply this to `launch.kind: command`, shell `run`, or `script` bodies. Those surfaces do
+not use the finite-command terminal-capability path. Do not use `auto` to compensate for a task
+that should be fully non-interactive in CI; declare credentials and a non-interactive command
+instead.
+
 ## Service launch
 
 Use `launch.kind: command` for long-running service processes instead of hiding service startup
