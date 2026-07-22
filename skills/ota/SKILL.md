@@ -311,6 +311,19 @@ labels:
   claim. Then read `ota doctor --json` `claim_assurance[]`: proof breadth is supported only by a
   content-addressed witness archive matching current semantic contract, clean source identity, and
   resolved execution scope; a matching failed proof is contradicted and stale evidence is unknown.
+- use `ota proof lifecycle --workflow <name> --json --archive` only for a workflow that declares
+  `proof.lifecycle` over manager-owned Compose or systemd services. The runner first executes the
+  normal workflow prerequisite closure, leases only manager-observed inactive services, starts and
+  readies the dependency closure, optionally runs one finite assertion, then finalizes in reverse
+  order even after a failed start, readiness failure, assertion failure, or interrupted child.
+  A manager-reported pre-existing or unknown-state service is never stopped. The archive is local,
+  content-addressed evidence bound to the semantic contract snapshot, selected scope, transaction,
+  service records, and terminal verdict; it does not support claim assurance, CI projection, or a
+  broader runtime/application proof.
+- lifecycle proof reuses selected-workflow `--agent`, `--mode`, and `--member` admission. Mode
+  applies to prerequisite and assertion tasks; manager start/stop/status commands stay on their
+  declared manager boundary. Do not make a native generic host start/stop smoke look eligible
+  until Ota has a typed state observer or isolated-boundary absence attestation.
 - use `workflows.<name>.proof.claim: bounded` for a real archive-backed verification lane that has
   no declared dependency seam, such as an offline replay, build, or deterministic test gate. It
   creates a bounded `proof_breadth` claim, not a repo-wide pass: Doctor remains `unknown` until a

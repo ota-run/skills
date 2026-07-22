@@ -42,5 +42,10 @@ Use this checklist when deciding whether a contract is trustworthy for humans, C
 - Are blocker `checks` present when the repo has known preconditions that should fail early in
   `ota doctor`?
 - Do runtime-proof workflows prove surfaced readiness rather than only process startup?
+- If a workflow declares `proof.lifecycle`, does it use only manager-owned services with positive
+  inactive-state cleanup authority, preserve pre-existing/unknown-state services, and retain
+  lifecycle `not_proved[]` boundaries instead of treating command success as application proof?
+- Is lifecycle proof intentionally outside CI projection and claim assurance until a separately
+  eligible typed or isolated boundary has been pressure-proven?
 - If the contract uses newer surfaces, do workflow pins and `metadata.ota.minimum_version` stay in
   sync?

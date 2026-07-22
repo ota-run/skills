@@ -28,6 +28,10 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
 
 - Does a service task that declares `runtime.kind: service` use `launch.kind: command` instead of
   opaque `run`?
+- If a workflow declares `proof.lifecycle`, are its selected services manager-owned with a typed
+  inactive-state observer and `lifecycle.teardown_assertion: manager_inactive`, rather than copied
+  start/stop shell? Does the review preserve the distinction between a local lifecycle archive and
+  runtime/application/CI proof?
 - Does a bounded parent task use `aggregate.tasks` instead of `run: "true"` or aggregate membership
   hidden in `depends_on`?
 - Does dependency setup use `prepare.kind: dependency_hydration` when Ota owns the package-manager

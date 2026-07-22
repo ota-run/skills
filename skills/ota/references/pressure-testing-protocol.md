@@ -113,6 +113,13 @@ Every pressure pass must actively look for:
   declarative surface
 - repo truth narrowed to one instance or path because Ota does not yet own the broader shape
 
+For lifecycle proof specifically, record whether Ota observed an inactive manager state before
+start, acquired a transaction-local cleanup lease, finalized every leased service after each
+failure/interrupt path, and produced a content-addressed local archive. Classify native generic
+host start/stop smoke as an Ota platform gap unless a typed manager or isolated boundary can prove
+current-boundary absence and cleanup authority. Do not promote a local lifecycle archive into CI,
+claim assurance, application-output, or repo-global proof.
+
 Classify each finding explicitly:
 
 - **repo contract issue**: Ota already owns the truth; upgrade the contract.
