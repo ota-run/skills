@@ -329,8 +329,10 @@ labels:
   applies to prerequisite and assertion tasks. A `boundary_terminated` service requires structured
   `manager.start` / `manager.stop` commands and `--mode container` resolving to an ephemeral
   context; Ota runs those commands inside its session and attests removal of that exact session.
-  This never proves host-manager inactivity or application output. Native generic host start/stop
-  remains ineligible until it has a typed state observer.
+  Machine consumers must require the same `boundary_identity` in archive scope and every isolated
+  service record. A failed removal is attested as incomplete cleanup, never promoted to
+  `boundary_terminated`, host-manager inactivity, or application output. Native generic host
+  start/stop remains ineligible until it has a typed state observer.
 - use `workflows.<name>.proof.claim: bounded` for a real archive-backed verification lane that has
   no declared dependency seam, such as an offline replay, build, or deterministic test gate. It
   creates a bounded `proof_breadth` claim, not a repo-wide pass: Doctor remains `unknown` until a
