@@ -316,7 +316,10 @@ labels:
   normal workflow prerequisite closure, leases only manager-observed inactive services, starts and
   readies the dependency closure, optionally runs one finite assertion, then finalizes in reverse
   order even after a failed start, readiness failure, assertion failure, or interrupted child.
-  A manager-reported pre-existing or unknown-state service is never stopped. The archive is local,
+  When declared, the typed `assertion` record carries the terminal task state, exit code, and
+  bounded runner-captured output tails for diagnosis; it does not turn that output into broader
+  application proof. A manager-reported pre-existing or unknown-state service is never stopped.
+  The archive is local,
   content-addressed evidence bound to the semantic contract snapshot, selected scope, transaction,
   service records, and terminal verdict; it does not support claim assurance, CI projection, or a
   broader runtime/application proof.
@@ -527,6 +530,9 @@ Prefer these concrete shapes when repo truth matches them:
 - use `effects.network_kind: integration_test` for live, staging, or remote-backed verification
   lanes that depend on real services or non-local credentials; keep `requirements.env` and any
   real `effects.external_state` explicit, and do not treat those paths as routine `agent.safe_tasks`
+- use `effects.network_kind: service_readiness` for a finite assertion against one declared
+  repo-managed service endpoint; pair it with `requires_services` and do not over-read it as
+  external integration coverage
 - use `prepare.kind: sequence` when one honest finite setup lane needs more than one typed setup
   step in order, including structural prepare steps (`dependency_hydration`, `tool_bootstrap`) and
   deterministic bootstrap steps such as `ensure_env_file`, `ensure_file`, `ensure_directory`,

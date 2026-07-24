@@ -330,6 +330,24 @@ tasks:
         - cloudflare
 ```
 
+## Declared service readiness assertion
+
+Use `service_readiness` when a finite task only probes a declared repo-managed service endpoint.
+It is narrower than an external integration test and remains explicit about the selected service
+dependency.
+
+```yaml
+tasks:
+  api:health:
+    command:
+      exe: curl
+      args: [--fail, --silent, http://127.0.0.1:8080/health]
+    requires_services: [api]
+    effects:
+      network: true
+      network_kind: service_readiness
+```
+
 ## Mixed finite setup sequencing
 
 When one repo-level `setup` lane honestly needs more than one typed finite step, use
