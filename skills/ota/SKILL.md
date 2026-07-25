@@ -269,14 +269,15 @@ Use the smallest real Ota workflow that fits the task:
     from a clean Git source tree to execute its declared unsafe producer and issue a receipt-bound
     attestation, review the generated output, then select that exact record with
     `ota baseline promote --artifact <name> --attestation <path>`. The committed authority manifest
-    embeds the selected attestation, keeping producer provenance reviewable on a fresh clone; never
+    embeds the selected attestation and declares SCM review as its external trust root; Ota does not
+    verify reviewer inclusion or signer provenance. Never
     hand-edit a digest or auto-promote the newest recording. Replay-baseline symlinks must resolve
     within declared artifact outputs, never into the mutable worktree.
-    Use `consumption: read_only` only with an enforceable ephemeral container boundary. Use
+    Use `consumption: read_only` only with an enforceable ephemeral container boundary for the
+    full selected closure; Ota mounts a run-scoped snapshot outside the writable workspace. Use
     `consumption: verify_unchanged` when native replay must remain available: Ota detects a changed
     baseline after the task and emits `replay_artifact_mutation_detected`, but does not claim it
-    refused the write. An ephemeral container automatically upgrades that posture to the stronger
-    runner-owned read-only overlay.
+    refused the write or upgrade that posture to read-only enforcement.
   - replay consumers must not depend on the baseline producer. `consumption: read_only` requires
     an enforceable runner-owned ephemeral container boundary; native or persistent execution is
     refused rather than approximated with mutable worktree checks or file permissions
