@@ -610,6 +610,10 @@ Prefer these concrete shapes when repo truth matches them:
   - declare `default_index`, ordered `indexes[]`, and `offline: true` when package-source or
     cache-only posture materially affects replay or supply-chain trust; do not let user/global uv
     configuration silently stand in for contract-owned source truth
+  - use `mode: pip_local_project` with `local_project.path`, explicit `editable`, ordered
+    `extras[]` / `groups[]`, and optional `lockfile` when the repo installs one checked-out Python
+    package; Ota records manifest, lockfile, and clean local-project source identity rather than
+    preserving those installs as opaque shell glue
 - use `action.kind: ensure_virtualenv` when the repo truthfully owns deterministic creation of one
   repo-local Python virtualenv such as `.venv`, and keep dependency installation itself under
   `prepare.kind: dependency_hydration`
