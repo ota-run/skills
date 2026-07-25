@@ -222,6 +222,41 @@ tasks:
       network_kind: dependency_hydration
 ```
 
+## uv local-project hydration
+
+When a repo installs a checked-out Python project rather than only synchronizing a root lockfile,
+use `mode: pip_local_project`. Keep the editable target, extras, groups, and optional lockfile
+explicit so Ota can record the actual local-project provenance instead of treating the install as
+opaque shell.
+
+```yaml
+tasks:
+  setup:
+    description: Install the checked-out Python package and test dependencies
+    prepare:
+      kind: dependency_hydration
+      medium: package_dependencies
+      source:
+        kind: uv
+        cwd: .
+        mode: pip_local_project
+        local_project:
+          path: .
+          editable: true
+          extras: [api]
+          groups: [test]
+          lockfile: uv.lock
+    requirements:
+      toolchains: [python]
+    effects:
+      writes: [.venv]
+      network: true
+      network_kind: dependency_hydration
+```
+
+Do not invent a lockfile for a repo that does not have one. Ota records a missing lockfile or
+dirty local-project source as a bounded replay limitation, not a resolved source pin.
+
 ## Composer hydration
 
 When a PHP repo uses Composer for dependency setup, prefer first-class dependency hydration instead
@@ -620,6 +655,59 @@ until a later receipt-backed derivation identity is available.
 For a pnpm workspace generator slice, use `prepare.source.filter` on the typed hydration source
 instead of hydrating unrelated workspace packages or writing `pnpm --filter ... install` in shell.
 Ota supports this selector only for `manager: pnpm` and renders it before `install`.
+
+## Trusted replay baseline
+
+Use `artifacts.<name>.replay` when a generated fixture, store, or model baseline needs an explicit
+recording and promotion path. Preserve an existing `kind: generated_source` lineage; use
+`kind: replay_baseline` only when no other generated-artifact lineage applies. This is not a
+replacement for `expected_identity` on a separately immutable input.
+
+```yaml
+artifacts:
+  recorded-baseline:
+    kind: generated_source
+    producer: record:baseline
+    paths:
+      - data/fixture.jsonl
+      - data/store.db
+      - data/baseline.json
+    replay:
+      authority_manifest: replay/recorded-baseline.ota.json
+      consumption: read_only
+
+execution:
+  contexts:
+    replay:
+      backend: container
+      lifecycle: ephemeral
+      container:
+        image: python:3.13-alpine
+
+tasks:
+  record:baseline:
+    description: Regenerate the reviewable replay baseline
+    command:
+      exe: python
+      args: [scripts/record_baseline.py]
+    safe_for_agent: false
+  replay:verify:
+    description: Verify the promoted replay baseline
+    context: replay
+    command:
+      exe: python
+      args: [scripts/replay_verify.py]
+    requires_artifacts: [recorded-baseline]
+    safe_for_agent: true
+```
+
+Record only from a clean source tree with `ota baseline record --artifact recorded-baseline`.
+Ota verifies source cleanliness before and after production, excluding declared baseline outputs
+and Ota-owned `.ota` runtime state. Review the generated output, then explicitly promote that exact attestation. The committed
+authority relies on SCM review; Ota does not verify reviewer or signer provenance. Use
+`read_only` only when the selected closure has an enforceable ephemeral container boundary. Use
+`verify_unchanged` for native replay only when detection after execution is the truthful posture.
+Never make a replay consumer depend on its producer or hand-edit baseline digests.
 
 ## Lockfile-strict npm hydration
 

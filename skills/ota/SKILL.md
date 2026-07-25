@@ -264,8 +264,9 @@ Use the smallest real Ota workflow that fits the task:
   - add `expected_identity: sha256:<64 lowercase hex characters>` only when that file must be
     independently pinned. Ota blocks the selected closure before execution when the observed
     content differs; never let Ota or an agent rewrite the pin automatically
-  - use `artifacts.<name>.kind: replay_baseline` when a generated fixture, store, or model
-    baseline needs an explicit regeneration authority chain. Run `ota baseline record --artifact <name>`
+  - use `artifacts.<name>.replay` when a generated fixture, store, model baseline, or existing
+    `generated_source` needs an explicit regeneration authority chain. Keep `kind: generated_source`
+    when that lineage already exists; do not duplicate output ownership. Run `ota baseline record --artifact <name>`
     from a clean Git source tree to execute its declared unsafe producer and issue a receipt-bound
     attestation, review the generated output, then select that exact record with
     `ota baseline promote --artifact <name> --attestation <path>`. The committed authority manifest

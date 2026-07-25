@@ -79,6 +79,9 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   effects?
 - If the repo uses uv for Python dependency setup, is that modeled with `source.kind: uv` instead
   of a raw `run: uv sync` or raw `uv pip install -r ...` body?
+- If a checked-out Python package is installed through uv, does it use `mode: pip_local_project`
+  with explicit `local_project.path`, editable posture, ordered extras/groups, and a declared
+  lockfile when one exists rather than opaque `uv pip install` shell?
 - If the repo truthfully owns creation of one repo-local Python virtualenv such as `.venv`, is
   that modeled with `action.kind: ensure_virtualenv` instead of `uv venv ...` shell glue?
 - If the repo uses npm with `package-lock.json`, is setup modeled with `manager: npm` and `mode: ci`?
@@ -87,6 +90,14 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
 - If the repo depends on deterministic file inputs, are those checks modeled with `kind: file`
   instead of shell `test -f ...` glue, and does any sibling relative input use
   `scope: workspace` explicitly instead of pretending it is repo-local?
+- If a deterministic input must be pinned before execution, does it use a canonical
+  `expected_identity: sha256:...` rather than a path-only assertion or an agent-updated digest?
+- If a generated fixture, store, or model output needs reviewable replay authority, does it use
+  `artifacts.<name>.replay` with one unsafe producer, explicit promotion, and a consumer that
+  cannot reach the producer through dependencies or hooks? Does it preserve an existing
+  `generated_source` lineage rather than duplicate output ownership? Is `read_only` limited to an
+  enforceable ephemeral container closure and `verify_unchanged` described only as post-execution
+  mutation detection?
 - Are env-file and env-rendering responsibilities owned by first-class env surfaces before shell
   glue?
 - When tasks mutate out-of-repo systems, does `effects.external_state` use shipped canonical
@@ -100,6 +111,9 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
 - If the repo uses Helm render/install/lint lanes, is chart root, values-file selection, release
   naming, or namespace truth owned by `adapter_inputs.overlays.helm.*` instead of shell `cd ... && helm ...`,
   chart positionals, or `--namespace` flags?
+- Does agent safety account for the full selected dependency closure, not only a top-level
+  `safe_for_agent` label? When CI needs to prove runner enforcement, are declared
+  `agent.refusal_canaries` exercised through `--agent --expect-refusal` rather than a shell test?
 - Does the contract declare `metadata.ota.minimum_version` when newer Ota surfaces are in use?
 - Are public CI or proof workflows installing an Ota build new enough to execute the contract they
   validate?
