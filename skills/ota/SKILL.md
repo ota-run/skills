@@ -264,6 +264,22 @@ Use the smallest real Ota workflow that fits the task:
   - add `expected_identity: sha256:<64 lowercase hex characters>` only when that file must be
     independently pinned. Ota blocks the selected closure before execution when the observed
     content differs; never let Ota or an agent rewrite the pin automatically
+  - use `artifacts.<name>.kind: replay_baseline` when a generated fixture, store, or model
+    baseline needs an explicit regeneration authority chain. Run `ota baseline record --artifact <name>`
+    from a clean Git source tree to execute its declared unsafe producer and issue a receipt-bound
+    attestation, review the generated output, then select that exact record with
+    `ota baseline promote --artifact <name> --attestation <path>`. The committed authority manifest
+    embeds the selected attestation, keeping producer provenance reviewable on a fresh clone; never
+    hand-edit a digest or auto-promote the newest recording. Replay-baseline symlinks must resolve
+    within declared artifact outputs, never into the mutable worktree.
+    Use `consumption: read_only` only with an enforceable ephemeral container boundary. Use
+    `consumption: verify_unchanged` when native replay must remain available: Ota detects a changed
+    baseline after the task and emits `replay_artifact_mutation_detected`, but does not claim it
+    refused the write. An ephemeral container automatically upgrades that posture to the stronger
+    runner-owned read-only overlay.
+  - replay consumers must not depend on the baseline producer. `consumption: read_only` requires
+    an enforceable runner-owned ephemeral container boundary; native or persistent execution is
+    refused rather than approximated with mutable worktree checks or file permissions
   - within `tasks.<name>.replay_inputs`, use `kind: static_file` for generic immutable repo files,
     `kind: presentation_profile` for files that define output-shaping or normalization posture, and
     `kind: comparator_profile` for files that define equivalence, tolerance, or comparison rules
