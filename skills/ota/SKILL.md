@@ -613,7 +613,9 @@ Prefer these concrete shapes when repo truth matches them:
   - use `mode: pip_local_project` with `local_project.path`, explicit `editable`, ordered
     `extras[]` / `groups[]`, and optional `lockfile` when the repo installs one checked-out Python
     package; Ota records manifest, lockfile, and clean local-project source identity rather than
-    preserving those installs as opaque shell glue
+    preserving those installs as opaque shell glue. Treat the record as replay-acquitting only when
+    resolved hydration posture, declared lockfile identity, and clean source identity all exist;
+    otherwise matching evidence is narrowing only.
 - use `action.kind: ensure_virtualenv` when the repo truthfully owns deterministic creation of one
   repo-local Python virtualenv such as `.venv`, and keep dependency installation itself under
   `prepare.kind: dependency_hydration`
