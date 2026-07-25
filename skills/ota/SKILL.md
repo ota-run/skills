@@ -266,7 +266,10 @@ Use the smallest real Ota workflow that fits the task:
     content differs; never let Ota or an agent rewrite the pin automatically
   - use `artifacts.<name>.replay` when a generated fixture, store, model baseline, or existing
     `generated_source` needs an explicit regeneration authority chain. Keep `kind: generated_source`
-    when that lineage already exists; do not duplicate output ownership. Run `ota baseline record --artifact <name>`
+    when that lineage already exists; do not duplicate output ownership. A `generated_source`
+    consumer with a top-level producer dependency remains ordinary generated-source execution;
+    omit that dependency only for an offline promoted-replay consumer. A dedicated
+    `replay_baseline` always consumes promoted authority. Run `ota baseline record --artifact <name>`
     from a clean Git source tree to execute its declared unsafe producer and issue a receipt-bound
     attestation, review the generated output, then select that exact record with
     `ota baseline promote --artifact <name> --attestation <path>`. The committed authority manifest
