@@ -270,8 +270,10 @@ Use the smallest real Ota workflow that fits the task:
     consumer with a top-level producer dependency remains ordinary generated-source execution;
     omit that dependency only for an offline promoted-replay consumer. A dedicated
     `replay_baseline` always consumes promoted authority. Run `ota baseline record --artifact <name>`
-    from a clean Git source tree to execute its declared unsafe producer and issue a receipt-bound
-    attestation, review the generated output, then select that exact record with
+    from a clean Git source tree to execute its declared producer through the explicit recording
+    boundary and issue a receipt-bound attestation. A dedicated `replay_baseline` producer is not
+    agent-safe; an additive `generated_source` producer keeps its ordinary task safety posture.
+    Review the generated output, then select that exact record with
     `ota baseline promote --artifact <name> --attestation <path>`. The committed authority manifest
     embeds the selected attestation and declares SCM review as its external trust root; Ota does not
     verify reviewer inclusion or signer provenance. Never
