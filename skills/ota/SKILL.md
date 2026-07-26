@@ -280,7 +280,9 @@ Use the smallest real Ota workflow that fits the task:
     hand-edit a digest or auto-promote the newest recording. Replay-baseline symlinks must resolve
     within declared artifact outputs, never into the mutable worktree.
     Use `consumption: read_only` only with an enforceable ephemeral container boundary for the
-    full selected closure; Ota mounts a run-scoped snapshot outside the writable workspace. Use
+    full selected closure; Ota mounts a run-scoped snapshot outside the writable workspace and
+    projects command-capable typed preparation through that same boundary without replacing it
+    with shell glue. Use
     `consumption: verify_unchanged` when native replay must remain available: Ota detects a changed
     baseline after the task and emits `replay_artifact_mutation_detected`, but does not claim it
     refused the write or upgrade that posture to read-only enforcement.
