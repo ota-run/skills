@@ -311,8 +311,15 @@ Use the smallest real Ota workflow that fits the task:
     routine runnable surface bounded before you decide whether any non-safe lane needs review
 - `ota run <task>`
   - execute canonical task flows
+  - treat explicit mode, lifecycle, host-port, memory, and dependency overrides as capability
+    requests, not hints. If Ota refuses one, inspect `ota tasks --use` and the dry-run blocker;
+    never retry by assuming an unsupported override was approximately applied
+  - native or remote task paths without a managed shared backend cannot honor `--ephemeral` or
+    `--persistent`; use the declared native/remote path or select an advertised container mode
 - `ota up`
   - prepare the repo into a ready state
+  - task-backed workflow phases use the same execution-option admission as `ota run` and must
+    refuse unsupported overrides before prepare/setup/run execution starts
 
 If a contract already exists, start with `ota doctor` and `ota validate` before editing it.
 
@@ -415,6 +422,10 @@ labels:
 For `ota run <task> --dry-run --json`, prefer top-level `provisioning` and `provisioning_request`
 when present instead of scraping `plan.requirement_lines`; that selected-path provisioning truth is
 the machine-readable host-fulfillment surface for direct tool acquisition.
+Full `ota run --dry-run --json` and `ota up --dry-run --json` previews carry
+`execution_started: false`. On run override refusal, read `overrides` together with
+`summary.primary_blocker.code`; on up refusal, read `blockers[].code`. Do not treat resolved
+execution metadata as evidence that the requested backend or lifecycle actually started.
 Also prefer the additive top-level `governance` block for the selected lane’s safety posture,
 review requirement, runnable mode commands, effect surface, and receipt follow-up command instead
 of reconstructing those facts from task text or from the raw `requested_task` payload by hand.
