@@ -264,6 +264,21 @@ Use the smallest real Ota workflow that fits the task:
   - add `expected_identity: sha256:<64 lowercase hex characters>` only when that file must be
     independently pinned. Ota blocks the selected closure before execution when the observed
     content differs; never let Ota or an agent rewrite the pin automatically
+  - use `policies.replay_inputs.identity.tasks|workflows` when an org policy must require complete
+    pins for selected replay-sensitive closures. Task rules follow reachable execution closure,
+    including recursive `after_success`, `after_failure`, and `after_always` hooks; workflow and
+    reachable task rules are cumulative. Both `deny` and `review` refuse before native
+    provisioning, dependency hydration, or task startup today. Unavailable observations, active
+    policy load failures, and unreadable or mismatched declared pins always fail closed. Read `replay_input_policy` from
+    Doctor, dry-run, and admission-produced run/up execution or refusal receipts; hard-pin
+    refusals retain the active policy record, while generic readiness receipts do not reconstruct
+    policy after execution. Agent safety, claim assurance, replay admission,
+    Doctor/provisioning findings, proof, CI projection, and receipt policy evidence reuse one
+    loaded policy snapshot per command. Runtime proof pins that admitted authority for its
+    detached child and reuses the command-scoped preflight across readiness diagnosis and its
+    embedded Doctor artifact. CI projection carries
+    requirements and the canonical execution closure including recursive hooks, not render-host
+    observations, so the provider checkout recomputes observed identities
   - use `artifacts.<name>.replay` when a generated fixture, store, model baseline, or existing
     `generated_source` needs an explicit regeneration authority chain. Keep `kind: generated_source`
     when that lineage already exists; do not duplicate output ownership. A `generated_source`
@@ -357,8 +372,14 @@ labels:
   content-addressed evidence bound to the semantic contract snapshot, selected scope, transaction,
   service records, and terminal verdict; it does not support claim assurance, CI projection, or a
   broader runtime/application proof.
-- lifecycle proof reuses selected-workflow `--agent`, `--mode`, and `--member` admission. Mode
-  applies to prerequisite and assertion tasks. A `boundary_terminated` service requires structured
+- lifecycle proof reuses selected-workflow `--agent`, `--mode`, and `--member` admission. The
+  selected mode applies to prerequisite and assertion tasks. Replay-input admission evaluates the
+  exact workflow prerequisite-plus-assertion closure before any lifecycle task, service
+  transition, or assertion starts. Runtime proof similarly includes its post-readiness seam
+  observers and selected negative-control task, then admits before creating `.ota/proof` artifacts
+  or spawning its child runtime. A refused machine result carries
+  `execution_started: false` with the hard-pin and active policy evidence. A
+  `boundary_terminated` service requires structured
   `manager.start` / `manager.stop` commands and `--mode container` resolving to an ephemeral
   context; Ota runs those commands inside its session and attests removal of that exact session.
   Machine consumers must require the same `boundary_identity` in archive scope and every isolated
