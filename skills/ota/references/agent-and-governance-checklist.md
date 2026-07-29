@@ -49,6 +49,11 @@ Use this checklist when deciding whether a contract is trustworthy for humans, C
   `ota doctor`?
 - If selected immutable replay inputs must not drift, do they declare `expected_identity` and keep
   the pin maintainer-reviewed rather than allowing Ota or an agent to rewrite it?
+- If replay-input identity policy governs selected tasks or workflows, do task rules own their
+  reachable closures, do rules accumulate deterministically with `deny > review > allow`, and do
+  `review`, unavailable policy, and hard-pin failures all refuse before execution or mutation?
+- Are policy findings and admission-produced receipts derived from one command-scoped replay-input
+  observation set rather than rereading mutable files or reconstructing policy after execution?
 - If the contract consumes a promoted generated baseline, does it state the honest authority and
   execution boundary: explicit `replay_baseline` promotion, SCM review as an external trust
   assumption rather than Ota-verified approval, and `read_only` only where an ephemeral container

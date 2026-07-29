@@ -210,6 +210,10 @@ Use the smallest real Ota workflow that fits the task:
   - use `ota doctor --fix` when the repo truth should allow safe deterministic repair such as
     repo-hygiene cleanup or native command-acquired tool activation; plain `ota doctor` should
     stay non-mutating
+  - do not use mutating `ota doctor --fix` to route around replay-input admission. When an active
+    replay-input policy is unavailable, evaluates to `deny` or `review`, or a declared hard pin is
+    unavailable or mismatched, Ota refuses before repo-hygiene or tool-activation mutation.
+    `ota doctor --fix --dry-run` remains a non-mutating preview
 - `ota init`
   - create a starter contract only when the user wants Ota adoption or no contract exists
   - prefer the emitted starter shapes Ota now owns directly: `toolchains.*`,
@@ -269,10 +273,14 @@ Use the smallest real Ota workflow that fits the task:
     including recursive `after_success`, `after_failure`, and `after_always` hooks; workflow and
     reachable task rules are cumulative. Both `deny` and `review` refuse before native
     provisioning, dependency hydration, or task startup today. Unavailable observations, active
-    policy load failures, and unreadable or mismatched declared pins always fail closed. Read `replay_input_policy` from
-    Doctor, dry-run, and admission-produced run/up execution or refusal receipts; hard-pin
-    refusals retain the active policy record, while generic readiness receipts do not reconstruct
-    policy after execution. Agent safety, claim assurance, replay admission,
+    policy load failures, and missing, unreadable, or mismatched declared pins always fail closed
+    and cannot be weakened to `review`. Mutating `ota doctor --fix` applies the same refusal before
+    repo-hygiene or native tool-activation mutation. Read `replay_input_policy` from Doctor,
+    dry-run, and admission-produced run/up execution or refusal receipts; hard-pin refusals retain
+    the active policy record, while generic readiness receipts do not reconstruct policy after
+    execution. Each task-qualified replay input is observed once for command admission, and that
+    command-scoped observation set drives findings, policy evaluation, hard-pin validation, and
+    receipts. Agent safety, claim assurance, replay admission,
     Doctor/provisioning findings, proof, CI projection, and receipt policy evidence reuse one
     loaded policy snapshot per command. Runtime proof pins that admitted authority for its
     detached child and reuses the command-scoped preflight across readiness diagnosis and its

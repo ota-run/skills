@@ -92,6 +92,13 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   `scope: workspace` explicitly instead of pretending it is repo-local?
 - If a deterministic input must be pinned before execution, does it use a canonical
   `expected_identity: sha256:...` rather than a path-only assertion or an agent-updated digest?
+- If replay-input identity policy governs a task or workflow, does each rule evaluate its own
+  reachable closure, do cumulative results preserve `deny > review > allow`, and do both `deny`
+  and `review` refuse rather than authorize execution?
+- Do missing, unreadable, or mismatched declared replay-input pins remain unconditional refusals
+  regardless of `on_insufficient`, including before mutating `ota doctor --fix` work?
+- Does command admission observe each task-qualified replay input once and reuse that same
+  observation set for Doctor findings, policy evaluation, hard-pin validation, and receipts?
 - If a generated fixture, store, or model output needs reviewable replay authority, does it use
   `artifacts.<name>.replay` with one unsafe producer, explicit promotion, and a consumer that
   cannot reach the producer through dependencies or hooks? Does it preserve an existing
