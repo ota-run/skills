@@ -474,7 +474,37 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   `default: "allow"` / `scope: "broad"` as the current honest broad effect posture; do not invent
   host or destination allowlists that the contract does not yet declare
 - when `sandbox_policy.network.scope: "targeted"`, consume declared `outbound_targets[]` directly
-  and keep `enforcement: "advisory_only"` honest until ota compiles a real sandbox target
+  and keep `enforcement: "advisory_only"` honest unless an identified provider can apply and attest
+  every authoritative target constraint
+- distinguish compiled posture from applied enforcement: `codex_local` remains advisory, while
+  `ota run <task> --agent --sandbox-target oci_local` and the matching `ota up` lane may enforce
+  the supported subset only for an explicit-platform ephemeral container selection
+- treat `container.platform` as canonical for every selected execution-backend container creation,
+  task variant, input, environment, service binding, and requirement, not as a sandbox-only
+  annotation; the current backend accepts Linux OCI targets only, and `oci_local` requires the
+  explicit pin instead of inferring it from the runner host
+- before recommending `oci_local`, verify the selected path needs only the shipped controls:
+  read-only repository root, existing writable carve-outs, protected-path write refusal, bounded
+  external IP-network denial, and cleanup of Ota's exact boundary; targeted egress, inherited
+  service networks, managed isolated paths, image-declared volumes, undeclared mounts,
+  runtime-control sockets, native execution, and unsupported path aliases refuse
+- require a finite `run`, `script`, or `command` body with no task requirements, required services,
+  or conditional checks. The first provider refuses typed prepare/action/Compose/launch/attach
+  bodies and other pre-boundary work rather than claiming that a later container covered it
+- read dry-run `sandbox_admission` for capability/refusal truth and executed
+  `witnessed_observations.sandbox_application` for runner-authored application, terminal inspection,
+  policy-authority/overlay linkage, and cleanup evidence; never infer enforcement from task success
+  or the compiled profile alone
+- do not expect dry-run to start a provider boundary merely to probe runtime/tool availability.
+  Real OCI execution performs provider-backed precondition probes only inside the registered
+  sandbox application transaction, binds each to the exact admitted segment that owns the
+  requirement, records it as a cleanup-confirmed `precondition_probe` invocation, and retains that
+  terminal evidence on a blocking refusal. Probe evidence never satisfies task-execution evidence
+- do not reuse one task identity as both a dependency and a hook or across separate workflow
+  phases in an enforced lane; give each invocation a distinct task identity so receipt segments
+  cannot collapse different execution phases
+- treat the automatically archived receipt as selected-lane evidence only. It does not prove
+  application output, repo-global safety, host-wide isolation, or raw-shell execution outside Ota
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
 backend selection from task names or advisory prose.

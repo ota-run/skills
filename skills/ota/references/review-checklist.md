@@ -121,6 +121,25 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
 - Does agent safety account for the full selected dependency closure, not only a top-level
   `safe_for_agent` label? When CI needs to prove runner enforcement, are declared
   `agent.refusal_canaries` exercised through `--agent --expect-refusal` rather than a shell test?
+- If the contract declares authoritative `runtime_boundary` controls, does agent execution resolve
+  one compatible enforcing target or refuse before setup instead of silently publishing advisory
+  posture?
+- If `oci_local` is selected, is the task already an explicit-platform ephemeral container lane,
+  are writable carve-outs present and alias-safe, and are targeted egress, inherited service
+  networks, image-declared volumes, undeclared mounts, runtime-control sockets, and unsupported path
+  controls refused rather than weakened?
+- Is `container.platform` a supported Linux OCI target and treated as the execution target for
+  variants, inputs, environment, requirements, and ordinary/provider-enforced execution-backend
+  container creation, with persistent reuse invalidated when the pin changes?
+- Is the selected closure limited to finite command bodies, with no requirements, services,
+  conditional checks, typed task bodies, or lifecycle-proof work executing before an evidenced
+  provider boundary?
+- Does dry-run admission agree with real execution, and does the receipt carry runner-authored
+  initial/terminal application plus confirmed cleanup evidence archived against the exact contract
+  and identified policy-authority snapshots? Is the claim still bounded to the selected Ota
+  execution lane?
+- Does every enforced phase use a distinct task identity, rather than reusing one task as both a
+  dependency and hook and collapsing separate invocations into one evidence segment?
 - Does the contract declare `metadata.ota.minimum_version` when newer Ota surfaces are in use?
 - Are public CI or proof workflows installing an Ota build new enough to execute the contract they
   validate?
