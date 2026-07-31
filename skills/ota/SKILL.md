@@ -250,6 +250,10 @@ Use the smallest real Ota workflow that fits the task:
   - on repos with more than one declared workflow, keep archive, baseline, and snapshot selection
     scoped with `ota receipt --workflow <name> ...` instead of relying on repo-global `latest` or
     `promoted` receipt history
+  - receipt history verifies the archived snapshot reference and identity, never the current
+    worktree. Authority-bearing execution archives also bind a canonical selected-invocation scope
+    that history re-derives before accepting crossing evidence. `legacy_unverified` entries remain inspectable but cannot become baselines, proof
+    inputs, or crossing-authority evidence
   - read `summary.comparison.correlation` first, then `contract_changes[]`, then
     `likely_related_changes[]`
   - read `baseline.evaluated_inputs[]`, `current.evaluated_inputs[]`, and
@@ -505,6 +509,35 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   cannot collapse different execution phases
 - treat the automatically archived receipt as selected-lane evidence only. It does not prove
   application output, repo-global safety, host-wide isolation, or raw-shell execution outside Ota
+- when a contract references `governance.crossing_authority.authority_id`, keep the authority
+  boundary outside the repository. Never add a public key, signed bundle, sequence state, or
+  caller-selectable trust path to `ota.yaml`; the first `prebound_file` carrier resolves those only
+  from fixed root-owned system state. That carrier is guarded from Ota's current unprivileged
+  process, not provider-attested privilege separation: `authority_separation_posture:
+  current_process_filesystem_guarded` does not prove the invoking job lacks administrative
+  escalation
+- use `ota run <task> --grant <id>` or the matching `ota up` form only for a derived heavier
+  non-agent closure. Routine lanes reject an inapplicable grant, and agent-unsafe lanes remain
+  refused under `--agent` even when a grant exists
+- read successful dry-run `crossing_grant_admission` and executed
+  `receipt.crossing.authority` as exact signed admission evidence. Real execution must also carry
+  a terminal `receipt.crossing.authority.transaction` created before selected-lane mutation;
+  refusal and dry-run create no crossing transaction or crossing record. Missing, stale, revoked,
+  rolled-back, or out-of-scope authority refuses before provider/setup/task mutation
+- inspect refused task dry-run `crossing_grant_admission` or admission-produced `receipt.refusal`
+  for typed `prebound_file` authority source, selected authority/grant, stable reason, and
+  `execution_started: false`. A runner-derived task scope also exposes its identity, contract
+  identity, boundary family, and classification for external issuance; never reconstruct that
+  semantic scope in workflow glue or treat refusal evidence as a crossing record
+- keep the local transaction claim bounded:
+  `authentication_posture: runner_local_content_addressed` means runner-authored, locked, and
+  internally reconciled; it does not authenticate the journal against same-user writes to
+  `.ota/state`
+- do not add free-form task inputs to a signed-file grant lane. The first carrier refuses that
+  unresolved identity rather than hashing or exposing potentially secret input values
+- keep the signed-file claim bounded: it is short-lived offline authority with a bounded local
+  transaction carrier, not online revocation, human identity proof, or independently authenticated
+  one-use work-unit authority. The broker-backed work-unit carrier remains open V11.7 work
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
 backend selection from task names or advisory prose.
@@ -914,6 +947,9 @@ For fuller holistic shapes, also use:
   `requires_services`, context-bound `execution`, and post-run hooks
 - `references/agent-and-governance-checklist.md` for `agent`, `checks`, `effects`, proof posture,
   and CI/version-floor governance
+- `references/execution-governance-capability-map.md` when you need the dedicated public
+  reference, evidence boundary, and copy-ready example for safe execution, CI projection,
+  sandboxing, proof, replay, claim assurance, crossings, or semantic snapshots
 - `references/pressure-testing-protocol.md` before selecting, modeling, or declaring a pressure
   repo complete; it defines the required proof matrix, Ota-gap review, and first-party
   propagation decision
@@ -1131,6 +1167,10 @@ service ownership, env modeling, `requires_services`, `execution`, or post-run h
 
 Read `references/agent-and-governance-checklist.md` when you want a compact pass over `agent`,
 `checks`, `effects`, proof posture, and CI/version-floor governance.
+
+Read `references/execution-governance-capability-map.md` when the contract needs one of Ota's
+execution-governance surfaces and you need to keep declaration, admission, execution, evidence,
+and authority boundaries separate.
 
 Read `references/pressure-testing-protocol.md` before pressure testing a repo. Do not call a
 pressure pass complete solely because existing Ota surfaces validated: it must also state whether
