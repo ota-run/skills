@@ -524,11 +524,13 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   a terminal `receipt.crossing.authority.transaction` created before selected-lane mutation;
   refusal and dry-run create no crossing transaction or crossing record. Missing, stale, revoked,
   rolled-back, or out-of-scope authority refuses before provider/setup/task mutation
-- inspect refused task dry-run `crossing_grant_admission` or admission-produced `receipt.refusal`
-  for typed `prebound_file` authority source, selected authority/grant, stable reason, and
-  `execution_started: false`. A runner-derived task scope also exposes its identity, contract
-  identity, boundary family, and classification for external issuance; never reconstruct that
-  semantic scope in workflow glue or treat refusal evidence as a crossing record
+- inspect refused task dry-run `crossing_grant_admission` or workflow-refusal
+  `receipt.refusal` for typed `prebound_file` authority source, selected authority/grant, stable
+  reason, and `execution_started: false`. Both runner-derived scope carriers expose scope and
+  contract identities, boundary family, and classification for external issuance. The workflow
+  receipt keeps its refusal boundary separate through `scope_boundary_family` and
+  `scope_classification`; never reconstruct either semantic scope in CI glue or treat refusal
+  evidence as a crossing record
 - keep the local transaction claim bounded:
   `authentication_posture: runner_local_content_addressed` means runner-authored, locked, and
   internally reconciled; it does not authenticate the journal against same-user writes to
