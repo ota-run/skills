@@ -516,9 +516,15 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   process, not provider-attested privilege separation: `authority_separation_posture:
   current_process_filesystem_guarded` does not prove the invoking job lacks administrative
   escalation
-- use `ota run <task> --grant <id>` or the matching `ota up` form only for a derived heavier
-  non-agent closure. Routine lanes reject an inapplicable grant, and agent-unsafe lanes remain
-  refused under `--agent` even when a grant exists
+- use `ota run <task> --grant <id>`, the matching `ota up` form, or a selected proof command
+  (`ota proof runtime|lifecycle --workflow <name> --grant <id>`) only for a derived heavier
+  non-agent closure. Proof admission happens before proof artifacts, child execution, lifecycle
+  services, or assertions begin. Proof invocation role and declaration order, lifecycle selected
+  service closure, and normalized runtime readiness-timeout selection are part of scope; any
+  grant-required runtime or lifecycle proof refuses before start until one terminal
+  transaction can cover every invocation, rather than inheriting a workflow-only grant.
+  Routine lanes reject an inapplicable grant, and agent-unsafe lanes remain refused under `--agent`
+  even when a grant exists
 - read successful dry-run `crossing_grant_admission` and executed
   `receipt.crossing.authority` as exact signed admission evidence. Real execution must also carry
   a terminal `receipt.crossing.authority.transaction` created before selected-lane mutation;
