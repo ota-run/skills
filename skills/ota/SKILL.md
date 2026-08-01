@@ -515,7 +515,11 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   from fixed root-owned system state. That carrier is guarded from Ota's current unprivileged
   process, not provider-attested privilege separation: `authority_separation_posture:
   current_process_filesystem_guarded` does not prove the invoking job lacks administrative
-  escalation
+  escalation. The provisioner owns the Linux trust store at
+  `/etc/ota/crossing-authorities.json`; its binding points to separately protected signed bundle
+  and sequence-state files, normally under `/var/lib/ota/`. See the
+  [Prebound Crossing Authority Operations guide](https://github.com/ota-run/ota/blob/1.6.26-implementation/docs/spec/crossing-authority-operations.md)
+  before proposing this preview carrier. Never self-provision it from a GitHub-hosted workflow
 - use `ota run <task> --grant <id>`, the matching `ota up` form, or a selected proof command
   (`ota proof runtime|lifecycle --workflow <name> --grant <id>`) only for a derived heavier
   non-agent closure. Proof admission happens before proof artifacts, child execution, lifecycle
