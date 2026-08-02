@@ -518,8 +518,14 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   escalation. The provisioner owns the Linux trust store at
   `/etc/ota/crossing-authorities.json`; its binding points to separately protected signed bundle
   and sequence-state files, normally under `/var/lib/ota/`. See the
-  [Prebound Crossing Authority Operations guide](https://github.com/ota-run/ota/blob/1.6.26-implementation/docs/spec/crossing-authority-operations.md)
+  [Prebound Crossing Authority (Preview)](https://ota.run/docs/reference/prebound-crossing-authority)
   before proposing this preview carrier. Never self-provision it from a GitHub-hosted workflow
+- before live grant pressure on a controlled runner, use `ota authority inspect --json` as the
+  canonical read-only hardening diagnostic. Require every `required` observation to be `passed`
+  and retain informational `unknown` capabilities as explicit boundaries. The command selects no
+  grant, writes no authority/high-water state or receipt, and proves only
+  `current_process_filesystem_guarded`; do not treat its matched profile as crossing authority or
+  provider/launcher attestation
 - use `ota run <task> --grant <id>`, the matching `ota up` form, or a selected proof command
   (`ota proof runtime|lifecycle --workflow <name> --grant <id>`) only for a derived heavier
   non-agent closure. Proof admission happens before proof artifacts, child execution, lifecycle
