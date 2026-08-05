@@ -526,9 +526,28 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   grant, writes no authority/high-water state or receipt, and proves only
   `current_process_filesystem_guarded`; do not treat its matched profile as crossing authority or
   provider/launcher attestation
-- use `ota run <task> --grant <id>`, the matching `ota up` form, or a selected proof command
-  (`ota proof runtime|lifecycle --workflow <name> --grant <id>`) only for a derived heavier
-  non-agent closure. Proof admission happens before proof artifacts, child execution, lifecycle
+- for controlled GitHub Actions pressure, use a dedicated Linux/x64 VPS and register its
+  unprivileged `ota-runner` account as a repository-scoped self-hosted runner with one protected
+  scenario label. The administrator builds the exact reviewed Ota commit outside the job, keeps it
+  root-owned at an administrator-controlled absolute path, and publishes a root-owned manifest
+  binding the full commit and binary SHA-256. The workflow must invoke that absolute path rather
+  than inheriting `PATH`. Archive that manifest check, `ota --version --json`, and `ota authority inspect --json`.
+  Do not treat the version command's abbreviated commit as full source-identity proof or give
+  `ota-runner` sudo, Docker, signing keys, or authority-write access. The complete
+  sequence is in [Prebound Crossing Authority (Preview)](https://ota.run/docs/reference/prebound-crossing-authority)
+- use crossing authority only for a derived heavier non-agent closure. `prebound_file` uses
+  `ota run <task> --grant <id>` or the matching `ota up` form. On Unix, `authority_broker`
+  automatically selects exactly one protected binding matching the contract's `authority_id`;
+  optional `--grant <authority-id>` is only a non-secret label check, never a lease. Broker dry-run
+  reports `requires_live_authorization` without launcher contact, while real `run`/`up` consumes one
+  exact lease after deterministic admission and before provisioning or work. Ordinary workflow
+  selected instance, ordered prerequisite-instance closure, readiness timeout, and runner-derived
+  closure/effect/resource breadth are authority-bound; public breadth uses counts, categories, and
+  hashed resource identities rather than raw values. Archives retain a public verification binding,
+  never the protected live launcher descriptor. Signed
+  protocol evidence permits only bounded non-secret invocation, principal, and mount labels.
+  Selected proof commands accept `--grant` only to evaluate authority;
+  grant-required proof still refuses before proof artifacts, child execution, lifecycle
   services, or assertions begin. Proof invocation role and declaration order, lifecycle selected
   service closure, and normalized runtime readiness-timeout selection are part of scope; any
   grant-required runtime or lifecycle proof refuses before start until one terminal
@@ -553,9 +572,13 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   `.ota/state`
 - do not add free-form task inputs to a signed-file grant lane. The first carrier refuses that
   unresolved identity rather than hashing or exposing potentially secret input values
-- keep the signed-file claim bounded: it is short-lived offline authority with a bounded local
-  transaction carrier, not online revocation, human identity proof, or independently authenticated
-  one-use work-unit authority. The broker-backed work-unit carrier remains open V11.7 work
+- keep carrier claims bounded. The signed-file carrier is short-lived offline authority under
+  `current_process_filesystem_guarded`. The Unix broker carrier verifies challenge-bound launcher
+  attestation and atomically consumed one-use authority under `launcher_attested_one_use`; it does
+  not invent provider, human, CI, or host-isolation claims absent from that attestation. Use the
+  [Broker Crossing Authority (Preview)](https://ota.run/docs/reference/broker-crossing-authority)
+  for its fixed binding and launcher boundary. Hosted broker pressure and proof-wide broker
+  transactions remain open V11.7 work
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
 backend selection from task names or advisory prose.
