@@ -546,12 +546,13 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   hashed resource identities rather than raw values. Archives retain a public verification binding,
   never the protected live launcher descriptor. Signed
   protocol evidence permits only bounded non-secret invocation, principal, and mount labels.
-  Selected proof commands accept `--grant` only to evaluate authority;
-  grant-required proof still refuses before proof artifacts, child execution, lifecycle
-  services, or assertions begin. Proof invocation role and declaration order, lifecycle selected
-  service closure, and normalized runtime readiness-timeout selection are part of scope; any
-  grant-required runtime or lifecycle proof refuses before start until one terminal
-  transaction can cover every invocation, rather than inheriting a workflow-only grant.
+  Selected proof commands retain one proof-owned terminal transaction across their complete
+  invocation set. Proof invocation role and declaration order, lifecycle selected-service closure,
+  target platform, host-port, memory, dependency selection, and normalized runtime readiness
+  timeout are scope-bound. Runner-private authority travels only between immediate Ota processes
+  over a bounded Unix descriptor and is removed before selected code executes. Runtime and
+  lifecycle archives embed and re-derive terminal authority rather than inheriting an ordinary
+  workflow grant.
   Routine lanes reject an inapplicable grant, and agent-unsafe lanes remain refused under `--agent`
   even when a grant exists
 - read successful dry-run `crossing_grant_admission` and executed
