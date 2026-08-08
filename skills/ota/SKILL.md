@@ -578,11 +578,18 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   unresolved identity rather than hashing or exposing potentially secret input values
 - keep carrier claims bounded. The signed-file carrier is short-lived offline authority under
   `current_process_filesystem_guarded`. The Unix broker carrier verifies challenge-bound launcher
-  attestation and atomically consumed one-use authority under `launcher_attested_one_use`; it does
-  not invent provider, human, CI, or host-isolation claims absent from that attestation. Use the
+  attestation and atomically consumed one-use authority. Immutable v1 evidence remains
+  `launcher_attested_one_use`. A strict v2 protected-launcher binding additionally requires one
+  exact protocol-published profile, every ordered required observation verified,
+  content-addressed launcher/configuration identities, and a separate attestor key authority
+  before it can emit `protected_launcher_attested_one_use`. The protected binding itself must carry
+  `schema_version: 2`; an unversioned binding remains v1. Neither posture invents provider,
+  human, CI, or host-isolation claims outside the signed evidence. V1 and v2 binding, payload,
+  domain, and archive branches are mutually exclusive; never upgrade v1 by defaulting v2 fields.
+  Use the
   [Broker Crossing Authority (Preview)](https://ota.run/docs/reference/broker-crossing-authority)
-  for its fixed binding and launcher boundary. Hosted broker pressure and proof-wide broker
-  transactions remain open V11.7 work
+  for its fixed binding and launcher boundary. Hosted protected-launcher v2 pressure and
+  provider-specific attestation remain open V11.7 work
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
 backend selection from task names or advisory prose.
