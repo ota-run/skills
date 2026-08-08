@@ -540,7 +540,10 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   automatically selects exactly one protected binding matching the contract's `authority_id`;
   optional `--grant <authority-id>` is only a non-secret label check, never a lease. Broker dry-run
   reports `requires_live_authorization` without launcher contact, while real `run`/`up` consumes one
-  exact lease after deterministic admission and before provisioning or work. Ordinary workflow
+  exact lease after deterministic admission and before provisioning or work. If consume
+  acknowledgement is uncertain, Ota re-queries the exact durable intent only after
+  fresh launcher attestation, closes the abandoned transaction as incomplete for every verified status,
+  and never resumes its work; a new execution requires fresh authorization. Ordinary workflow
   selected instance, ordered prerequisite-instance closure, readiness timeout, and runner-derived
   closure/effect/resource breadth are authority-bound; public breadth uses counts, categories, and
   hashed resource identities rather than raw values. Archives retain a public verification binding,
