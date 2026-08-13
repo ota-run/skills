@@ -590,17 +590,19 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   profiles. Immutable Linux/x64 PID 1 pressure run
   [31664495937](https://github.com/ota-run/authority-launcher/actions/runs/31664495937)
   proves completed, failed, interrupted, replay-refused, and crash-recovered selected execution.
-  Core completion remains separate from launcher cleanup: Core's portable archive binds admission,
-  one-use consumption, semantic scope,
-  and the terminal crossing transaction, while the outer launcher finalization separately proves
-  child reap plus scope, cgroup, and active-slot removal. Do not claim portable cleanup evidence
-  until that finalization is itself archive-bound.
+  Core completion remains separate from launcher cleanup: Core's archive binds admission, one-use
+  consumption, semantic scope, and the terminal crossing transaction. The current local candidate
+  adds protected post-cleanup recovery plus producer signatures over cleanup and the exact archive
+  association. Signed launcher-owned transaction schema v3 requires broker-archive schema v2 and
+  portable finalization verification; historical transaction v2 evidence is not upgraded. Do not
+  claim it shipped until immutable PID 1 crash pressure and a production
+  operator attachment surface are complete.
   Use the
   [Broker Crossing Authority (Preview)](https://ota.run/docs/reference/broker-crossing-authority)
   for its fixed binding and launcher boundary. Bounded protected-launcher v2, execution-disabled
-  systemd V3, and selected systemd execution pressure are green. Portable launcher-finalization
-  evidence, independently administered separation, and provider-specific attestation remain open
-  V11.7 work.
+  systemd V3 and selected systemd execution pressure are green. Portable finalization and
+  independently administered launcher separation remain V11.7 gates; provider-specific
+  attestation remains a separate stronger profile rather than an implied systemd property.
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
 backend selection from task names or advisory prose.
