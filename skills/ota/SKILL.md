@@ -587,17 +587,20 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   human, CI, or host-isolation claims outside the signed evidence. V1 and v2 binding, payload,
   domain, and archive branches are mutually exclusive; never upgrade v1 by defaulting v2 fields.
   The additive Linux systemd V3 branch requires the exact closed launcher V3 and job-principal V2
-  profiles. Its current unreleased selected-execution candidate separates Core completion from
-  launcher cleanup: Core's portable archive binds admission, one-use consumption, semantic scope,
+  profiles. Immutable Linux/x64 PID 1 pressure run
+  [31663366909](https://github.com/ota-run/authority-launcher/actions/runs/31663366909)
+  proves completed, failed, interrupted, replay-refused, and crash-recovered selected execution.
+  Core completion remains separate from launcher cleanup: Core's portable archive binds admission,
+  one-use consumption, semantic scope,
   and the terminal crossing transaction, while the outer launcher finalization separately proves
   child reap plus scope, cgroup, and active-slot removal. Do not claim portable cleanup evidence
   until that finalization is itself archive-bound.
   Use the
   [Broker Crossing Authority (Preview)](https://ota.run/docs/reference/broker-crossing-authority)
-  for its fixed binding and launcher boundary. Bounded protected-launcher v2 and execution-disabled
-  systemd V3 pressure are green; selected systemd execution, portable launcher-finalization
+  for its fixed binding and launcher boundary. Bounded protected-launcher v2, execution-disabled
+  systemd V3, and selected systemd execution pressure are green. Portable launcher-finalization
   evidence, independently administered separation, and provider-specific attestation remain open
-  V11.7 work
+  V11.7 work.
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
 backend selection from task names or advisory prose.
