@@ -588,7 +588,7 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   domain, and archive branches are mutually exclusive; never upgrade v1 by defaulting v2 fields.
   The additive Linux systemd V3 branch requires the exact closed launcher V3 and job-principal V2
   profiles. Immutable Linux/x64 PID 1 pressure run
-  [31663366909](https://github.com/ota-run/authority-launcher/actions/runs/31663366909)
+  [31664495937](https://github.com/ota-run/authority-launcher/actions/runs/31664495937)
   proves completed, failed, interrupted, replay-refused, and crash-recovered selected execution.
   Core completion remains separate from launcher cleanup: Core's portable archive binds admission,
   one-use consumption, semantic scope,
