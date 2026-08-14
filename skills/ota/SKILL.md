@@ -558,6 +558,15 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   workflow grant.
   Routine lanes reject an inapplicable grant, and agent-unsafe lanes remain refused under `--agent`
   even when a grant exists
+- on a production Linux systemd Launcher deployment, inspect independently retained execution
+  evidence with `ota receipt --history --source systemd_protected_launcher --json`. The fixed
+  protected service derives repository/catalog selection from the admitted operator peer and
+  administrator mapping, and returns the exact archive, immutable contract snapshot, and
+  finalization sidecar for Core semantic re-verification. Never add a path, `--file`, or `OTA_FILE`
+  override, never read protected blobs directly, and never fall back to local history after a
+  protected-source refusal. Use `--archive-identity <sha256:...>` only to select one exact archive
+  and use `https://ota.run/docs/reference/broker-crossing-authority` for the canonical operator
+  deployment, fixed-layout, ownership, and trust-boundary reference
 - read successful dry-run `crossing_grant_admission` and executed
   `receipt.crossing.authority` as exact signed admission evidence. Real execution must also carry
   a terminal `receipt.crossing.authority.transaction` created before selected-lane mutation;
