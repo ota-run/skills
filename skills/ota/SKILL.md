@@ -594,9 +594,15 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   consumption, semantic scope, and the terminal crossing transaction. The current local candidate
   adds protected post-cleanup recovery plus producer signatures over cleanup and the exact archive
   association. Signed launcher-owned transaction schema v3 requires broker-archive schema v2 and
-  portable finalization verification; historical transaction v2 evidence is not upgraded. Do not
-  claim it shipped until immutable PID 1 crash pressure and a production
-  operator attachment surface are complete.
+  portable finalization verification. Core publishes the archive atomically and durably; the root
+  launcher requires execution-principal-owned `0700` archive directories, verifies and publishes
+  the exact sidecar, and retains the exact terminal until its identity-bound acknowledgement. The
+  job principal never reads the private receipt directory.
+  Historical transaction v2 evidence is not upgraded. Immutable Linux/x64 PID 1 run
+  `31758094819` proves the pressure-only portable-finalization and crash-recovery path, including
+  schema-v2 recovered child absence without false exit or reaping claims. Do not call the pressure
+  client a production operator attachment surface; that surface and a least-privilege history
+  client remain open.
   Use the
   [Broker Crossing Authority (Preview)](https://ota.run/docs/reference/broker-crossing-authority)
   for its fixed binding and launcher boundary. Bounded protected-launcher v2, execution-disabled
