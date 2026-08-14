@@ -600,8 +600,8 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   [31664495937](https://github.com/ota-run/authority-launcher/actions/runs/31664495937)
   proves completed, failed, interrupted, replay-refused, and crash-recovered selected execution.
   Core completion remains separate from launcher cleanup: Core's archive binds admission, one-use
-  consumption, semantic scope, and the terminal crossing transaction. The current local candidate
-  adds protected post-cleanup recovery plus producer signatures over cleanup and the exact archive
+  consumption, semantic scope, and the terminal crossing transaction. Protected post-cleanup
+  recovery adds producer signatures over cleanup and the exact archive
   association. Signed launcher-owned transaction schema v3 requires broker-archive schema v2 and
   portable finalization verification. Core publishes the archive atomically and durably; the root
   launcher requires execution-principal-owned `0700` archive directories, verifies and publishes
@@ -610,13 +610,16 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   Historical transaction v2 evidence is not upgraded. Immutable Linux/x64 PID 1 run
   `31758094819` proves the pressure-only portable-finalization and crash-recovery path, including
   schema-v2 recovered child absence without false exit or reaping claims. Do not call the pressure
-  client a production operator attachment surface; that surface and a least-privilege history
-  client remain open.
+  client a production operator attachment surface. Immutable Linux/x64 PID 1 run `31823037642`
+  proves the separate installed production client and least-privilege protected-history source
+  against exact Protocol, Core, and Launcher revisions, with one valid and zero invalid protected
+  archive and no private signing material. The workflow controller provisioned the authority stack,
+  so independently administered launcher separation remains open.
   Use the
   [Broker Crossing Authority (Preview)](https://ota.run/docs/reference/broker-crossing-authority)
   for its fixed binding and launcher boundary. Bounded protected-launcher v2, execution-disabled
-  systemd V3 and selected systemd execution pressure are green. Portable finalization and
-  independently administered launcher separation remain V11.7 gates; provider-specific
+  systemd V3, selected execution, portable finalization, and production attachment/history pressure
+  are green. Independently administered launcher separation remains a V11.7 gate; provider-specific
   attestation remains a separate stronger profile rather than an implied systemd property.
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
