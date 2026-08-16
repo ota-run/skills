@@ -613,14 +613,17 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   client a production operator attachment surface. Immutable Linux/x64 PID 1 run `31823037642`
   proves the separate installed production client and least-privilege protected-history source
   against exact Protocol, Core, and Launcher revisions, with one valid and zero invalid protected
-  archive and no private signing material. The workflow controller provisioned the authority stack,
-  so independently administered launcher separation remains open.
+  archive and no private signing material. Independently administered Linux/x64 PID 1 run
+  `31939777636` separately proves the consumer-only positive path with a pre-provisioned protected
+  runner, one consumed work unit, exact terminal cleanup, one valid protected archive, and zero
+  invalid archives. Administrator-driven reboot recovery and provider attestation remain open.
   Use the
   [Broker Crossing Authority (Preview)](https://ota.run/docs/reference/broker-crossing-authority)
   for its fixed binding and launcher boundary. Bounded protected-launcher v2, execution-disabled
   systemd V3, selected execution, portable finalization, and production attachment/history pressure
-  are green. Independently administered launcher separation remains a V11.7 gate; provider-specific
-  attestation remains a separate stronger profile rather than an implied systemd property.
+  are green. The independently administered positive hardened-launcher branch is also green;
+  administrator-driven reboot recovery and provider-specific attestation remain separate V11.7
+  gates rather than implied systemd properties.
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
 backend selection from task names or advisory prose.
