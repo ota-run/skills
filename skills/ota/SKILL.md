@@ -518,8 +518,8 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   escalation. The provisioner owns the Linux trust store at
   `/etc/ota/crossing-authorities.json`; its binding points to separately protected signed bundle
   and sequence-state files, normally under `/var/lib/ota/`. See the
-  [Prebound Crossing Authority (Preview)](https://ota.run/docs/reference/prebound-crossing-authority)
-  before proposing this preview carrier. Never self-provision it from a GitHub-hosted workflow
+  [Prebound Crossing Authority](https://ota.run/docs/reference/prebound-crossing-authority)
+  before proposing this bounded carrier. Never self-provision it from a GitHub-hosted workflow
 - before live grant pressure on a controlled runner, use `ota authority inspect --json` as the
   canonical read-only hardening diagnostic. Require every `required` observation to be `passed`
   and retain informational `unknown` capabilities as explicit boundaries. The command selects no
@@ -534,7 +534,7 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   than inheriting `PATH`. Archive that manifest check, `ota --version --json`, and `ota authority inspect --json`.
   Do not treat the version command's abbreviated commit as full source-identity proof or give
   `ota-runner` sudo, Docker, signing keys, or authority-write access. The complete
-  sequence is in [Prebound Crossing Authority (Preview)](https://ota.run/docs/reference/prebound-crossing-authority)
+  sequence is in [Prebound Crossing Authority](https://ota.run/docs/reference/prebound-crossing-authority)
 - use crossing authority only for a derived heavier non-agent closure. `prebound_file` uses
   `ota run <task> --grant <id>` or the matching `ota up` form. On Unix, `authority_broker`
   automatically selects exactly one protected binding matching the contract's `authority_id`;
@@ -622,12 +622,13 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   zero invalid or legacy archives, unchanged repository state, and complete terminal cleanup.
   Provider attestation remains open.
   Use the
-  [Broker Crossing Authority (Preview)](https://ota.run/docs/reference/broker-crossing-authority)
+  [Broker Crossing Authority](https://ota.run/docs/reference/broker-crossing-authority)
   for its fixed binding and launcher boundary. Bounded protected-launcher v2, execution-disabled
   systemd V3, selected execution, portable finalization, and production attachment/history pressure
   are green. The independently administered positive hardened-launcher and administrator-driven
-  reboot/fault-recovery branches are also green; provider-specific attestation remains a separate
-  V11.7 gate rather than an implied systemd property.
+  reboot/fault-recovery branches are also green and satisfy the bounded V11.7 OSS slice.
+  Provider-specific attestation remains optional stronger hardening rather than an implied systemd
+  property or V11.7 completion gate.
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
 backend selection from task names or advisory prose.

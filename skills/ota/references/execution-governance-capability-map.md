@@ -50,6 +50,7 @@ Open the focused public reference before copying the example.
 - A baseline record is not trusted until one exact attestation is explicitly promoted.
 - Claim assurance is derived evidence posture; never hand-author `supported`.
 - A crossing record is never reusable approval authority.
-- The V11.7 `--grant` carrier remains unreleased and incomplete. Do not teach repository-owned trust
-  keys or signed bundles as a shortcut.
+- The bounded V11.7 `--grant` authority slice is complete on the `1.6.26-implementation` branch but
+  remains unreleased. Do not teach repository-owned trust keys or signed bundles as a shortcut;
+  provider attestation remains optional stronger hardening.
 - Raw shell outside an adopted Ota, CI, or sandbox chokepoint remains outside Ota's control.
