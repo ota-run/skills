@@ -54,6 +54,23 @@ Use this checklist when deciding whether a contract is trustworthy for humans, C
   `review`, unavailable policy, and hard-pin failures all refuse before execution or mutation?
 - Are policy findings and admission-produced receipts derived from one command-scoped replay-input
   observation set rather than rereading mutable files or reconstructing policy after execution?
+- If `governance.crossing_authority` is present, does the repository contain only the authority
+  identity while keys, bundles, sequence state, and trust paths remain independently managed
+  system state? Repository-controlled trust material is self-issued authority.
+- Does every heavier non-agent grant bind the exact semantic closure and remain subject to
+  freshness, revocation, and rollback checks? A grant must never widen `--agent` safety or be
+  accepted for a routine lane.
+- Does every real granted crossing carry a terminal runner-owned transaction created before
+  selected-lane mutation, while refusal and dry-run remain admission-only and create no
+  transaction or crossing record?
+- Does refused admission preserve typed authority-source, authority/grant selection, stable reason,
+  and `execution_started: false` evidence without minting a crossing record?
+- Is the local transaction posture described honestly as
+  `runner_local_content_addressed`, without implying independent authentication against same-user
+  writes to `.ota/state`?
+- Does the first signed-file carrier avoid free-form task inputs and stay described as bounded
+  offline authority with a bounded local transaction carrier rather than human identity proof,
+  online revocation, or independently authenticated one-use work-unit authority?
 - If the contract consumes a promoted generated baseline, does it state the honest authority and
   execution boundary: explicit `replay_baseline` promotion, SCM review as an external trust
   assumption rather than Ota-verified approval, and `read_only` only where an ephemeral container
@@ -64,5 +81,5 @@ Use this checklist when deciding whether a contract is trustworthy for humans, C
   lifecycle `not_proved[]` boundaries instead of treating command success as application proof?
 - Is lifecycle proof intentionally outside CI projection and claim assurance until a separately
   eligible typed or isolated boundary has been pressure-proven?
-- If the contract uses newer surfaces, do workflow pins and `metadata.ota.minimum_version` stay in
-  sync?
+- Do all contracts, including published examples, declare `metadata.ota.minimum_version`, and do
+  workflow pins stay in sync with that lowest honest compatible release?

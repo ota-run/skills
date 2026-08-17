@@ -1057,10 +1057,18 @@ That contract keeps the service bind on `3000` and lets operators run
 `ota run compose:native:published --host-port 4000` to remap only the published host port for one
 run.
 
+Direct native tasks have no separate Compose or container publication boundary. When their primary
+listener has fixed bind and fixed projected host-port truth, `--host-port` changes both values for
+that invocation and Ota reprojects supported typed launch arguments plus canonical runtime env.
+If the selected fixed listener conflicts with an active Ota execution, Ota refuses with
+`runtime_listener` evidence and suggests a free `--host-port` only when that selected lane can
+enforce the override; it never silently remaps an explicitly requested port.
+
 ## Minimum-version governance
 
-When a contract depends on newer Ota parser, validator, or runtime behavior, set
-`metadata.ota.minimum_version` explicitly.
+Every contract must set `metadata.ota.minimum_version` explicitly. Use the lowest Ota release that
+can honestly parse and execute the contract; published examples must never rely on an implicit
+version floor.
 
 ```yaml
 metadata:

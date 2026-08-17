@@ -250,6 +250,10 @@ Use the smallest real Ota workflow that fits the task:
   - on repos with more than one declared workflow, keep archive, baseline, and snapshot selection
     scoped with `ota receipt --workflow <name> ...` instead of relying on repo-global `latest` or
     `promoted` receipt history
+  - receipt history verifies the archived snapshot reference and identity, never the current
+    worktree. Authority-bearing execution archives also bind a canonical selected-invocation scope
+    that history re-derives before accepting crossing evidence. `legacy_unverified` entries remain inspectable but cannot become baselines, proof
+    inputs, or crossing-authority evidence
   - read `summary.comparison.correlation` first, then `contract_changes[]`, then
     `likely_related_changes[]`
   - read `baseline.evaluated_inputs[]`, `current.evaluated_inputs[]`, and
@@ -474,7 +478,157 @@ For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows -
   `default: "allow"` / `scope: "broad"` as the current honest broad effect posture; do not invent
   host or destination allowlists that the contract does not yet declare
 - when `sandbox_policy.network.scope: "targeted"`, consume declared `outbound_targets[]` directly
-  and keep `enforcement: "advisory_only"` honest until ota compiles a real sandbox target
+  and keep `enforcement: "advisory_only"` honest unless an identified provider can apply and attest
+  every authoritative target constraint
+- distinguish compiled posture from applied enforcement: `codex_local` remains advisory, while
+  `ota run <task> --agent --sandbox-target oci_local` and the matching `ota up` lane may enforce
+  the supported subset only for an explicit-platform ephemeral container selection
+- treat `container.platform` as canonical for every selected execution-backend container creation,
+  task variant, input, environment, service binding, and requirement, not as a sandbox-only
+  annotation; the current backend accepts Linux OCI targets only, and `oci_local` requires the
+  explicit pin instead of inferring it from the runner host
+- before recommending `oci_local`, verify the selected path needs only the shipped controls:
+  read-only repository root, existing writable carve-outs, protected-path write refusal, bounded
+  external IP-network denial, and cleanup of Ota's exact boundary; targeted egress, inherited
+  service networks, managed isolated paths, image-declared volumes, undeclared mounts,
+  runtime-control sockets, native execution, and unsupported path aliases refuse
+- require a finite `run`, `script`, or `command` body with no task requirements, required services,
+  or conditional checks. The first provider refuses typed prepare/action/Compose/launch/attach
+  bodies and other pre-boundary work rather than claiming that a later container covered it
+- read dry-run `sandbox_admission` for capability/refusal truth and executed
+  `witnessed_observations.sandbox_application` for runner-authored application, terminal inspection,
+  policy-authority/overlay linkage, and cleanup evidence; never infer enforcement from task success
+  or the compiled profile alone
+- do not expect dry-run to start a provider boundary merely to probe runtime/tool availability.
+  Real OCI execution performs provider-backed precondition probes only inside the registered
+  sandbox application transaction, binds each to the exact admitted segment that owns the
+  requirement, records it as a cleanup-confirmed `precondition_probe` invocation, and retains that
+  terminal evidence on a blocking refusal. Probe evidence never satisfies task-execution evidence
+- do not reuse one task identity as both a dependency and a hook or across separate workflow
+  phases in an enforced lane; give each invocation a distinct task identity so receipt segments
+  cannot collapse different execution phases
+- treat the automatically archived receipt as selected-lane evidence only. It does not prove
+  application output, repo-global safety, host-wide isolation, or raw-shell execution outside Ota
+- when a contract references `governance.crossing_authority.authority_id`, keep the authority
+  boundary outside the repository. Never add a public key, signed bundle, sequence state, or
+  caller-selectable trust path to `ota.yaml`; the first `prebound_file` carrier resolves those only
+  from fixed root-owned system state. That carrier is guarded from Ota's current unprivileged
+  process, not provider-attested privilege separation: `authority_separation_posture:
+  current_process_filesystem_guarded` does not prove the invoking job lacks administrative
+  escalation. The provisioner owns the Linux trust store at
+  `/etc/ota/crossing-authorities.json`; its binding points to separately protected signed bundle
+  and sequence-state files, normally under `/var/lib/ota/`. See the
+  [Prebound Crossing Authority](https://ota.run/docs/reference/prebound-crossing-authority)
+  before proposing this bounded carrier. Never self-provision it from a GitHub-hosted workflow
+- before live grant pressure on a controlled runner, use `ota authority inspect --json` as the
+  canonical read-only hardening diagnostic. Require every `required` observation to be `passed`
+  and retain informational `unknown` capabilities as explicit boundaries. The command selects no
+  grant, writes no authority/high-water state or receipt, and proves only
+  `current_process_filesystem_guarded`; do not treat its matched profile as crossing authority or
+  provider/launcher attestation
+- for controlled GitHub Actions pressure, use a dedicated Linux/x64 VPS and register its
+  unprivileged `ota-runner` account as a repository-scoped self-hosted runner with one protected
+  scenario label. The administrator builds the exact reviewed Ota commit outside the job, keeps it
+  root-owned at an administrator-controlled absolute path, and publishes a root-owned manifest
+  binding the full commit and binary SHA-256. The workflow must invoke that absolute path rather
+  than inheriting `PATH`. Archive that manifest check, `ota --version --json`, and `ota authority inspect --json`.
+  Do not treat the version command's abbreviated commit as full source-identity proof or give
+  `ota-runner` sudo, Docker, signing keys, or authority-write access. The complete
+  sequence is in [Prebound Crossing Authority](https://ota.run/docs/reference/prebound-crossing-authority)
+- use crossing authority only for a derived heavier non-agent closure. `prebound_file` uses
+  `ota run <task> --grant <id>` or the matching `ota up` form. On Unix, `authority_broker`
+  automatically selects exactly one protected binding matching the contract's `authority_id`;
+  optional `--grant <authority-id>` is only a non-secret label check, never a lease. Broker dry-run
+  reports `requires_live_authorization` without launcher contact, while real `run`/`up` consumes one
+  exact lease after deterministic admission and before provisioning or work. If consume
+  acknowledgement is uncertain, Ota re-queries the exact durable intent only after
+  fresh launcher attestation, closes the abandoned transaction as incomplete for every verified status,
+  and never resumes its work; a new execution requires fresh authorization. Ordinary workflow
+  selected instance, ordered prerequisite-instance closure, readiness timeout, and runner-derived
+  closure/effect/resource breadth are authority-bound; public breadth uses counts, categories, and
+  hashed resource identities rather than raw values. Archives retain a public verification binding,
+  never the protected live launcher descriptor. Signed
+  protocol evidence permits only bounded non-secret invocation, principal, and mount labels.
+  Selected proof commands retain one proof-owned terminal transaction across their complete
+  invocation set. Proof invocation role and declaration order, lifecycle selected-service closure,
+  target platform, host-port, memory, dependency selection, and normalized runtime readiness
+  timeout are scope-bound. Runner-private authority travels only between immediate Ota processes
+  over a bounded Unix descriptor and is removed before selected code executes. Runtime and
+  lifecycle archives embed and re-derive terminal authority rather than inheriting an ordinary
+  workflow grant.
+  Routine lanes reject an inapplicable grant, and agent-unsafe lanes remain refused under `--agent`
+  even when a grant exists
+- on a production Linux systemd Launcher deployment, inspect independently retained execution
+  evidence with `ota receipt --history --source systemd_protected_launcher --json`. The fixed
+  protected service derives repository/catalog selection from the admitted operator peer and
+  administrator mapping, and returns the exact archive, immutable contract snapshot, and
+  finalization sidecar for Core semantic re-verification. Never add a path, `--file`, or `OTA_FILE`
+  override, never read protected blobs directly, and never fall back to local history after a
+  protected-source refusal. Use `--archive-identity <sha256:...>` only to select one exact archive
+  and use `https://ota.run/docs/reference/broker-crossing-authority` for the canonical operator
+  deployment, fixed-layout, ownership, and trust-boundary reference
+- read successful dry-run `crossing_grant_admission` and executed
+  `receipt.crossing.authority` as exact signed admission evidence. Real execution must also carry
+  a terminal `receipt.crossing.authority.transaction` created before selected-lane mutation;
+  refusal and dry-run create no crossing transaction or crossing record. Missing, stale, revoked,
+  rolled-back, or out-of-scope authority refuses before provider/setup/task mutation
+- inspect refused task dry-run `crossing_grant_admission` or workflow-refusal
+  `receipt.refusal` for typed `prebound_file` authority source, selected authority/grant, stable
+  reason, and `execution_started: false`. Both runner-derived scope carriers expose scope and
+  contract identities, boundary family, and classification for external issuance. The workflow
+  receipt keeps its refusal boundary separate through `scope_boundary_family` and
+  `scope_classification`; never reconstruct either semantic scope in CI glue or treat refusal
+  evidence as a crossing record
+- keep the local transaction claim bounded:
+  `authentication_posture: runner_local_content_addressed` means runner-authored, locked, and
+  internally reconciled; it does not authenticate the journal against same-user writes to
+  `.ota/state`
+- do not add free-form task inputs to a signed-file grant lane. The first carrier refuses that
+  unresolved identity rather than hashing or exposing potentially secret input values
+- keep carrier claims bounded. The signed-file carrier is short-lived offline authority under
+  `current_process_filesystem_guarded`. The Unix broker carrier verifies challenge-bound launcher
+  attestation and atomically consumed one-use authority. Immutable v1 evidence remains
+  `launcher_attested_one_use`. A strict v2 protected-launcher binding additionally requires one
+  exact protocol-published profile, every ordered required observation verified,
+  content-addressed launcher/configuration identities, and a separate attestor key authority
+  before it can emit `protected_launcher_attested_one_use`. The protected binding itself must carry
+  `schema_version: 2`; an unversioned binding remains v1. Neither posture invents provider,
+  human, CI, or host-isolation claims outside the signed evidence. V1 and v2 binding, payload,
+  domain, and archive branches are mutually exclusive; never upgrade v1 by defaulting v2 fields.
+  The additive Linux systemd V3 branch requires the exact closed launcher V3 and job-principal V2
+  profiles. Immutable Linux/x64 PID 1 pressure run
+  [31664495937](https://github.com/ota-run/authority-launcher/actions/runs/31664495937)
+  proves completed, failed, interrupted, replay-refused, and crash-recovered selected execution.
+  Core completion remains separate from launcher cleanup: Core's archive binds admission, one-use
+  consumption, semantic scope, and the terminal crossing transaction. Protected post-cleanup
+  recovery adds producer signatures over cleanup and the exact archive
+  association. Signed launcher-owned transaction schema v3 requires broker-archive schema v2 and
+  portable finalization verification. Core publishes the archive atomically and durably; the root
+  launcher requires execution-principal-owned `0700` archive directories, verifies and publishes
+  the exact sidecar, and retains the exact terminal until its identity-bound acknowledgement. The
+  job principal never reads the private receipt directory.
+  Historical transaction v2 evidence is not upgraded. Immutable Linux/x64 PID 1 run
+  `31758094819` proves the pressure-only portable-finalization and crash-recovery path, including
+  schema-v2 recovered child absence without false exit or reaping claims. Do not call the pressure
+  client a production operator attachment surface. Immutable Linux/x64 PID 1 run `31823037642`
+  proves the separate installed production client and least-privilege protected-history source
+  against exact Protocol, Core, and Launcher revisions, with one valid and zero invalid protected
+  archive and no private signing material. Independently administered Linux/x64 PID 1 run
+  `31939777636` separately proves the consumer-only positive path with a pre-provisioned protected
+  runner, one consumed work unit, exact terminal cleanup, one valid protected archive, and zero
+  invalid archives. Immutable Linux/x64 PID 1 run `31953535665` separately proves the
+  administrator-driven execution-completion, finalization-intent, and terminal-recorded reboot
+  matrix against exact Protocol, Core, and Launcher revisions, with three valid protected archives,
+  zero invalid or legacy archives, unchanged repository state, and complete terminal cleanup.
+  Provider attestation remains open.
+  Use the
+  [Broker Crossing Authority](https://ota.run/docs/reference/broker-crossing-authority)
+  for its fixed binding and launcher boundary. Bounded protected-launcher v2, execution-disabled
+  systemd V3, selected execution, portable finalization, and production attachment/history pressure
+  are green. The independently administered positive hardened-launcher and administrator-driven
+  reboot/fault-recovery branches are also green and satisfy the bounded V11.7 OSS slice.
+  Provider-specific attestation remains optional stronger hardening rather than an implied systemd
+  property or V11.7 completion gate.
 For dependency-plane truth, prefer preview `plan.dependency_steps[]`, executed
 `receipt.dependency_steps[]`, and validate `warning_details[].provenance` instead of inferring
 backend selection from task names or advisory prose.
@@ -550,6 +704,10 @@ Prefer these concrete shapes when repo truth matches them:
   one-run `--host-port` overrides, keep the Docker command/task truthful and declare
   `runtime.listeners.<name>.project.publication.compose.service` so ota can remap the published
   host port without changing the internal bind port or editing compose YAML
+- for a direct native task with fixed bind and fixed projected host-port truth, a one-run
+  `--host-port` selection updates both the workload bind and projected host port; Ota reprojects
+  supported typed launch arguments and canonical runtime env rather than pretending native
+  execution has a separate publication boundary
 - use `launch.cwd` when the service-start truth is one executable plus stable argv rooted in a
   repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `prepare.kind: dependency_hydration` for dependency setup instead of raw package-manager
@@ -746,8 +904,9 @@ Prefer these concrete shapes when repo truth matches them:
 - treat `adapter_inputs.overlays.<family>` as a generalized contract surface with a strict shipped
   boundary: runtime semantics currently exist for `compose`, `bake`, and `helm`, and unsupported
   families should be called out as not yet shipped rather than modeled as if they execute
-- set `metadata.ota.minimum_version` when the contract depends on newer parser, validator, or
-  runtime surfaces
+- every `ota.yaml` must declare `metadata.ota.minimum_version`, including all published and local
+  example contracts; set it to the lowest Ota release that can honestly parse and execute the
+  contract, not merely the version currently installed
 
 Before editing:
 
@@ -847,7 +1006,7 @@ When the repo truth supports them, push toward these shapes explicitly:
   - `workflows.<name>.adapter_inputs.overlays.bake.*` when Bake file selection or adapter-root
     ownership belongs to the workflow rather than one isolated task body
 - release/governance truth:
-  - `metadata.ota.minimum_version` when the contract uses newer Ota capabilities
+  - `metadata.ota.minimum_version` on every contract, with the lowest honest compatible release
 
 - pressure workflow truth:
   - separate contract/dry-run coverage lanes from real runtime proof lanes
@@ -884,6 +1043,9 @@ For fuller holistic shapes, also use:
   `requires_services`, context-bound `execution`, and post-run hooks
 - `references/agent-and-governance-checklist.md` for `agent`, `checks`, `effects`, proof posture,
   and CI/version-floor governance
+- `references/execution-governance-capability-map.md` when you need the dedicated public
+  reference, evidence boundary, and copy-ready example for safe execution, CI projection,
+  sandboxing, proof, replay, claim assurance, crossings, or semantic snapshots
 - `references/pressure-testing-protocol.md` before selecting, modeling, or declaring a pressure
   repo complete; it defines the required proof matrix, Ota-gap review, and first-party
   propagation decision
@@ -922,8 +1084,9 @@ Watch for the concrete regressions we have repeatedly seen in pressure-test repo
 - Bake file selection buried in shell `docker buildx bake -f ...` flags instead of
   `tasks.<name>.adapter_inputs.overlays.bake.files` or
   `workflows.<name>.adapter_inputs.overlays.bake.files`
-- missing `metadata.ota.minimum_version` when a contract depends on newer Ota parsing or runtime
-  behavior
+- missing `metadata.ota.minimum_version` on any contract, especially a published example; a
+  contract that uses newer Ota parsing or runtime behavior must not rely on an implicit version
+  floor
 - context-level heavyweight requirements such as `docker`, `node`, or `python` that accidentally
   make pure file/env/action tasks unrunnable on contract-only lanes
 - pressure workflows that dry-run or execute tasks before materializing declared file/env bootstrap
@@ -958,8 +1121,9 @@ serious OSS repo, evaluate these gates explicitly:
   with protected paths.
 - CI proof posture: public PR workflows use released Ota setup/install paths unless the task is
   explicitly pressure-testing unreleased Ota.
-- Version-floor honesty: contracts that use newer Ota surfaces declare `metadata.ota.minimum_version`
-  and keep workflow-installed Ota in sync with that floor.
+- Version-floor honesty: every contract declares `metadata.ota.minimum_version`, the value is the
+  lowest release that can honestly interpret the contract, and workflow-installed Ota stays in sync
+  with that floor. Published examples must be checked for this invariant before propagation.
 - Container/native parity: container and native workflows are both modeled only when the repo
   actually supports them, and lifecycle choices are intentional.
 - Concurrency truth: when truthful parallel container lanes need the same logical dependency path,
@@ -1016,7 +1180,7 @@ When reviewing an `ota.yaml`, look for:
 - protected paths that contradict generated safe setup actions
 - workflow names/descriptions that overclaim the modeled slice
 - missing bounded verification tasks for the repo's known preflight checks
-- missing `metadata.ota.minimum_version` when newer contract surfaces are in use
+- missing `metadata.ota.minimum_version` on any contract, especially a published example
 - duplicated ownership across toolchains, runtimes, and tools
 - context-level requirements that are broader than the actual task bodies in that context
 - pure `action.kind:*` or file/env/bootstrap tasks that inherit heavyweight runtime requirements
@@ -1101,6 +1265,10 @@ service ownership, env modeling, `requires_services`, `execution`, or post-run h
 
 Read `references/agent-and-governance-checklist.md` when you want a compact pass over `agent`,
 `checks`, `effects`, proof posture, and CI/version-floor governance.
+
+Read `references/execution-governance-capability-map.md` when the contract needs one of Ota's
+execution-governance surfaces and you need to keep declaration, admission, execution, evidence,
+and authority boundaries separate.
 
 Read `references/pressure-testing-protocol.md` before pressure testing a repo. Do not call a
 pressure pass complete solely because existing Ota surfaces validated: it must also state whether
