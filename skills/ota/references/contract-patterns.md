@@ -1066,8 +1066,9 @@ enforce the override; it never silently remaps an explicitly requested port.
 
 ## Minimum-version governance
 
-When a contract depends on newer Ota parser, validator, or runtime behavior, set
-`metadata.ota.minimum_version` explicitly.
+Every contract must set `metadata.ota.minimum_version` explicitly. Use the lowest Ota release that
+can honestly parse and execute the contract; published examples must never rely on an implicit
+version floor.
 
 ```yaml
 metadata:

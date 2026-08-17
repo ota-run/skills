@@ -140,6 +140,7 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   execution lane?
 - Does every enforced phase use a distinct task identity, rather than reusing one task as both a
   dependency and hook and collapsing separate invocations into one evidence segment?
-- Does the contract declare `metadata.ota.minimum_version` when newer Ota surfaces are in use?
+- Does every contract declare `metadata.ota.minimum_version` at the lowest honest compatible
+  release, including published examples?
 - Are public CI or proof workflows installing an Ota build new enough to execute the contract they
   validate?

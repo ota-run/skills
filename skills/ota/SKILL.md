@@ -904,8 +904,9 @@ Prefer these concrete shapes when repo truth matches them:
 - treat `adapter_inputs.overlays.<family>` as a generalized contract surface with a strict shipped
   boundary: runtime semantics currently exist for `compose`, `bake`, and `helm`, and unsupported
   families should be called out as not yet shipped rather than modeled as if they execute
-- set `metadata.ota.minimum_version` when the contract depends on newer parser, validator, or
-  runtime surfaces
+- every `ota.yaml` must declare `metadata.ota.minimum_version`, including all published and local
+  example contracts; set it to the lowest Ota release that can honestly parse and execute the
+  contract, not merely the version currently installed
 
 Before editing:
 
@@ -1005,7 +1006,7 @@ When the repo truth supports them, push toward these shapes explicitly:
   - `workflows.<name>.adapter_inputs.overlays.bake.*` when Bake file selection or adapter-root
     ownership belongs to the workflow rather than one isolated task body
 - release/governance truth:
-  - `metadata.ota.minimum_version` when the contract uses newer Ota capabilities
+  - `metadata.ota.minimum_version` on every contract, with the lowest honest compatible release
 
 - pressure workflow truth:
   - separate contract/dry-run coverage lanes from real runtime proof lanes
@@ -1083,8 +1084,9 @@ Watch for the concrete regressions we have repeatedly seen in pressure-test repo
 - Bake file selection buried in shell `docker buildx bake -f ...` flags instead of
   `tasks.<name>.adapter_inputs.overlays.bake.files` or
   `workflows.<name>.adapter_inputs.overlays.bake.files`
-- missing `metadata.ota.minimum_version` when a contract depends on newer Ota parsing or runtime
-  behavior
+- missing `metadata.ota.minimum_version` on any contract, especially a published example; a
+  contract that uses newer Ota parsing or runtime behavior must not rely on an implicit version
+  floor
 - context-level heavyweight requirements such as `docker`, `node`, or `python` that accidentally
   make pure file/env/action tasks unrunnable on contract-only lanes
 - pressure workflows that dry-run or execute tasks before materializing declared file/env bootstrap
@@ -1119,8 +1121,9 @@ serious OSS repo, evaluate these gates explicitly:
   with protected paths.
 - CI proof posture: public PR workflows use released Ota setup/install paths unless the task is
   explicitly pressure-testing unreleased Ota.
-- Version-floor honesty: contracts that use newer Ota surfaces declare `metadata.ota.minimum_version`
-  and keep workflow-installed Ota in sync with that floor.
+- Version-floor honesty: every contract declares `metadata.ota.minimum_version`, the value is the
+  lowest release that can honestly interpret the contract, and workflow-installed Ota stays in sync
+  with that floor. Published examples must be checked for this invariant before propagation.
 - Container/native parity: container and native workflows are both modeled only when the repo
   actually supports them, and lifecycle choices are intentional.
 - Concurrency truth: when truthful parallel container lanes need the same logical dependency path,
@@ -1177,7 +1180,7 @@ When reviewing an `ota.yaml`, look for:
 - protected paths that contradict generated safe setup actions
 - workflow names/descriptions that overclaim the modeled slice
 - missing bounded verification tasks for the repo's known preflight checks
-- missing `metadata.ota.minimum_version` when newer contract surfaces are in use
+- missing `metadata.ota.minimum_version` on any contract, especially a published example
 - duplicated ownership across toolchains, runtimes, and tools
 - context-level requirements that are broader than the actual task bodies in that context
 - pure `action.kind:*` or file/env/bootstrap tasks that inherit heavyweight runtime requirements

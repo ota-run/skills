@@ -81,5 +81,5 @@ Use this checklist when deciding whether a contract is trustworthy for humans, C
   lifecycle `not_proved[]` boundaries instead of treating command success as application proof?
 - Is lifecycle proof intentionally outside CI projection and claim assurance until a separately
   eligible typed or isolated boundary has been pressure-proven?
-- If the contract uses newer surfaces, do workflow pins and `metadata.ota.minimum_version` stay in
-  sync?
+- Do all contracts, including published examples, declare `metadata.ota.minimum_version`, and do
+  workflow pins stay in sync with that lowest honest compatible release?
