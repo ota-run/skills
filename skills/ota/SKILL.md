@@ -220,6 +220,13 @@ Use the smallest real Ota workflow that fits the task:
     `prepare.kind: dependency_hydration` for `setup`, and `command` for simple finite task bodies
 - `ota detect`
   - inspect deterministic repo evidence before broadening a contract
+  - use `ota detect --candidate-out .ota/candidates/detect.json` when a maintainer needs one
+    durable source-bound review artifact without changing `ota.yaml`; create the dedicated output
+    directory first; Ota refuses output aliases and derives the artifact from one immutable source
+    snapshot. Current durable publication requires Unix no-follow directory support and refuses
+    on other platforms. It retains every selected evidence tuple, binds subjects as structured
+    path segments, omits semantically equivalent existing truth, and marks real disagreement as
+    `conflict`. Treat the artifact as review input, never execution or agent-safety authority
   - treat `ota detect --write` as the conservative first-write lane, not the full starter lane
   - when reviewing a detect-written contract, read `metadata.ota.detect.field_ownership` together
     with `metadata.ota.detect.field_admission` so direct detector-owned writes are not confused
