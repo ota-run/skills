@@ -227,6 +227,14 @@ Use the smallest real Ota workflow that fits the task:
     on other platforms. It retains every selected evidence tuple, binds subjects as structured
     path segments, omits semantically equivalent existing truth, and marks real disagreement as
     `conflict`. Treat the artifact as review input, never execution or agent-safety authority
+  - use `ota contract apply-candidate .ota/candidates/detect.json --json` after review to verify
+    that current repository and contract truth still re-derive the exact artifact. Add `--write`
+    only after that review: Ota takes a no-follow repository lock, repeats source/evidence
+    admission, and atomically creates only a previously absent `ota.yaml` from the shared
+    evaluator's validated `Contract`; it never overwrites an existing contract, and a matching
+    repeat is a semantic no-op. The writer currently requires Linux or macOS atomic no-replace
+    rename support. `--require-complete` refuses residual `unknown` or `unsupported` review state
+    instead of treating it as authority
   - treat `ota detect --write` as the conservative first-write lane, not the full starter lane
   - when reviewing a detect-written contract, read `metadata.ota.detect.field_ownership` together
     with `metadata.ota.detect.field_admission` so direct detector-owned writes are not confused
