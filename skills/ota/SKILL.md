@@ -246,7 +246,13 @@ Use the smallest real Ota workflow that fits the task:
     source, migration, unchanged semantic identity, and resulting content. Apply an approved
     upgrade only through `ota contract apply-candidate .ota/candidates/upgrade.json --write
     --carrier git --json`; do not hand-rewrite `ota.yaml`
-  - treat `ota detect --write` as the conservative first-write lane, not the full starter lane
+  - treat `ota detect --write` as the conservative first-write lane, not the full starter lane or
+    an independent writer; it derives the versioned conservative first-contract profile and
+    publishes through the same create-new evaluator as `apply-candidate`
+  - do not use repo-level `ota detect --merge`, `--apply`, `--apply-all`, `--rewrite`, or `--yes`;
+    those flags were removed and return `detect_legacy_mutation_removed` before repository access.
+    Workspace mutation guidance remains separate because workspace contracts do not yet use the
+    repo candidate/apply model
   - when reviewing a detect-written contract, read `metadata.ota.detect.field_ownership` together
     with `metadata.ota.detect.field_admission` so direct detector-owned writes are not confused
     with conservative starter-policy promotions
