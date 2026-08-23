@@ -233,17 +233,19 @@ Use the smallest real Ota workflow that fits the task:
     input, never execution or agent-safety authority
   - use `ota contract apply-candidate .ota/candidates/detect.json --json` after review to verify
     that current repository and contract truth still re-derive the exact artifact. Add `--write`
-    only after that review: Ota takes a no-follow repository lock, repeats source/evidence
-    admission, and atomically creates only a previously absent `ota.yaml` from the shared
-    evaluator's validated `Contract`; it never overwrites an existing contract, and a matching
-    repeat is a semantic no-op. The writer currently requires Linux or macOS atomic no-replace
-    rename support. `--require-complete` refuses residual `unknown` or `unsupported` review state
-    instead of treating it as authority
+    only after that review: default `--write` takes a no-follow repository lock and atomically
+    creates only a previously absent `ota.yaml`. To update a tracked existing contract, use the
+    explicit `--write --carrier git` path: it requires a non-detached checkout where `ota.yaml`
+    matches `HEAD` in both index and worktree, scrubs caller Git routing state, disables configured Git helpers, commits only the reviewed contract with expected-HEAD compare-and-swap, then verifies the worktree and
+    reports the branch and commit identities. It never pushes, rebases, amends, or changes
+    unrelated paths. Both writers currently require Linux or macOS. A matching repeat is a semantic no-op. `--require-complete` refuses residual
+    `unknown` or `unsupported` review state instead of treating it as authority
   - use `ota contract upgrade --candidate-out .ota/candidates/upgrade.json --json` when an existing
     contract uses a registered legacy representation. Review the schema-v2 artifact, then use
     `ota contract apply-candidate .ota/candidates/upgrade.json --json` to re-derive its exact
-    source, migration, unchanged semantic identity, and resulting content. Upgrade application is
-    dry-run only; do not hand-rewrite `ota.yaml` or imply that `--write` can replace it
+    source, migration, unchanged semantic identity, and resulting content. Apply an approved
+    upgrade only through `ota contract apply-candidate .ota/candidates/upgrade.json --write
+    --carrier git --json`; do not hand-rewrite `ota.yaml`
   - treat `ota detect --write` as the conservative first-write lane, not the full starter lane
   - when reviewing a detect-written contract, read `metadata.ota.detect.field_ownership` together
     with `metadata.ota.detect.field_admission` so direct detector-owned writes are not confused
