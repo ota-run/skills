@@ -75,6 +75,20 @@ For unreleased pressure, pin `agent.bootstrap.ota.source.kind: branch` to the ac
 For released proof, pin `kind: version`. CI must consume that truth through the first-party setup
 or action surface where possible.
 
+## Partner-Facing CI Adoption
+
+For pressure testing in a design-partner, client, or other public-facing repository, Ota governance
+evidence must not change the repository's primary build or release badge by default. Put it in a
+separate clearly named workflow, such as `ota-governance.yml`, or use a non-blocking job while the
+repository owner evaluates the integration.
+
+The workflow must still publish Ota's JSON output, receipts, and relevant logs as artifacts on
+success, refusal, and failure. A non-blocking workflow is an adoption posture, not permission to
+ignore evidence: report every refusal and platform gap to the repository owner.
+
+Only the repository owner may promote Ota to a required merge gate. Ota-owned pressure repositories
+and private test fixtures may use blocking governance checks when that is the stated proof goal.
+
 ## Required Proof
 
 Every pressure repo must prove both native and Ota-owned container execution for the selected
