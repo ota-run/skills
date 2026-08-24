@@ -248,7 +248,12 @@ Use the smallest real Ota workflow that fits the task:
     --carrier git --json`; do not hand-rewrite `ota.yaml`
   - treat `ota detect --write` as the conservative first-write lane, not the full starter lane or
     an independent writer; it derives the versioned conservative first-contract profile and
-    publishes through the same create-new evaluator as `apply-candidate`
+    publishes through the same create-new evaluator as `apply-candidate`. Its successful JSON
+    returns `write_candidate.identity`, `schema_version`, and `profile` for the exact candidate
+    whose verified projection became `ota.yaml`
+  - treat `ota init --dry-run --json` as a source-bound starter review: its complete
+    `preview_candidate` carries the exact `init_starter_preview_v1` candidate and resulting
+    contract identity, but is read-only and cannot be applied as a candidate write
   - do not use repo-level `ota detect --merge`, `--apply`, `--apply-all`, `--rewrite`, or `--yes`;
     those flags were removed and return `detect_legacy_mutation_removed` before repository access.
     Workspace mutation guidance remains separate because workspace contracts do not yet use the
