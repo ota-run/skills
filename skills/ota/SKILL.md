@@ -230,7 +230,10 @@ Use the smallest real Ota workflow that fits the task:
     `conflict`. In JSON, inspect `candidate_published` and `candidate_publication` for the
     review artifact; `written` continues to describe `ota.yaml` mutation. Inspect the exact
     candidate path before retrying a durability-uncertain result. Treat the artifact as review
-    input, never execution or agent-safety authority
+    input, never execution or agent-safety authority. Exact CI verifier commands may retain
+    job-scoped lane identity and observed platform, Cargo toolchain, service, and environment
+    requirement names in their unresolved closure evidence; these are non-authoritative
+    observations and must not be promoted into the contract or agent-safe truth without review
   - use `ota contract apply-candidate .ota/candidates/detect.json --json` after review to verify
     that current repository and contract truth still re-derive the exact artifact. Add `--write`
     only after that review: default `--write` takes a no-follow repository lock and atomically
