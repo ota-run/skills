@@ -238,7 +238,9 @@ Use the smallest real Ota workflow that fits the task:
     explicit `--write --carrier git` path: it requires a non-detached checkout where `ota.yaml`
     matches `HEAD` in both index and worktree, scrubs caller Git routing state, disables configured Git helpers, commits only the reviewed contract with expected-HEAD compare-and-swap, then verifies the worktree and
     reports the branch and commit identities. It never pushes, rebases, amends, or changes
-    unrelated paths. Both writers currently require Linux or macOS. A matching repeat is a semantic no-op. `--require-complete` refuses residual
+    unrelated paths. Both writers currently require Linux or macOS; other platforms return
+    `candidate_write_unsupported_platform` before candidate loading, repository locking, Git
+    invocation, or mutation. A matching repeat is a semantic no-op. `--require-complete` refuses residual
     `unknown` or `unsupported` review state instead of treating it as authority
   - use `ota contract upgrade --candidate-out .ota/candidates/upgrade.json --json` when an existing
     contract uses a registered legacy representation. Review the schema-v2 artifact, then use
