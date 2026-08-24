@@ -233,7 +233,9 @@ Use the smallest real Ota workflow that fits the task:
     input, never execution or agent-safety authority. Exact CI verifier commands may retain
     job-scoped lane identity and observed platform, Cargo toolchain, service, and environment
     requirement names in their unresolved closure evidence; these are non-authoritative
-    observations and must not be promoted into the contract or agent-safe truth without review
+    observations and must not be promoted into the contract or agent-safe truth without review.
+    V11.22 deliberately emits no inferred agent-safe proposal; maintainers must author that
+    contract truth until the planned typed effect/realization evaluator can prove a future rule
   - use `ota contract apply-candidate .ota/candidates/detect.json --json` after review to verify
     that current repository and contract truth still re-derive the exact artifact. Add `--write`
     only after that review: default `--write` takes a no-follow repository lock and atomically
