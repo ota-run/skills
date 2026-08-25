@@ -696,7 +696,9 @@ For contracts requiring Ota v1.6.27 or later, typed V12 effects may separate a t
 `resource_bindings` entry, a reusable `effect_definitions` consequence, and a task-local
 `effects.declared` attachment. Treat contract-local labels as locators rather than resource or
 effect identity. Require a canonical non-secret namespace authority, discriminated action bounds,
-normalized contract-relative paths, and lowercase SHA-256 identities. Do not infer declarations
+ASCII-profile namespace components, exact alias-free contract-relative paths, and lowercase
+SHA-256 identities. Migration roots must also exclude control and Unicode line-separator
+characters. Do not infer declarations
 from task names or prose, place secrets in resource identity, or mark a declared-only effect
 agent-safe or positively assured. An authored migration content identity is an expected bound until
 a typed adapter independently derives and reconciles current bytes.
