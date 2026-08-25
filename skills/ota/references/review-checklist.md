@@ -110,6 +110,10 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
 - When tasks mutate out-of-repo systems, does `effects.external_state` use shipped canonical
   tokens like `docker`, `postgres`, `redis`, `s3`, `cloudflare`, or `kubernetes` instead of
   repo-local aliases such as `docker_compose`, `postgresql`, or `k8s`?
+- When `effects.declared` is present, does every reference resolve through a typed
+  `effect_definitions` entry to a canonical non-secret `resource_bindings` identity with exact
+  action-specific bounds? Is declared-only truth kept outside positive assurance and agent-safe
+  promotion until a typed adapter independently reconciles the application plan and source bytes?
 - If `docker compose` or `docker buildx bake` truth lives under a repo subdirectory, is that
   adapter root modeled with `adapter_inputs.overlays.compose.cwd` or `adapter_inputs.overlays.bake.cwd` instead of
   shell `cd ... && ...` or `docker compose --project-directory ...` glue?
