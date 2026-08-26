@@ -720,12 +720,17 @@ a typed adapter independently derives and reconciles current bytes. When the rep
 shipped V12 adapter, declare `action.kind: database_schema_mutation` with `action.effect` equal to
 exactly one same-task `effects.declared` reference. It has no shell command, credential, or
 provider endpoint: on Unix, Ota captures the bounded migration bytes, publishes the non-secret
-selected-task-bound plan in dry-run, verifies the retained bytes at the selected executor boundary,
-then refuses before task conditions, required services, dependencies, or provider contact. Mode and
+selected-task-bound plan in dry-run, and repo-level `ota run` plus non-dry-run repo-level `ota up`
+perform one closure-wide typed preflight before
+command-scoped replay-input policy loading, agent/crossing/sandbox admission, workflow-environment
+artifact rendering, durable-log preparation, task conditions, required services, dependencies, or
+provider contact. Proof paths invoking repo-level `ota up` inherit that boundary. Dry-run and other
+read-only command diagnosis are outside that ordering claim. Mode and
 OS-variant overlays may refine non-execution inputs, but must not replace the typed action with
 another executable body. Non-Unix execution refuses because race-safe capture is unavailable. It currently refuses
-before provider contact. Do not represent that refusal as a migration,
-authorization, receipt, archive, or positive assurance result.
+before provider contact. Non-dry-run `ota up` still emits its generic blocked readiness receipt with
+`execution_attempted: false`. Do not represent that refusal as a migration, authorization, positive
+effect or execution receipt, archive, or positive assurance result.
 
 When creating or refining a contract:
 

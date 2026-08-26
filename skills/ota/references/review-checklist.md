@@ -117,8 +117,15 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
 - When `action.kind: database_schema_mutation` is used, does `action.effect` name exactly one
   matching same-task declared effect, does the migration tree have a current expected manifest
   identity, and does the contract keep the task outside `agent.safe_tasks`? On Unix, current Ota
-  captures the bytes and binds the same selected-task plan across dry-run and selected execution,
-  but refuses before task conditions, required services, dependencies, or provider contact. Do mode
+  opens every effective-cwd and migration-root component relative to a retained repository
+  descriptor without following symlinks, and binds the contract invocation origin plus
+  repository-relative effective working directory into the same selected-task plan across dry-run
+  and selected execution. Repo-level `ota run` and non-dry-run repo-level `ota up` perform one
+  closure-wide typed preflight before
+  command-scoped replay-input policy loading, agent/crossing/sandbox admission, workflow-environment
+  artifact rendering, durable-log preparation, task conditions, required services, dependencies,
+  or provider contact. Proof paths invoking repo-level `ota up` inherit that boundary. Dry-run and
+  other read-only command diagnosis are outside that ordering claim. Do mode
   and OS-variant overlays avoid executable-body overrides that could replace the typed action? Non-Unix execution
   refuses because race-safe capture is unavailable; it must not be described as a successful
   migration or effect-policy decision.
