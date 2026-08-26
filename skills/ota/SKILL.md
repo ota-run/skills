@@ -719,8 +719,12 @@ agent-safe or positively assured. An authored migration content identity is an e
 a typed adapter independently derives and reconciles current bytes. When the repository uses the
 shipped V12 adapter, declare `action.kind: database_schema_mutation` with `action.effect` equal to
 exactly one same-task `effects.declared` reference. It has no shell command, credential, or
-provider endpoint: Ota observes the alias-free migration tree, binds one application-plan identity,
-then currently refuses before provider contact. Do not represent that refusal as a migration,
+provider endpoint: on Unix, Ota captures the bounded migration bytes, publishes the non-secret
+selected-task-bound plan in dry-run, verifies the retained bytes at the selected executor boundary,
+then refuses before task conditions, required services, dependencies, or provider contact. Mode and
+OS-variant overlays may refine non-execution inputs, but must not replace the typed action with
+another executable body. Non-Unix execution refuses because race-safe capture is unavailable. It currently refuses
+before provider contact. Do not represent that refusal as a migration,
 authorization, receipt, archive, or positive assurance result.
 
 When creating or refining a contract:

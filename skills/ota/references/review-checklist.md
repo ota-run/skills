@@ -116,8 +116,11 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   promotion until a typed adapter independently reconciles the application plan and source bytes?
 - When `action.kind: database_schema_mutation` is used, does `action.effect` name exactly one
   matching same-task declared effect, does the migration tree have a current expected manifest
-  identity, and does the contract keep the task outside `agent.safe_tasks`? Current Ota derives and
-  binds the plan but refuses before provider contact; it must not be described as a successful
+  identity, and does the contract keep the task outside `agent.safe_tasks`? On Unix, current Ota
+  captures the bytes and binds the same selected-task plan across dry-run and selected execution,
+  but refuses before task conditions, required services, dependencies, or provider contact. Do mode
+  and OS-variant overlays avoid executable-body overrides that could replace the typed action? Non-Unix execution
+  refuses because race-safe capture is unavailable; it must not be described as a successful
   migration or effect-policy decision.
 - If `docker compose` or `docker buildx bake` truth lives under a repo subdirectory, is that
   adapter root modeled with `adapter_inputs.overlays.compose.cwd` or `adapter_inputs.overlays.bake.cwd` instead of
