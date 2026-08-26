@@ -1068,7 +1068,17 @@ enforce the override; it never silently remaps an explicitly requested port.
 
 Every contract must set `metadata.ota.minimum_version` explicitly. Use the lowest Ota release that
 can honestly parse and execute the contract; published examples must never rely on an implicit
-version floor.
+version floor. Put this block at the top of every newly authored `ota.yaml`, before project or
+task declarations; do not infer it from the binary currently installed on the authoring machine.
+This is a Skill authoring and review quality bar: Core remains backward-compatible with legacy
+contracts that omit the field.
+
+Every CI or proof workflow that invokes Ota must install a released version greater than or equal
+to this floor. When a released `agent.bootstrap.ota.source.version` is declared, it must also be
+greater than or equal to this floor. Prefer contract-owned `agent.bootstrap.ota.source` through
+`ota-run/setup@v1 source: contract` or `ota-run/action@v1 source: contract`, so workflow YAML
+does not duplicate a divergent version. A branch or source build belongs only in an explicitly
+named unreleased pressure lane.
 
 ```yaml
 metadata:

@@ -155,7 +155,7 @@ Always prefer using the real Ota binary when it is available.
      `ota-run/setup@v1` action with `source: contract` over duplicating `OTA_VERSION`,
      `OTA_GIT_REV`, `OTA_GIT_BRANCH`, or `--from-git` in workflow YAML
    - when a repository declares contract-owned CI bootstrap or verification truth, add a dedicated
-     pull-request gate with `ota-run/action@v1`, `command: doctor`, `source: contract`, and
+     pull-request gate with the `ota-run/action@v1` action with `source: contract`, `command: doctor`, and
      `fail-on-ci-drift: true`; it fails only on Ota-established CI bootstrap or verification drift,
      not ordinary Doctor warnings. Keep it separate from general readiness reporting so the blocking
      reason stays explicit.
@@ -218,6 +218,21 @@ Use the smallest real Ota workflow that fits the task:
   - create a starter contract only when the user wants Ota adoption or no contract exists
   - prefer the emitted starter shapes Ota now owns directly: `toolchains.*`,
     `prepare.kind: dependency_hydration` for `setup`, and `command` for simple finite task bodies
+  - before writing, accepting, or manually completing any `ota.yaml`, require this first block;
+    do not leave version compatibility implicit:
+    ```yaml
+    metadata:
+      ota:
+        minimum_version: "<lowest honest compatible Ota release>"
+    ```
+    Use the lowest released Ota version that can parse and execute the authored surface. The
+    currently installed binary is not a substitute for this contract declaration.
+  - when a CI or proof workflow invokes Ota, require its installed released version to be greater
+    than or equal to `metadata.ota.minimum_version`. Prefer contract-owned
+    `agent.bootstrap.ota.source` consumed through `ota-run/setup@v1 source: contract` or
+    `ota-run/action@v1 source: contract`; do not duplicate a divergent version in workflow YAML.
+    A branch or source build is allowed only for an explicitly labeled unreleased pressure lane,
+    never ordinary public CI
 - `ota detect`
   - inspect deterministic repo evidence before broadening a contract
   - use `ota detect --candidate-out .ota/candidates/detect.json` when a maintainer needs one
@@ -701,7 +716,12 @@ SHA-256 identities. Migration roots must also exclude control and Unicode line-s
 characters. Do not infer declarations
 from task names or prose, place secrets in resource identity, or mark a declared-only effect
 agent-safe or positively assured. An authored migration content identity is an expected bound until
-a typed adapter independently derives and reconciles current bytes.
+a typed adapter independently derives and reconciles current bytes. When the repository uses the
+shipped V12 adapter, declare `action.kind: database_schema_mutation` with `action.effect` equal to
+exactly one same-task `effects.declared` reference. It has no shell command, credential, or
+provider endpoint: Ota observes the alias-free migration tree, binds one application-plan identity,
+then currently refuses before provider contact. Do not represent that refusal as a migration,
+authorization, receipt, archive, or positive assurance result.
 
 When creating or refining a contract:
 
@@ -965,6 +985,16 @@ Prefer these concrete shapes when repo truth matches them:
 
 Before editing:
 
+- require `metadata.ota.minimum_version` in every newly authored or modified `ota.yaml` before
+  adding project, task, workflow, environment, or agent fields; retain it when updating an
+  existing contract. This is a Skill authoring and review quality bar: current Core remains
+  backward-compatible with legacy contracts that omit the field. A missing floor is not optional
+  metadata for new authoring.
+- when a released `agent.bootstrap.ota.source.version` is declared, require it to be greater than or equal to that floor; `git_rev` is deterministic unreleased proof and `branch` is only for an explicitly named pressure lane.
+- require every CI or proof workflow that invokes Ota to install a released version at or above
+  that floor, or consume the contract-owned bootstrap source. A mismatched workflow pin is a
+  workflow-authoring defect; an unreleased branch is valid only for an explicitly named pressure
+  lane.
 - preserve existing user intent in `ota.yaml`
 - make the narrowest complete contract change
 - update docs/tests only when command behavior, schema shape, or published examples change

@@ -114,6 +114,11 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   `effect_definitions` entry to a canonical non-secret `resource_bindings` identity with exact
   action-specific bounds? Is declared-only truth kept outside positive assurance and agent-safe
   promotion until a typed adapter independently reconciles the application plan and source bytes?
+- When `action.kind: database_schema_mutation` is used, does `action.effect` name exactly one
+  matching same-task declared effect, does the migration tree have a current expected manifest
+  identity, and does the contract keep the task outside `agent.safe_tasks`? Current Ota derives and
+  binds the plan but refuses before provider contact; it must not be described as a successful
+  migration or effect-policy decision.
 - If `docker compose` or `docker buildx bake` truth lives under a repo subdirectory, is that
   adapter root modeled with `adapter_inputs.overlays.compose.cwd` or `adapter_inputs.overlays.bake.cwd` instead of
   shell `cd ... && ...` or `docker compose --project-directory ...` glue?
@@ -146,5 +151,8 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   dependency and hook and collapsing separate invocations into one evidence segment?
 - Does every contract declare `metadata.ota.minimum_version` at the lowest honest compatible
   release, including published examples?
-- Are public CI or proof workflows installing an Ota build new enough to execute the contract they
-  validate?
+- When a contract declares a released `agent.bootstrap.ota.source.version`, is it greater than or
+  equal to `metadata.ota.minimum_version`?
+- Do public CI or proof workflows consume that checked release through `ota-run/setup@v1` or
+  `ota-run/action@v1` with `source: contract`, rather than independently selecting an older Ota
+  build?
