@@ -135,6 +135,12 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   archives, and positive assurance? Do not describe either a typed migration plan or an
   effect-policy decision as provider execution, provider mutation, receipt, archive, or positive
   assurance.
+- When `agent.effect_refusal_canaries` is declared, does each unique canonical ID bind one existing
+  effect and at least one exact task/workflow lane with a mandatory reachable attachment origin?
+  Does invocation use the stored ID rather than caller-supplied effect/rule truth? A pass must bind
+  the exact eligible effect, attachment, realization, invocation, policy snapshot, source evidence,
+  and explicit deny-rule identities with `execution_started: false`. Generic safety/readiness,
+  strict fallback, missing origin, caller overrides, or policy allow/warn must remain non-passing.
 - If `docker compose` or `docker buildx bake` truth lives under a repo subdirectory, is that
   adapter root modeled with `adapter_inputs.overlays.compose.cwd` or `adapter_inputs.overlays.bake.cwd` instead of
   shell `cd ... && ...` or `docker compose --project-directory ...` glue?

@@ -738,6 +738,14 @@ Non-dry-run `ota up` still emits its generic blocked readiness receipt with
 `execution_attempted: false`. Do not represent that refusal as a migration, authorization, positive
 effect or execution receipt, archive, or positive assurance result.
 
+When a repository needs a durable negative control for that exact policy boundary, declare
+`agent.effect_refusal_canaries` rather than reusing the V11 task refusal canary. Each challenge must
+name one exact task or workflow lane and a mandatory same-effect attachment origin. Invoke task
+controls as `ota run --agent --expect-effect-refusal <id> --json <task>` and workflow controls as
+`ota up --workflow <name> --agent --expect-effect-refusal <id> --json`. A pass requires an eligible
+realization and explicit matching typed deny rule. Unknown IDs, caller overrides, absent origins,
+generic refusals, and strict fallback denial must not be described as passing effect assurance.
+
 When creating or refining a contract:
 
 1. Identify the real operational truth with the minimum repo reading needed:
