@@ -125,10 +125,16 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   command-scoped replay-input policy loading, agent/crossing/sandbox admission, workflow-environment
   artifact rendering, durable-log preparation, task conditions, required services, dependencies,
   or provider contact. Proof paths invoking repo-level `ota up` inherit that boundary. Dry-run and
-  other read-only command diagnosis are outside that ordering claim. Do mode
-  and OS-variant overlays avoid executable-body overrides that could replace the typed action? Non-Unix execution
+  other read-only command diagnosis are outside that ordering claim. Do mode and OS-variant
+  overlays avoid executable-body overrides that could replace the typed action? Non-Unix execution
   refuses because race-safe capture is unavailable; it must not be described as a successful
-  migration or effect-policy decision.
+  provider mutation. If `policies.effects.typed.rules` is active, does every selector use an
+  explicit `exact`, `namespace_pattern`, or `any` resource branch, retain policy-source authority
+  posture, and accumulate all matches through `deny > warn > allow`? Is
+  `OTA_EFFECT_POLICY_DENIED` kept distinct from provider execution, canary success, receipts,
+  archives, and positive assurance? Do not describe either a typed migration plan or an
+  effect-policy decision as provider execution, provider mutation, receipt, archive, or positive
+  assurance.
 - If `docker compose` or `docker buildx bake` truth lives under a repo subdirectory, is that
   adapter root modeled with `adapter_inputs.overlays.compose.cwd` or `adapter_inputs.overlays.bake.cwd` instead of
   shell `cd ... && ...` or `docker compose --project-directory ...` glue?

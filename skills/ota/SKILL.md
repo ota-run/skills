@@ -728,7 +728,13 @@ provider contact. Proof paths invoking repo-level `ota up` inherit that boundary
 read-only command diagnosis are outside that ordering claim. Mode and
 OS-variant overlays may refine non-execution inputs, but must not replace the typed action with
 another executable body. Non-Unix execution refuses because race-safe capture is unavailable. It currently refuses
-before provider contact. Non-dry-run `ota up` still emits its generic blocked readiness receipt with
+before provider contact. An active policy pack may now declare `policies.effects.typed.rules`; the
+shared decision binds source authority, selected invocation and execution graph, exact effect and
+realization sets, matching typed rules, coarse effect decisions, and `deny > warn > allow`
+precedence. `OTA_POLICY`, repository policy, and workspace policy remain visibly
+`caller_selected`, `repository_controlled`, and `workspace_controlled`. An aggregate deny causes
+`OTA_EFFECT_POLICY_DENIED` before side effects, but allow or warn does not enable provider execution.
+Non-dry-run `ota up` still emits its generic blocked readiness receipt with
 `execution_attempted: false`. Do not represent that refusal as a migration, authorization, positive
 effect or execution receipt, archive, or positive assurance result.
 
