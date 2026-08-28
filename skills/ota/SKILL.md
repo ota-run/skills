@@ -526,6 +526,13 @@ of reconstructing those facts from task text or from the raw `requested_task` pa
 For harness-facing callable truth, prefer `ota tasks --json` or `ota workflows --json`
 `capability_profile` over hand-built agent policy:
 - read `preflight` for the canonical callable vs refused decision
+- read mandatory `effect_policy` before treating a lane as callable. `not_applicable` is the
+  untyped posture; evaluated typed lanes bind the decision, policy snapshot, execution graph, and
+  effect set but remain refused while `provider_execution: disabled`; `unavailable` is never an
+  implicit allow. Only `not_applicable` lanes may appear under `callable_tasks` or
+  `callable_workflows`; evaluated or unavailable typed posture must pair with its matching refused
+  `preflight` reason. Live sandbox admission consumes that retained command decision rather than
+  deriving another origin
 - read `environment_boundary` for declared writable/protected path posture
 - read additive `sandbox_policy` for the first compiled runtime target, `codex_local`
 - treat `sandbox_policy.filesystem.state: "compiled"` as derived from declared
