@@ -349,7 +349,9 @@ Use the smallest real Ota workflow that fits the task:
     detached child and reuses the command-scoped preflight across readiness diagnosis and its
     embedded Doctor artifact. CI projection carries
     requirements and the canonical execution closure including recursive hooks, not render-host
-    observations, so the provider checkout recomputes observed identities
+    observations, so the provider checkout recomputes observed identities and any selected typed
+    effect-policy decision before provider setup or execution. An explicit typed deny is a
+    pre-execution refusal, not evidence of provider mutation, a receipt, archive, or assurance.
   - use `artifacts.<name>.replay` when a generated fixture, store, model baseline, or existing
     `generated_source` needs an explicit regeneration authority chain. Keep `kind: generated_source`
     when that lineage already exists; do not duplicate output ownership. A `generated_source`
