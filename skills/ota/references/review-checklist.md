@@ -114,6 +114,8 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   `effect_definitions` entry to a canonical non-secret `resource_bindings` identity with exact
   action-specific bounds? Is declared-only truth kept outside positive assurance and agent-safe
   promotion until a typed adapter independently reconciles the application plan and source bytes?
+  A raw command carrying that declaration is ineligible and must refuse before its command body,
+  not act as a typed execution substitute.
 - When `action.kind: database_schema_mutation` is used, does `action.effect` name exactly one
   matching same-task declared effect, does the migration tree have a current expected manifest
   identity, and does the contract keep the task outside `agent.safe_tasks`? On Unix, current Ota

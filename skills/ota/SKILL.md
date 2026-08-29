@@ -724,10 +724,12 @@ ASCII-profile namespace components, exact alias-free contract-relative paths, an
 SHA-256 identities. Migration roots must also exclude control and Unicode line-separator
 characters. Do not infer declarations
 from task names or prose, place secrets in resource identity, or mark a declared-only effect
-agent-safe or positively assured. An authored migration content identity is an expected bound until
-a typed adapter independently derives and reconciles current bytes. When the repository uses the
-shipped V12 adapter, declare `action.kind: database_schema_mutation` with `action.effect` equal to
-exactly one same-task `effects.declared` reference. It has no shell command, credential, or
+agent-safe or positively assured. A raw `command` with `effects.declared` is a declared-only,
+ineligible realization: Ota refuses it before the command body runs rather than treating the
+declaration as execution authority. An authored migration content identity is an expected bound
+until a typed adapter independently derives and reconciles current bytes. When the repository uses
+the shipped V12 adapter, declare `action.kind: database_schema_mutation` with `action.effect` equal
+to exactly one same-task `effects.declared` reference. It has no shell command, credential, or
 provider endpoint: on Unix, Ota captures the bounded migration bytes, publishes the non-secret
 selected-task-bound plan in dry-run, and repo-level `ota run` plus non-dry-run repo-level `ota up`
 perform one closure-wide typed preflight before
