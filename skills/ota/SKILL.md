@@ -1204,6 +1204,15 @@ Watch for the concrete regressions we have repeatedly seen in pressure-test repo
 - missing `metadata.ota.minimum_version` on any contract, especially a published example; a
   contract that uses newer Ota parsing or runtime behavior must not rely on an implicit version
   floor
+- contracts that use only terse task descriptions when a maintainer or agent needs durable context
+  about hydration provenance, effects, external boundaries, proof limits, or refusal posture;
+  use `notes` on the task, workflow, or `agent` section for that operational truth rather than
+  duplicating it in README prose
+- agents selecting a listed task by name alone; inspect `ota tasks --safe --use` first, then run
+  only a lane reported callable for agent use through `ota run --agent <task>`, and refuse rather
+  than dropping `--agent` or invoking the repository command directly
+- treating a repository, CI, provider, or harness `ALLOW` as Ota execution authority; only the
+  current Ota agent admission result authorizes an agent-mode invocation
 - context-level heavyweight requirements such as `docker`, `node`, or `python` that accidentally
   make pure file/env/action tasks unrunnable on contract-only lanes
 - pressure workflows that dry-run or execute tasks before materializing declared file/env bootstrap
@@ -1236,6 +1245,14 @@ serious OSS repo, evaluate these gates explicitly:
   do not drift into duplicate declarations.
 - Agent boundary: writable/protected paths are tight, and generated-file exceptions do not conflict
   with protected paths.
+- Operator notes: material hydration, effect, external-boundary, proof-limit, and refusal context
+  is recorded in the relevant task, workflow, or `agent.notes`; concise descriptions are not a
+  substitute for durable operational guidance.
+- Agent lane selection: an agent discovers the bounded surface with `ota tasks --safe --use`, then
+  invokes only a callable lane with `ota run --agent <task>` and refuses instead of falling back to
+  raw commands or ordinary `ota run`. A contract may intentionally have no agent-safe lanes; in
+  that case omit `agent.entrypoint`, `agent.default_task`, and `verify_after_changes` rather than
+  naming an unsafe default.
 - CI proof posture: public PR workflows use released Ota setup/install paths unless the task is
   explicitly pressure-testing unreleased Ota.
 - Version-floor honesty: every contract declares `metadata.ota.minimum_version`, the value is the

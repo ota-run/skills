@@ -30,6 +30,11 @@ Use this checklist when deciding whether a contract is trustworthy for humans, C
 - Is `agent.default_task` finite, bounded, and suitable as the normal post-change verification task?
 - Are `agent.safe_tasks` honest about network and dependency hydration behavior rather than marking
   long-running or broad-mutation tasks safe?
+- Does `agent.notes` tell humans and agents to discover the bounded surface with
+  `ota tasks --safe --use`, that only callable lanes may use `ota run --agent <task>`, and that
+  no agent may drop `--agent`, invoke a raw repository command, or treat another system's `ALLOW`
+  as Ota authority? A contract with no safe lanes should say so plainly and omit agent defaults
+  rather than naming an unsafe `entrypoint`, `default_task`, or `verify_after_changes` lane.
 - Is each claimed-safe task safe across its full selected dependency and aggregate closure, not
   only at the requested task body?
 - When a repo needs to prove the runner still refuses a disallowed lane, does it declare
@@ -45,6 +50,9 @@ Use this checklist when deciding whether a contract is trustworthy for humans, C
   command surfaces such as labeled command bullets or exact `| Task | Command |` tables inside
   explicit command sections should be treated as admissible detect truth?
 - Are task `effects` explicit when the task writes, touches external state, or uses the network?
+- Do task or workflow `notes` preserve material operational context that the field structure alone
+  cannot carry, including hydration provenance, external-effect boundaries, proof limits, and why a
+  task remains non-agent-safe? Keep notes specific; do not add boilerplate to simple finite tasks.
 - Are blocker `checks` present when the repo has known preconditions that should fail early in
   `ota doctor`?
 - If selected immutable replay inputs must not drift, do they declare `expected_identity` and keep
