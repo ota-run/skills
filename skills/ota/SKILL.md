@@ -756,12 +756,15 @@ controls as `ota run --agent --expect-effect-refusal <id> --json <task>` and wor
 `ota up --workflow <name> --agent --expect-effect-refusal <id> --json`. A pass requires an eligible
 realization and explicit matching typed deny rule. Unknown IDs, caller overrides, absent origins,
 generic refusals, and strict fallback denial must not be described as passing effect assurance.
-`ota doctor --json` exposes the initial `effect_refusal_assurance` coverage record for each
+`ota doctor --json` exposes the `effect_refusal_assurance` coverage record for each
 declared typed canary: it binds the semantic contract snapshot, and known same-effect attachments
 that were not challenged are explicitly `equivalent_execution_paths_not_proved`; opaque
-shell/provider paths remain bounded. This record is `unknown` until a later verified refusal archive binds the selected invocation,
-realization, policy, and execution-attempted evidence. Do not present a declared or ephemeral
-passing canary as positive assurance.
+shell/provider paths remain bounded. A verified private refusal archive can support only an exact
+workflow challenge when the current contract snapshot, workflow, eligible attachment and
+realization, explicit typed deny, and pre-execution posture reconcile. Task-only, stale, invalid,
+ambiguous duplicate, or mismatched archives remain `unknown`; an invalid sibling archive also
+prevents support. Do not present a declared or ephemeral passing canary as
+positive assurance.
 
 When creating or refining a contract:
 
