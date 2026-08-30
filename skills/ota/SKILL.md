@@ -259,8 +259,9 @@ Use the smallest real Ota workflow that fits the task:
     matches `HEAD` in both index and worktree, scrubs caller Git routing state, disables configured Git helpers, commits only the reviewed contract with expected-HEAD compare-and-swap, then verifies the worktree and
     reports the branch and commit identities. It never pushes, rebases, amends, or changes
     unrelated paths. Both writers currently require Linux or macOS; other platforms return
-    `candidate_write_unsupported_platform` before candidate loading, repository locking, Git
-    invocation, or mutation. A matching repeat is a semantic no-op. `--require-complete` refuses residual
+    `candidate_write_unsupported_platform` after candidate identity/kind validation but before
+    repository locking, Git invocation, or mutation. Review-only kinds therefore return their
+    stable refusal before writer platform admission. A matching repeat is a semantic no-op. `--require-complete` refuses residual
     `unknown` or `unsupported` review state instead of treating it as authority
   - use `ota contract upgrade --candidate-out .ota/candidates/upgrade.json --json` when an existing
     contract uses a registered legacy representation. Review the schema-v2 artifact, then use
@@ -268,6 +269,15 @@ Use the smallest real Ota workflow that fits the task:
     source, migration, unchanged semantic identity, and resulting content. Apply an approved
     upgrade only through `ota contract apply-candidate .ota/candidates/upgrade.json --write
     --carrier git --json`; do not hand-rewrite `ota.yaml`
+  - use `ota contract effect-refusal-candidate --archive ARCHIVE --canary-id ID --candidate-out PATH
+    --json` only after a verified private workflow refusal archive exists and a maintainer needs a
+    reviewable canary proposal. It freezes and rechecks one regular no-follow contract snapshot,
+    re-derives current workflow, effect, attachment, migration-plan, and realization truth, emits
+    an archive-bound `unknown` candidate with no application projection, and cannot be applied by
+    `apply-candidate`, which returns platform-stable `candidate_read_only` before writer admission.
+    Published and exact-existing no-op results both carry the versioned reconciliation identity
+    and bound archive/contract/effect/attachment/realization identities. It does not infer an effect definition,
+    policy, grant, provider authority, or execution approval from an archive or incident narrative
   - treat `ota detect --write` as the conservative first-write lane, not the full starter lane or
     an independent writer; it derives the versioned conservative first-contract profile and
     publishes through the same create-new evaluator as `apply-candidate`. Its successful JSON
