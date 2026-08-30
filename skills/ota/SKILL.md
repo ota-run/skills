@@ -528,7 +528,8 @@ when present instead of scraping `plan.requirement_lines`; that selected-path pr
 the machine-readable host-fulfillment surface for direct tool acquisition.
 Full `ota run --dry-run --json` and `ota up --dry-run --json` previews carry
 `execution_started: false`. On run override refusal, read `overrides` together with
-`summary.primary_blocker.code`; on up refusal, read `blockers[].code`. Do not treat resolved
+`summary.primary_blocker.code`; on typed up refusal, read `plan.effect_application_plans` and
+`plan.effect_policy_decision` alongside `blockers[].code`. Do not treat resolved
 execution metadata as evidence that the requested backend or lifecycle actually started.
 Also prefer the additive top-level `governance` block for the selected lane’s safety posture,
 review requirement, runnable mode commands, effect surface, and receipt follow-up command instead
@@ -741,12 +742,15 @@ until a typed adapter independently derives and reconciles current bytes. When t
 the shipped V12 adapter, declare `action.kind: database_schema_mutation` with `action.effect` equal
 to exactly one same-task `effects.declared` reference. It has no shell command, credential, or
 provider endpoint: on Unix, Ota captures the bounded migration bytes, publishes the non-secret
-selected-task-bound plan in dry-run, and repo-level `ota run` plus non-dry-run repo-level `ota up`
-perform one closure-wide typed preflight before
+  selected-task-bound plan in dry-run, and repo-level `ota run` plus `ota up`, including
+  `ota up --dry-run`, perform one closure-wide typed preflight before
 command-scoped replay-input policy loading, agent/crossing/sandbox admission, workflow-environment
 artifact rendering, durable-log preparation, task conditions, required services, dependencies, or
-provider contact. Proof paths invoking repo-level `ota up` inherit that boundary. Dry-run and other
-read-only command diagnosis are outside that ordering claim. Mode and
+  provider contact. Proof paths invoking repo-level `ota up` inherit that boundary. A blocked
+  `ota up --dry-run --json` retains non-secret `plan.effect_application_plans` and an active
+  `plan.effect_policy_decision` without starting workflow work; untyped or no-policy cases omit
+  unavailable decision evidence rather than fabricating it. Other read-only command diagnosis is
+  outside that ordering claim. Mode and
 OS-variant overlays may refine non-execution inputs, but must not replace the typed action with
 another executable body. Non-Unix execution refuses because race-safe capture is unavailable. It currently refuses
 before provider contact. An active policy pack may now declare `policies.effects.typed.rules`; the
