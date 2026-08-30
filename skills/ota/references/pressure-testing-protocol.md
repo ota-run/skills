@@ -169,3 +169,10 @@ Close every pressure pass with:
 3. the exact Ota version, branch, or revision tested
 4. repo contract issues, repo implementation issues, and Ota platform gaps separately
 5. first-party propagation completed or deliberately not required
+6. one Core pressure-evidence registry entry with the repository revision, Ota identity, retained
+   matrices, exercised surfaces, proven facts, explicit `not_proved` boundaries, and engineering-note
+   status
+
+The Core registry is the canonical evidence ledger. A Site index or engineering note may summarize
+it, but must not add claims, imply repository certification or endorsement, or replace the retained
+matrix and artifact links.

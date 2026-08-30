@@ -64,6 +64,7 @@ grep -q 'references/workflow-service-patterns.md' "${skill_dir}/SKILL.md" || fai
 grep -q 'references/agent-and-governance-checklist.md' "${skill_dir}/SKILL.md" || fail "SKILL.md must route to agent/governance checklist reference"
 grep -q 'references/execution-governance-capability-map.md' "${skill_dir}/SKILL.md" || fail "SKILL.md must route to execution-governance capability map"
 grep -q 'references/pressure-testing-protocol.md' "${skill_dir}/SKILL.md" || fail "SKILL.md must route to pressure-testing protocol reference"
+grep -q 'Core pressure-evidence registry' "${skill_dir}/references/pressure-testing-protocol.md" || fail "pressure protocol must require Core pressure-evidence registry recording"
 grep -q 'https://github.com/ota-run/skills' "${skill_dir}/references/official-sources.md" || fail "official sources must reference ota-run/skills"
 grep -q '`launch.kind: command`' "${skill_dir}/references/contract-patterns.md" || fail "contract patterns must cover service launch"
 grep -q '`aggregate.tasks`' "${skill_dir}/references/contract-patterns.md" || fail "contract patterns must cover aggregate tasks"
