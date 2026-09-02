@@ -727,6 +727,18 @@ instead of inferring operational meaning from `status` text alone. For `ota work
 
 ## Contract authoring workflow
 
+For contracts requiring Ota v1.6.28 or later, `secret_requirements` may declare provider-neutral
+secret-delivery intent. Require `metadata.ota.minimum_version: "1.6.28"`, the initial
+`authentication_credential` / `external_api_authentication` vocabulary, a canonical
+`process_environment` destination, exact sorted task/workflow recipients, and every propagation
+edge set to `deny`. Never add provider names, cloud projects, tenants, secret paths or versions,
+GitHub secret names, values, or defaults to `ota.yaml`. Reject a governed destination that is also
+owned by compatibility `env`, execution-context, workflow-instance, task, mode, binding, profile,
+or variant truth.
+This is declaration-only in the first V12.1 slice: do not tell users that Ota resolves a provider
+binding, requests OIDC, contacts a provider, injects bytes, authorizes execution, or emits positive
+delivery evidence. Existing env values with the same name do not satisfy the requirement.
+
 For contracts requiring Ota v1.6.27 or later, typed V12 effects may separate a top-level
 `resource_bindings` entry, a reusable `effect_definitions` consequence, and a task-local
 `effects.declared` attachment. Treat contract-local labels as locators rather than resource or

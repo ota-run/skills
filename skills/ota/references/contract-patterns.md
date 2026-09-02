@@ -1064,6 +1064,24 @@ If the selected fixed listener conflicts with an active Ota execution, Ota refus
 `runtime_listener` evidence and suggests a free `--host-port` only when that selected lane can
 enforce the override; it never silently remaps an explicitly requested port.
 
+## Provider-neutral secret requirements
+
+From Ota v1.6.28, use `secret_requirements` only to declare repository-owned delivery intent. The
+initial shape requires `secret_class: authentication_credential`,
+`purpose: external_api_authentication`, a canonical `process_environment` variable, exact sorted
+task/workflow recipients, explicit deny posture for every propagation edge, and requested execution
+constraints. Set `metadata.ota.minimum_version: "1.6.28"`.
+
+Do not put provider names, provider references, cloud projects, tenants, secret paths or versions,
+GitHub secret names, secret values, or defaults in the contract. Do not duplicate the destination
+under `env`, execution contexts, workflow-instance environment or task overlays,
+task/mode/variant env, bindings, or profile literal env. Matching compatibility or inherited
+environment values do not fulfill governed delivery.
+
+This first slice is schema and identity truth only. No current command resolves a provider binding,
+contacts a provider, requests OIDC, injects bytes, grants execution authority, or emits positive
+delivery evidence from the declaration.
+
 ## Minimum-version governance
 
 Every contract must set `metadata.ota.minimum_version` explicitly. Use the lowest Ota release that

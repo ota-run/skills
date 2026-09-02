@@ -116,6 +116,15 @@ Use this checklist when deciding whether a contract is merely valid or genuinely
   promotion until a typed adapter independently reconciles the application plan and source bytes?
   A raw command carrying that declaration is ineligible and must refuse before its command body,
   not act as a typed execution substitute.
+- When `secret_requirements` is present, does the contract require Ota v1.6.28 or later, use only
+  the initial provider-neutral class/purpose/destination vocabulary, select exact unique sorted
+  task/workflow roots, and keep every propagation edge at `deny`? Does it omit provider selectors,
+  cloud scope, provider references, secret paths/versions, GitHub secret names, values, and
+  defaults? Is the destination absent from compatibility `env`, execution-context,
+  workflow-instance, profile, task/mode/variant env, and task environment-binding ownership? Keep
+  this declaration outside
+  delivery, authority, provider-contact, injection, receipt, and positive-evidence claims until a
+  later V12.1 runtime slice proves those boundaries.
 - When `action.kind: database_schema_mutation` is used, does `action.effect` name exactly one
   matching same-task declared effect, does the migration tree have a current expected manifest
   identity, and does the contract keep the task outside `agent.safe_tasks`? On Unix, current Ota
