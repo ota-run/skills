@@ -1110,6 +1110,11 @@ Do not duplicate ownership across `toolchains`, `runtimes`, and `tools`. If a pa
 runtime, or command is owned by a declared toolchain, task requirements may select it, but top-level
 runtime/tool ownership should not be duplicated.
 
+For Rust toolchains, distinguish diagnosis from fulfillment. Diagnose-only contracts must use a
+semantic version requirement that Ota can compare, such as `version: ">=1.85"`. Rustup channel
+names such as `stable`, `beta`, and `nightly` are valid only when the selected path declares
+`fulfillment.mode: run`, because Ota then owns resolving and activating that channel.
+
 Requirements should live at the narrowest truthful owner.
 
 - use context-level `requirements` only when every task in that context genuinely needs them
