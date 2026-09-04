@@ -1078,9 +1078,19 @@ under `env`, execution contexts, workflow-instance environment or task overlays,
 task/mode/variant env, bindings, or profile literal env. Matching compatibility or inherited
 environment values do not fulfill governed delivery.
 
-This first slice is schema and identity truth only. No current command resolves a provider binding,
-contacts a provider, requests OIDC, injects bytes, grants execution authority, or emits positive
-delivery evidence from the declaration.
+In the current v1.6.28 implementation, command admission consumes the exact selected task or
+workflow recipient. A non-empty selection refuses with
+`secret_delivery_protected_truth_unavailable` before setup, hydration, environment rendering,
+durable logs, services, proof artifacts, child creation, mutation, or provider contact. Agents
+should treat the public `secret_delivery_admission` object as bounded negative evidence only: it
+reports `not_checked`, `not_attempted`, and `execution_started: false` without exposing protected
+provider truth.
+
+No current command resolves a production provider binding, contacts a provider, requests OIDC,
+injects bytes, grants execution authority, or emits positive delivery evidence. Real `ota up` may
+retain its ordinary blocked execution receipt with `execution_attempted: false`; treat that as a
+negative failure record, never a positive secret-delivery receipt or archive. Do not route around
+the refusal with ambient environment values or repo-local secret-loading glue.
 
 ## Minimum-version governance
 

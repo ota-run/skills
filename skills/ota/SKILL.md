@@ -734,10 +734,16 @@ secret-delivery intent. Require `metadata.ota.minimum_version: "1.6.28"`, the in
 edge set to `deny`. Never add provider names, cloud projects, tenants, secret paths or versions,
 GitHub secret names, values, or defaults to `ota.yaml`. Reject a governed destination that is also
 owned by compatibility `env`, execution-context, workflow-instance, task, mode, binding, profile,
-or variant truth.
-This is declaration-only in the first V12.1 slice: do not tell users that Ota resolves a provider
-binding, requests OIDC, contacts a provider, injects bytes, authorizes execution, or emits positive
-delivery evidence. Existing env values with the same name do not satisfy the requirement.
+or variant truth. Current command admission consumes exact selected recipients and refuses with
+`secret_delivery_protected_truth_unavailable` before setup or execution while production protected
+binding truth is unavailable. Treat `secret_delivery_admission` as bounded negative evidence only:
+it reports no provider contact, delivery, or execution and exposes no protected identities. Do not
+tell users that Ota resolves a production provider binding, requests OIDC, contacts a provider,
+injects bytes, authorizes execution, or emits positive delivery evidence. Real `ota up` may retain
+its ordinary blocked execution receipt with `execution_attempted: false`; classify that as a
+negative failure record, never a positive secret-delivery receipt or archive. Existing env values
+with the same name do not satisfy the requirement, and agents must not route around the refusal
+with ambient values or repo-local secret-loading glue.
 
 For contracts requiring Ota v1.6.27 or later, typed V12 effects may separate a top-level
 `resource_bindings` entry, a reusable `effect_definitions` consequence, and a task-local
