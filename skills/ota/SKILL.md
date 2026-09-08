@@ -1126,6 +1126,11 @@ semantic version requirement that Ota can compare, such as `version: ">=1.85"`. 
 names such as `stable`, `beta`, and `nightly` are valid only when the selected path declares
 `fulfillment.mode: run`, because Ota then owns resolving and activating that channel.
 
+On a selected native Node path with `fulfillment.source: corepack` and `fulfillment.mode: run`,
+use structured task commands or typed Node dependency hydration for `pnpm` or `yarn`. Ota routes
+those commands through Corepack so an ambient global shim cannot replace the declared package
+manager version. Opaque shell bodies remain repository-owned and are not rewritten.
+
 Requirements should live at the narrowest truthful owner.
 
 - use context-level `requirements` only when every task in that context genuinely needs them
