@@ -320,9 +320,14 @@ Use the smallest real Ota workflow that fits the task:
     scoped with `ota receipt --workflow <name> ...` instead of relying on repo-global `latest` or
     `promoted` receipt history
   - receipt history verifies the archived snapshot reference and identity, never the current
-    worktree. Authority-bearing execution archives also bind a canonical selected-invocation scope
-    that history re-derives before accepting crossing evidence. `legacy_unverified` entries remain inspectable but cannot become baselines, proof
-    inputs, or crossing-authority evidence
+    worktree. Current archives also retain the canonical backend-selected execution graph and
+    reconcile its typed receipt input by re-deriving the graph from archived contract and lane
+    truth. Each selected occurrence carries a digest of its resolved execution semantics, and
+    selected workflow-required service closure and definitions, plus requested lifecycle, host-port,
+    and memory overrides are bound into the graph identity.
+    Authority-bearing execution archives additionally bind a canonical selected-invocation
+    scope that history re-derives before accepting crossing evidence. `legacy_unverified` entries
+    remain inspectable but cannot become baselines, proof inputs, or crossing-authority evidence
   - read `summary.comparison.correlation` first, then `contract_changes[]`, then
     `likely_related_changes[]`
   - read `baseline.evaluated_inputs[]`, `current.evaluated_inputs[]`, and
@@ -1285,6 +1290,12 @@ serious OSS repo, evaluate these gates explicitly:
   declare an expected reason: Ota must derive the refusal from the current closure.
 - Strong task-body modeling: aggregate verification is modeled with `aggregate`, and long-running
   services use `launch.kind: command` when Ota owns that surface.
+- Mode-selected dependency truth: when native and container paths need different prerequisites,
+  keep them under `execution.modes.<mode>.depends_on`; aggregate availability must follow the
+  selected mode graph and must not be narrowed by dependencies from an unselected branch. Distinct
+  workflow phases retain distinct invocation identities even when they select the same task.
+  Selected execution and dry-run evidence must also avoid reading or reporting optional env sources,
+  replay inputs, services, or sandbox boundaries owned only by an unselected branch.
 - Readiness truth: surfaces/checks prove the declared workflow is usable, not just that a process
   started.
 - Workflow fidelity: Ota workflows mirror real contributor/CI paths instead of inventing a parallel
