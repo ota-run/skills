@@ -235,6 +235,9 @@ Use the smallest real Ota workflow that fits the task:
     never ordinary public CI
 - `ota detect`
   - inspect deterministic repo evidence before broadening a contract
+  - keep Taskfile helpers whose names begin with `_` or declare `internal: true` out of executable
+    contract truth, and collapse repeated callers of the same reusable CI verification step before
+    treating it as one reviewed lane
   - use `ota detect --candidate-out .ota/candidates/detect.json` when a maintainer needs one
     durable source-bound review artifact without changing `ota.yaml`; create the dedicated output
     directory first; Ota refuses output aliases and derives the artifact from one immutable source
