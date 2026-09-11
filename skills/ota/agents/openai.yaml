@@ -1,6 +1,6 @@
 interface:
   display_name: "Ota"
-  short_description: "Execution governance and Ota contract workflows."
+  short_description: "The execution contract for AI agents."
   default_prompt: "Use $ota to review this repository's execution-governance contract for humans and AI agents and recommend the next correct Ota change."
 
 policy:

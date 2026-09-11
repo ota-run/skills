@@ -3,7 +3,7 @@
   "groupings": [
     {
       "title": "Ota",
-      "description": "Skills for Ota execution governance and contract workflows for humans and AI agents.",
+      "description": "Skills for Ota, the execution contract for AI agents and execution governance for software repositories.",
       "skills": ["ota"]
     }
   ]

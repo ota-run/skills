@@ -1,6 +1,6 @@
 ---
 name: ota
-description: "Use when working on anything Ota-specific: creating, refining, reviewing, or explaining Ota contracts (`ota.yaml`), modeling execution governance for humans and AI agents, working through `ota doctor` / `ota up` / `ota run`, handling agent safety surfaces, Ota Studio boundaries, or when deciding whether a problem belongs in the repo contract or in Ota itself."
+description: "Use when working on Ota: the execution contract for AI agents and execution governance for software repositories. Covers authoring or reviewing `ota.yaml`, using `ota doctor` / `ota up` / `ota run`, agent safety surfaces, and deciding whether a problem belongs in the repo contract or Ota itself."
 ---
 
 <!--
@@ -30,13 +30,16 @@ description: "Use when working on anything Ota-specific: creating, refining, rev
 # Ota
 
 Use this skill when the task is about Ota-specific contract authoring, contract review, execution
-governance for humans and AI agents, or Ota platform judgment.
+governance for software repositories, or Ota platform judgment.
 
 Do not use this skill for generic YAML generation. It is for truthful execution governance, not
 schema-only completion.
 
 ## Core product posture
 
+- Ota is the execution contract for AI agents, shared with humans and CI.
+- Its category is execution governance for software repositories.
+- Repo readiness, verification, execution, and proof are product capabilities, not the category.
 - Doctor first, contract second.
 - `ota.yaml` is the canonical source of execution governance truth.
 - Prefer one explicit operational path over parallel scripts and tribal knowledge.
