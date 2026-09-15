@@ -49,6 +49,14 @@ Use this checklist when deciding whether a contract is trustworthy for humans, C
   docs should not be over-interpreted, and only structured external boundary lists plus narrow
   command surfaces such as labeled command bullets or exact `| Task | Command |` tables inside
   explicit command sections should be treated as admissible detect truth?
+- Does `ota agents --review` report `in sync` only for one uniquely delimited managed block whose
+  complete content matches the contract? New files and exact legacy generated-only files should
+  converge on that same block through `ota agents --write`. Duplicate, reversed, incomplete, or
+  otherwise ambiguous markers must make write mode refuse without modifying the file and require
+  manual repair. Contract-authored content must not contain the reserved markers, and an unreadable
+  existing file must never be treated as missing or replaced. Only exact standalone marker lines
+  define ownership; inline marker examples remain user content. Matching generated prose outside
+  the managed block is not sync.
 - Are task `effects` explicit when the task writes, touches external state, or uses the network?
 - Do task or workflow `notes` preserve material operational context that the field structure alone
   cannot carry, including hydration provenance, external-effect boundaries, proof limits, and why a
