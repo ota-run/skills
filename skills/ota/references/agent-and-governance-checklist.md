@@ -28,6 +28,10 @@ Use this checklist when deciding whether a contract is trustworthy for humans, C
 
 - For a newly authored contract, is the `agent` block present with an evidenced boundary, or is
   its omission explained? Do not infer safety from a missing block or invent safe lanes to add one.
+- Do the primary task/workflow dry-runs select the needed setup before verification, and does a
+  disposable fresh checkout prove that path? If not, record fresh bootstrap as `not_proved`.
+- Is finite verification actually executed with `ota run <task>`? `ota up --workflow <name>`
+  checks readiness but does not execute that workflow's `run.task`.
 - Does `agent.entrypoint` lead into the canonical verification or readiness path?
 - Is `agent.default_task` finite, bounded, and suitable as the normal post-change verification task?
 - Are `agent.safe_tasks` honest about network and dependency hydration behavior rather than marking

@@ -1116,6 +1116,23 @@ with only evidenced safe lanes and relevant path/operational guidance, or explai
 why this contract omits the block. No agent-safe lane is a valid outcome: do not invent safe tasks,
 an entrypoint, or a default task merely to fill the block.
 
+Before calling a new contract ready, run `ota validate`, `ota doctor`, `ota tasks --use`, and
+`ota tasks --safe --use`; dry-run the primary task and workflow paths, then execute meaningful
+verification where safe. Check that the selected execution graph actually includes required setup
+before its consumers. Prove bootstrap from a disposable fresh checkout or clean runner, not a
+warmed local dependency directory. Never delete an existing developer environment to simulate a
+clean start; if fresh proof is unavailable, name that boundary `not_proved` rather than claiming
+the contract is bootstrap-ready.
+
+Do not count `ota up --workflow <name>` as finite verification: it prepares and checks workflow
+readiness but does not execute `workflows.<name>.run.task`. Run the selected finite task with
+`ota run <task>` (and `--agent` when verifying the agent boundary); inspect the task receipt.
+
+For Yarn 1 setup, use typed `prepare.kind: dependency_hydration` with
+`source.manager: yarn`, `source.yarn_release: classic`, and `source.frozen_lockfile: true`;
+this renders `yarn install --frozen-lockfile`. Keep the Yarn version pinned in the Node toolchain.
+Do not use modern Yarn's `--immutable` for a Classic repository.
+
 When deciding where something belongs, prefer:
 
 - `toolchains` for managed ecosystem ownership such as Node/Corepack/pnpm or Rust/rustup
@@ -1141,6 +1158,11 @@ On a selected native Node path with `fulfillment.source: corepack` and `fulfillm
 use structured task commands or typed Node dependency hydration for `pnpm` or `yarn`. Ota routes
 those commands through Corepack so an ambient global shim cannot replace the declared package
 manager version. Opaque shell bodies remain repository-owned and are not rewritten.
+
+For Yarn Classic (`yarn@1.x` / lockfile v1), use typed lockfile-strict hydration with
+`yarn_release: classic` and `frozen_lockfile: true`; Ota renders `--frozen-lockfile`. Omitted or
+`modern` release truth renders modern Yarn's `--immutable` flag. A non-strict install or a passing
+warmed-checkout build is not equivalent fresh-bootstrap proof.
 
 Requirements should live at the narrowest truthful owner.
 
