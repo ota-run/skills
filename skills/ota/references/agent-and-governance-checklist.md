@@ -26,6 +26,8 @@
 
 Use this checklist when deciding whether a contract is trustworthy for humans, CI, and agents.
 
+- For a newly authored contract, is the `agent` block present with an evidenced boundary, or is
+  its omission explained? Do not infer safety from a missing block or invent safe lanes to add one.
 - Does `agent.entrypoint` lead into the canonical verification or readiness path?
 - Is `agent.default_task` finite, bounded, and suitable as the normal post-change verification task?
 - Are `agent.safe_tasks` honest about network and dependency hydration behavior rather than marking

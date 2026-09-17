@@ -1111,6 +1111,11 @@ Default modeling areas:
 - `checks`
 - `agent`
 
+When authoring a new `ota.yaml`, decide the agent boundary explicitly. Include an `agent` block
+with only evidenced safe lanes and relevant path/operational guidance, or explain in the review
+why this contract omits the block. No agent-safe lane is a valid outcome: do not invent safe tasks,
+an entrypoint, or a default task merely to fill the block.
+
 When deciding where something belongs, prefer:
 
 - `toolchains` for managed ecosystem ownership such as Node/Corepack/pnpm or Rust/rustup
