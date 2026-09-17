@@ -133,10 +133,63 @@ tasks:
               path: /
               primary: true
       surfaces: [api]
+```
 
 Use `launch.runtime_projection` only when the adapter is explicitly supported and the bind truth
 already lives under explicit `runtime.listeners`.
+
+## Browser surface readiness
+
+Declare browser-facing HTTP readiness under `surfaces.<name>.readiness`. It is the canonical
+endpoint and response contract for a runtime task that publishes that surface; the workflow then
+selects it through `workflows.<name>.readiness.surfaces`. Do not duplicate the same probe under
+top-level `readiness.probes` unless another task or workflow needs that probe by name.
+
+```yaml
+surfaces:
+  site:
+    kind: http
+    label: Docs preview
+    purpose: Canonical browser-facing docs preview surface
+    visibility: public
+    port: 3000
+    path: /
+    readiness:
+      kind: http
+      method: GET
+      path: /
+      headers:
+        Accept: text/html
+      success:
+        status: [200]
+      body:
+        contains: "<!DOCTYPE html>"
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+
+tasks:
+  dev:
+    launch:
+      kind: command
+      exe: yarn
+      args: [dev]
+    runtime:
+      kind: service
+      surfaces: [site]
+
+workflows:
+  development:
+    run:
+      task: dev
+    readiness:
+      surfaces: [site]
 ```
+
+This proves only that Ota observed the declared local HTTP response before reporting the selected
+runtime ready. It does not prove deployment, browser behavior beyond that response, or application
+correctness.
 
 ## Interactive workflow attach
 

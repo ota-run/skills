@@ -832,6 +832,9 @@ Prefer these concrete shapes when repo truth matches them:
 - use `command.cwd` when the task truth is still one finite executable plus stable argv but it
   should run from a repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `launch.kind: command` for long-running service processes instead of opaque `run`
+- use `surfaces.<name>.readiness` for the canonical browser-facing HTTP response contract; select
+  that surface from the owning runtime task and workflow rather than duplicating it as a named
+  top-level probe unless another consumer needs independent reusable probe identity
 - when a supported long-running server adapter would otherwise duplicate bind flags already owned
   by explicit `runtime.listeners`, use `launch.runtime_projection` so ota projects bind argv from
   canonical runtime listener truth instead of repeating `--host` / `--port`, `-b` / `-p`, or
