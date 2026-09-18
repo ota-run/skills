@@ -1114,6 +1114,32 @@ Default modeling areas:
 - `checks`
 - `agent`
 
+### Container state ownership
+
+Model a container context's workspace state deliberately rather than treating every write as a
+host artifact:
+
+- declare `attachments.isolated_paths` when a container context needs independent workspace state.
+  For container-owned, workspace-relative dependency trees, caches, or build state, inspect the
+  selected producer and consumer closure; `node_modules` and `.next` are common Next.js examples.
+  Ota backs isolated directory trees with context-owned volumes. Isolated file paths use a
+  runner-owned mount initialized from the host file when present, otherwise empty, so do not claim
+  their initial bytes were never host-derived.
+- do not add a path merely because a task writes it. Preserve an output on the host when that is the
+  repo's intended handoff, and do not claim isolation for paths the selected container closure does
+  not own.
+- if the contract advertises both native and container execution, keep platform-specific setup on
+  the correct selected branch. A native lane needing host dependencies should use
+  `execution.modes.native.depends_on`; do not make container execution inherit a host-only setup
+  task or share its dependency tree.
+- omit `container.resources.memory` unless repository evidence establishes a useful default or a
+  real minimum. `ota run ... --memory <limit>` can override the engine default even when the
+  contract has no memory block; a declared minimum intentionally rejects smaller overrides.
+- when a long-running task exposes an attached surface through a workflow, the runtime listener,
+  surface readiness target, and workflow `readiness.surfaces` must describe the same reachable
+  service, not separate shell assumptions. A service without an exposed surface should use its
+  truthful listener, probe, or manager-state readiness rather than inventing a browser surface.
+
 When authoring a new `ota.yaml`, decide the agent boundary explicitly. Include an `agent` block
 with only evidenced safe lanes and relevant path/operational guidance, or explain in the review
 why this contract omits the block. No agent-safe lane is a valid outcome: do not invent safe tasks,
@@ -1360,6 +1386,10 @@ serious OSS repo, evaluate these gates explicitly:
   with that floor. Published examples must be checked for this invariant before propagation.
 - Container/native parity: container and native workflows are both modeled only when the repo
   actually supports them, and lifecycle choices are intentional.
+- Container state ownership: each container context is reviewed against its selected producer and
+  consumer closure. Platform-sensitive dependency or build state is isolated only when the
+  container owns it; host handoff outputs remain deliberate. Native-only setup must not leak into
+  the container branch, and resource defaults/minima are evidence-based rather than cargo-culted.
 - Concurrency truth: when truthful parallel container lanes need the same logical dependency path,
   keep them on distinct execution contexts with matching `attachments.isolated_paths`; ota now
   distinguishes those owned paths by effective isolation namespace instead of blocking on raw path

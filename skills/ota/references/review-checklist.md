@@ -26,6 +26,20 @@
 
 Use this checklist when deciding whether a contract is merely valid or genuinely strong.
 
+- For every declared container context, does each `attachments.isolated_paths` entry model a real
+  independent-state boundary? For container-owned workspace-relative dependency/cache/build state,
+  inspect the selected producer and consumer closure. Directory trees receive context-owned
+  volumes, while file paths use runner-owned mounts initialized from host files when present and
+  otherwise empty. Do not use isolation as a blanket list of writes or claim a file's initial bytes
+  never came from the host.
+- If a contract supports native and container modes, do mode-specific dependency branches keep
+  host setup under `execution.modes.native.depends_on` instead of forcing container execution to
+  materialize or reuse host-owned dependencies? Are memory defaults/minima declared only when
+  repository evidence supports them, remembering that `--memory` works without a resource block?
+- When a long-running container or native service exposes an attached surface through a workflow,
+  do the runtime listener, surface readiness probe, and workflow `readiness.surfaces` identify the
+  same reachable service? Otherwise, does it use truthful listener, probe, or manager-state
+  readiness without inventing a surface or workflow?
 - Does a service task that declares `runtime.kind: service` use `launch.kind: command` instead of
   opaque `run`?
 - If a workflow declares `proof.lifecycle`, are its selected services manager-owned with a typed
