@@ -1,6 +1,6 @@
 ---
 name: ota
-description: "Use when working on anything Ota-specific: creating, refining, reviewing, or explaining Ota contracts (`ota.yaml`), modeling execution governance for humans and AI agents, working through `ota doctor` / `ota up` / `ota run`, handling agent safety surfaces, Ota Studio boundaries, or when deciding whether a problem belongs in the repo contract or in Ota itself."
+description: "Use when working on Ota: the execution contract for AI agents and execution governance for software repositories. Covers authoring or reviewing `ota.yaml`, using `ota doctor` / `ota up` / `ota run`, agent safety surfaces, and deciding whether a problem belongs in the repo contract or Ota itself."
 ---
 
 <!--
@@ -30,13 +30,16 @@ description: "Use when working on anything Ota-specific: creating, refining, rev
 # Ota
 
 Use this skill when the task is about Ota-specific contract authoring, contract review, execution
-governance for humans and AI agents, or Ota platform judgment.
+governance for software repositories, or Ota platform judgment.
 
 Do not use this skill for generic YAML generation. It is for truthful execution governance, not
 schema-only completion.
 
 ## Core product posture
 
+- Ota is the execution contract for AI agents, shared with humans and CI.
+- Its category is execution governance for software repositories.
+- Repo readiness, verification, execution, and proof are product capabilities, not the category.
 - Doctor first, contract second.
 - `ota.yaml` is the canonical source of execution governance truth.
 - Prefer one explicit operational path over parallel scripts and tribal knowledge.
@@ -235,6 +238,9 @@ Use the smallest real Ota workflow that fits the task:
     never ordinary public CI
 - `ota detect`
   - inspect deterministic repo evidence before broadening a contract
+  - keep Taskfile helpers whose names begin with `_` or declare `internal: true` out of executable
+    contract truth, and collapse repeated callers of the same reusable CI verification step before
+    treating it as one reviewed lane
   - use `ota detect --candidate-out .ota/candidates/detect.json` when a maintainer needs one
     durable source-bound review artifact without changing `ota.yaml`; create the dedicated output
     directory first; Ota refuses output aliases and derives the artifact from one immutable source
@@ -320,9 +326,14 @@ Use the smallest real Ota workflow that fits the task:
     scoped with `ota receipt --workflow <name> ...` instead of relying on repo-global `latest` or
     `promoted` receipt history
   - receipt history verifies the archived snapshot reference and identity, never the current
-    worktree. Authority-bearing execution archives also bind a canonical selected-invocation scope
-    that history re-derives before accepting crossing evidence. `legacy_unverified` entries remain inspectable but cannot become baselines, proof
-    inputs, or crossing-authority evidence
+    worktree. Current archives also retain the canonical backend-selected execution graph and
+    reconcile its typed receipt input by re-deriving the graph from archived contract and lane
+    truth. Each selected occurrence carries a digest of its resolved execution semantics, and
+    selected workflow-required service closure and definitions, plus requested lifecycle, host-port,
+    and memory overrides are bound into the graph identity.
+    Authority-bearing execution archives additionally bind a canonical selected-invocation
+    scope that history re-derives before accepting crossing evidence. `legacy_unverified` entries
+    remain inspectable but cannot become baselines, proof inputs, or crossing-authority evidence
   - read `summary.comparison.correlation` first, then `contract_changes[]`, then
     `likely_related_changes[]`
   - read `baseline.evaluated_inputs[]`, `current.evaluated_inputs[]`, and
@@ -727,6 +738,24 @@ instead of inferring operational meaning from `status` text alone. For `ota work
 
 ## Contract authoring workflow
 
+For contracts requiring Ota v1.6.28 or later, `secret_requirements` may declare provider-neutral
+secret-delivery intent. Require `metadata.ota.minimum_version: "1.6.28"`, the initial
+`authentication_credential` / `external_api_authentication` vocabulary, a canonical
+`process_environment` destination, exact sorted task/workflow recipients, and every propagation
+edge set to `deny`. Never add provider names, cloud projects, tenants, secret paths or versions,
+GitHub secret names, values, or defaults to `ota.yaml`. Reject a governed destination that is also
+owned by compatibility `env`, execution-context, workflow-instance, task, mode, binding, profile,
+or variant truth. Current command admission consumes exact selected recipients and refuses with
+`secret_delivery_protected_truth_unavailable` before setup or execution while production protected
+binding truth is unavailable. Treat `secret_delivery_admission` as bounded negative evidence only:
+it reports no provider contact, delivery, or execution and exposes no protected identities. Do not
+tell users that Ota resolves a production provider binding, requests OIDC, contacts a provider,
+injects bytes, authorizes execution, or emits positive delivery evidence. Real `ota up` may retain
+its ordinary blocked execution receipt with `execution_attempted: false`; classify that as a
+negative failure record, never a positive secret-delivery receipt or archive. Existing env values
+with the same name do not satisfy the requirement, and agents must not route around the refusal
+with ambient values or repo-local secret-loading glue.
+
 For contracts requiring Ota v1.6.27 or later, typed V12 effects may separate a top-level
 `resource_bindings` entry, a reusable `effect_definitions` consequence, and a task-local
 `effects.declared` attachment. Treat contract-local labels as locators rather than resource or
@@ -803,6 +832,9 @@ Prefer these concrete shapes when repo truth matches them:
 - use `command.cwd` when the task truth is still one finite executable plus stable argv but it
   should run from a repo subdirectory instead of hiding `cd ... && ...` in shell
 - use `launch.kind: command` for long-running service processes instead of opaque `run`
+- use `surfaces.<name>.readiness` for the canonical browser-facing HTTP response contract; select
+  that surface from the owning runtime task and workflow rather than duplicating it as a named
+  top-level probe unless another consumer needs independent reusable probe identity
 - when a supported long-running server adapter would otherwise duplicate bind flags already owned
   by explicit `runtime.listeners`, use `launch.runtime_projection` so ota projects bind argv from
   canonical runtime listener truth instead of repeating `--host` / `--port`, `-b` / `-p`, or
@@ -1082,6 +1114,54 @@ Default modeling areas:
 - `checks`
 - `agent`
 
+### Container state ownership
+
+Model a container context's workspace state deliberately rather than treating every write as a
+host artifact:
+
+- declare `attachments.isolated_paths` when a container context needs independent workspace state.
+  For container-owned, workspace-relative dependency trees, caches, or build state, inspect the
+  selected producer and consumer closure; `node_modules` and `.next` are common Next.js examples.
+  Ota backs isolated directory trees with context-owned volumes. Isolated file paths use a
+  runner-owned mount initialized from the host file when present, otherwise empty, so do not claim
+  their initial bytes were never host-derived.
+- do not add a path merely because a task writes it. Preserve an output on the host when that is the
+  repo's intended handoff, and do not claim isolation for paths the selected container closure does
+  not own.
+- if the contract advertises both native and container execution, keep platform-specific setup on
+  the correct selected branch. A native lane needing host dependencies should use
+  `execution.modes.native.depends_on`; do not make container execution inherit a host-only setup
+  task or share its dependency tree.
+- omit `container.resources.memory` unless repository evidence establishes a useful default or a
+  real minimum. `ota run ... --memory <limit>` can override the engine default even when the
+  contract has no memory block; a declared minimum intentionally rejects smaller overrides.
+- when a long-running task exposes an attached surface through a workflow, the runtime listener,
+  surface readiness target, and workflow `readiness.surfaces` must describe the same reachable
+  service, not separate shell assumptions. A service without an exposed surface should use its
+  truthful listener, probe, or manager-state readiness rather than inventing a browser surface.
+
+When authoring a new `ota.yaml`, decide the agent boundary explicitly. Include an `agent` block
+with only evidenced safe lanes and relevant path/operational guidance, or explain in the review
+why this contract omits the block. No agent-safe lane is a valid outcome: do not invent safe tasks,
+an entrypoint, or a default task merely to fill the block.
+
+Before calling a new contract ready, run `ota validate`, `ota doctor`, `ota tasks --use`, and
+`ota tasks --safe --use`; dry-run the primary task and workflow paths, then execute meaningful
+verification where safe. Check that the selected execution graph actually includes required setup
+before its consumers. Prove bootstrap from a disposable fresh checkout or clean runner, not a
+warmed local dependency directory. Never delete an existing developer environment to simulate a
+clean start; if fresh proof is unavailable, name that boundary `not_proved` rather than claiming
+the contract is bootstrap-ready.
+
+Do not count `ota up --workflow <name>` as finite verification: it prepares and checks workflow
+readiness but does not execute `workflows.<name>.run.task`. Run the selected finite task with
+`ota run <task>` (and `--agent` when verifying the agent boundary); inspect the task receipt.
+
+For Yarn 1 setup, use typed `prepare.kind: dependency_hydration` with
+`source.manager: yarn`, `source.yarn_release: classic`, and `source.frozen_lockfile: true`;
+this renders `yarn install --frozen-lockfile`. Keep the Yarn version pinned in the Node toolchain.
+Do not use modern Yarn's `--immutable` for a Classic repository.
+
 When deciding where something belongs, prefer:
 
 - `toolchains` for managed ecosystem ownership such as Node/Corepack/pnpm or Rust/rustup
@@ -1097,6 +1177,21 @@ When deciding where something belongs, prefer:
 Do not duplicate ownership across `toolchains`, `runtimes`, and `tools`. If a package manager,
 runtime, or command is owned by a declared toolchain, task requirements may select it, but top-level
 runtime/tool ownership should not be duplicated.
+
+For Rust toolchains, distinguish diagnosis from fulfillment. Diagnose-only contracts must use a
+semantic version requirement that Ota can compare, such as `version: ">=1.85"`. Rustup channel
+names such as `stable`, `beta`, and `nightly` are valid only when the selected path declares
+`fulfillment.mode: run`, because Ota then owns resolving and activating that channel.
+
+On a selected native Node path with `fulfillment.source: corepack` and `fulfillment.mode: run`,
+use structured task commands or typed Node dependency hydration for `pnpm` or `yarn`. Ota routes
+those commands through Corepack so an ambient global shim cannot replace the declared package
+manager version. Opaque shell bodies remain repository-owned and are not rewritten.
+
+For Yarn Classic (`yarn@1.x` / lockfile v1), use typed lockfile-strict hydration with
+`yarn_release: classic` and `frozen_lockfile: true`; Ota renders `--frozen-lockfile`. Omitted or
+`modern` release truth renders modern Yarn's `--immutable` flag. A non-strict install or a passing
+warmed-checkout build is not equivalent fresh-bootstrap proof.
 
 Requirements should live at the narrowest truthful owner.
 
@@ -1262,6 +1357,12 @@ serious OSS repo, evaluate these gates explicitly:
   declare an expected reason: Ota must derive the refusal from the current closure.
 - Strong task-body modeling: aggregate verification is modeled with `aggregate`, and long-running
   services use `launch.kind: command` when Ota owns that surface.
+- Mode-selected dependency truth: when native and container paths need different prerequisites,
+  keep them under `execution.modes.<mode>.depends_on`; aggregate availability must follow the
+  selected mode graph and must not be narrowed by dependencies from an unselected branch. Distinct
+  workflow phases retain distinct invocation identities even when they select the same task.
+  Selected execution and dry-run evidence must also avoid reading or reporting optional env sources,
+  replay inputs, services, or sandbox boundaries owned only by an unselected branch.
 - Readiness truth: surfaces/checks prove the declared workflow is usable, not just that a process
   started.
 - Workflow fidelity: Ota workflows mirror real contributor/CI paths instead of inventing a parallel
@@ -1285,6 +1386,10 @@ serious OSS repo, evaluate these gates explicitly:
   with that floor. Published examples must be checked for this invariant before propagation.
 - Container/native parity: container and native workflows are both modeled only when the repo
   actually supports them, and lifecycle choices are intentional.
+- Container state ownership: each container context is reviewed against its selected producer and
+  consumer closure. Platform-sensitive dependency or build state is isolated only when the
+  container owns it; host handoff outputs remain deliberate. Native-only setup must not leak into
+  the container branch, and resource defaults/minima are evidence-based rather than cargo-culted.
 - Concurrency truth: when truthful parallel container lanes need the same logical dependency path,
   keep them on distinct execution contexts with matching `attachments.isolated_paths`; ota now
   distinguishes those owned paths by effective isolation namespace instead of blocking on raw path

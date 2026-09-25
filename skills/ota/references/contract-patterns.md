@@ -133,10 +133,63 @@ tasks:
               path: /
               primary: true
       surfaces: [api]
+```
 
 Use `launch.runtime_projection` only when the adapter is explicitly supported and the bind truth
 already lives under explicit `runtime.listeners`.
+
+## Browser surface readiness
+
+Declare browser-facing HTTP readiness under `surfaces.<name>.readiness`. It is the canonical
+endpoint and response contract for a runtime task that publishes that surface; the workflow then
+selects it through `workflows.<name>.readiness.surfaces`. Do not duplicate the same probe under
+top-level `readiness.probes` unless another task or workflow needs that probe by name.
+
+```yaml
+surfaces:
+  site:
+    kind: http
+    label: Docs preview
+    purpose: Canonical browser-facing docs preview surface
+    visibility: public
+    port: 3000
+    path: /
+    readiness:
+      kind: http
+      method: GET
+      path: /
+      headers:
+        Accept: text/html
+      success:
+        status: [200]
+      body:
+        contains: "<!DOCTYPE html>"
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+
+tasks:
+  dev:
+    launch:
+      kind: command
+      exe: yarn
+      args: [dev]
+    runtime:
+      kind: service
+      surfaces: [site]
+
+workflows:
+  development:
+    run:
+      task: dev
+    readiness:
+      surfaces: [site]
 ```
+
+This proves only that Ota observed the declared local HTTP response before reporting the selected
+runtime ready. It does not prove deployment, browser behavior beyond that response, or application
+correctness.
 
 ## Interactive workflow attach
 
@@ -1063,6 +1116,34 @@ that invocation and Ota reprojects supported typed launch arguments plus canonic
 If the selected fixed listener conflicts with an active Ota execution, Ota refuses with
 `runtime_listener` evidence and suggests a free `--host-port` only when that selected lane can
 enforce the override; it never silently remaps an explicitly requested port.
+
+## Provider-neutral secret requirements
+
+From Ota v1.6.28, use `secret_requirements` only to declare repository-owned delivery intent. The
+initial shape requires `secret_class: authentication_credential`,
+`purpose: external_api_authentication`, a canonical `process_environment` variable, exact sorted
+task/workflow recipients, explicit deny posture for every propagation edge, and requested execution
+constraints. Set `metadata.ota.minimum_version: "1.6.28"`.
+
+Do not put provider names, provider references, cloud projects, tenants, secret paths or versions,
+GitHub secret names, secret values, or defaults in the contract. Do not duplicate the destination
+under `env`, execution contexts, workflow-instance environment or task overlays,
+task/mode/variant env, bindings, or profile literal env. Matching compatibility or inherited
+environment values do not fulfill governed delivery.
+
+In the current v1.6.28 implementation, command admission consumes the exact selected task or
+workflow recipient. A non-empty selection refuses with
+`secret_delivery_protected_truth_unavailable` before setup, hydration, environment rendering,
+durable logs, services, proof artifacts, child creation, mutation, or provider contact. Agents
+should treat the public `secret_delivery_admission` object as bounded negative evidence only: it
+reports `not_checked`, `not_attempted`, and `execution_started: false` without exposing protected
+provider truth.
+
+No current command resolves a production provider binding, contacts a provider, requests OIDC,
+injects bytes, grants execution authority, or emits positive delivery evidence. Real `ota up` may
+retain its ordinary blocked execution receipt with `execution_attempted: false`; treat that as a
+negative failure record, never a positive secret-delivery receipt or archive. Do not route around
+the refusal with ambient environment values or repo-local secret-loading glue.
 
 ## Minimum-version governance
 

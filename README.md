@@ -24,7 +24,8 @@
 
 # Ota Skills
 
-Official Ota agent skills for execution governance and contract workflows for humans and AI agents.
+Official agent skills for Ota, the execution contract for AI agents, shared with humans and CI
+across software repositories.
 
 [![skills.sh](https://skills.sh/b/ota-run/skills)](https://skills.sh/ota-run/skills)
 
