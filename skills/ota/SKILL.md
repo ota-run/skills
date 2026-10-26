@@ -74,6 +74,19 @@ For workspace contracts, keep one more boundary explicit:
 - do not force mixed-name cross-repo flows back into shell wrappers just because the repos do not
   share one literal task name
 
+For native `ota workspace up`, the unreleased correction uses already supplied inline
+`policies.env.values` for child Up environment-requirement diagnosis: resolution, missing-value,
+and allowed-value checks at initial, pre-authority, prerequisite, and post-Up stages. It does not
+inject values into the host process or arbitrary check/probe commands. For these env checks, the
+overlay wins over independently acquired repo-policy env, then process env, ordered declared
+sources, and defaults. Task overrides remain task-only, not repo-readiness input.
+Do not replace the acquired policy Arc, absence, load error, or source identity with the overlay,
+or bypass fresh final Runner policy checks. Allowed-value and selected-path requirements still
+apply; invalid secret diagnostics must omit values. Standalone `ota doctor` does not auto-discover
+a workspace overlay. Selected native Linux/arm64 local fixture controls cover this correction;
+do not describe that coverage as released, other-platform, container/remote, or installed
+qualification.
+
 ## Source priority
 
 Prefer sources in this order:
